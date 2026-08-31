@@ -2,6 +2,7 @@
   "current": {
     "store_name": "Reka Store",
     "whatsapp_number": "201094881552",
-    "delivery_fee": 0
+    "delivery_fee": 0,
+    "shipping_zones": "Cairo | |\nGiza | |\nAlexandria | |\nQalyubia | |\nSharqia | |\nDakahlia | |\nBeheira | |\nGharbia | |\nMonufia | |\nKafr El Sheikh | |\nDamietta | |\nPort Said | |\nIsmailia | |\nSuez | |\nNorth Sinai | |\nSouth Sinai | |\nFaiyum | |\nBeni Suef | |\nMinya | |\nAssiut | |\nSohag | |\nQena | |\nLuxor | |\nAswan | |\nRed Sea | |\nNew Valley | |\nMatrouh | |"
   }
 }
