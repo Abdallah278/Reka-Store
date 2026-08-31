@@ -1,0 +1,58 @@
+{%- comment -%}
+  Product card — 1:1 port of client/src/storefront/components.tsx ProductCard.
+  Sold out = !product.available. Low stock ("Only N left") when the first
+  variant tracks inventory and 1..5 remain.
+  Usage: {% render 'product-card', product: product, show_department: true %}
+{%- endcomment -%}
+{%- assign v = product.selected_or_first_available_variant | default: product.variants.first -%}
+{%- assign sold_out = false -%}{%- unless product.available -%}{%- assign sold_out = true -%}{%- endunless -%}
+{%- assign stock_left = nil -%}
+{%- if sold_out == false and v.inventory_management == 'shopify' and v.inventory_policy == 'deny' and v.inventory_quantity > 0 and v.inventory_quantity <= 5 -%}
+  {%- assign stock_left = v.inventory_quantity -%}
+{%- endif -%}
+{%- assign off = 0 -%}
+{%- if product.compare_at_price > product.price -%}
+  {%- assign diff = product.compare_at_price | minus: product.price | times: 100.0 -%}
+  {%- assign off = diff | divided_by: product.compare_at_price | round -%}
+{%- endif -%}
+<article class="rk-card {% if sold_out %}rk-card--soldout{% endif %}" aria-label="{{ product.title | escape }}{% if sold_out %} — sold out{% endif %}">
+  <a href="{{ product.url }}" class="rk-card__media" aria-label="Open {{ product.title | escape }}">
+    <div class="rk-card__img brand-tone">
+      {%- if product.featured_image -%}
+        <img src="{{ product.featured_image | image_url: width: 700 }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="700" height="875">
+      {%- else -%}
+        {% render 'product-art', product: product %}
+      {%- endif -%}
+    </div>
+    {%- if sold_out -%}
+      <span class="rk-badge rk-badge--soldout">Sold out</span>
+    {%- elsif stock_left -%}
+      <span class="rk-badge rk-badge--low">Only {{ stock_left }} left</span>
+    {%- else -%}
+      <span class="rk-badge">Available</span>
+    {%- endif -%}
+    {%- if off > 0 and sold_out == false -%}
+      <span class="rk-badge rk-badge--off">−{{ off }}%</span>
+    {%- endif -%}
+    {%- if sold_out -%}
+      <span aria-hidden="true" class="rk-card__unavailable">Currently unavailable</span>
+    {%- endif -%}
+  </a>
+  <div class="rk-card__row">
+    <div style="min-width:0;">
+      <h3 class="rk-card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+      <p class="rk-card__cat">
+        {%- if show_department -%}{%- assign dc = product.collections.first -%}{%- if dc -%}{{ dc.title }} · {% endif %}{%- endif -%}
+        {{ product.type | default: 'Uncategorised' }}
+      </p>
+    </div>
+    {% render 'price', product: product %}
+  </div>
+  {%- if sold_out -%}
+    <p class="rk-card__soldnote" role="status">Sold out — back soon</p>
+  {%- else -%}
+    <button type="button" class="btn-wa" data-add-to-cart="{{ v.id }}" data-product-title="{{ product.title | escape }}">
+      {% render 'icon', name: 'shopping-bag' %} Add to order
+    </button>
+  {%- endif -%}
+</article>

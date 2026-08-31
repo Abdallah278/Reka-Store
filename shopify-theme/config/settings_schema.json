@@ -1,0 +1,24 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Reka Store",
+    "theme_version": "1.0.0",
+    "theme_author": "Reka Store",
+    "theme_documentation_url": "https://github.com/Abdallah278/Reka-Store",
+    "theme_support_url": "https://github.com/Abdallah278/Reka-Store"
+  },
+  {
+    "name": "Store identity",
+    "settings": [
+      { "type": "image_picker", "id": "logo_image", "label": "Logo (round, replaces the R mark)" },
+      { "type": "text", "id": "instagram_url", "label": "Instagram profile URL" }
+    ]
+  },
+  {
+    "name": "WhatsApp ordering",
+    "settings": [
+      { "type": "text", "id": "whatsapp_number", "label": "Store WhatsApp number (digits only, e.g. 2010xxxxxxxx)", "default": "201000000000" },
+      { "type": "range", "id": "delivery_fee", "label": "Flat delivery fee (EGP, 0 = confirmed in chat)", "min": 0, "max": 500, "step": 5, "default": 0 }
+    ]
+  }
+]

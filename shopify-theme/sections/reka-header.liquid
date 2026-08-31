@@ -1,0 +1,57 @@
+{%- comment -%} Fixed pill navigation — port of chrome.tsx Nav {%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+<header class="rk-header">
+  <div class="rk-header__bar" data-header-bar>
+    <a href="{{ routes.root_url }}" class="rk-logo" aria-label="{{ shop.name }} home">
+      <span class="rk-logo__mark">
+        {%- if settings.logo_image -%}
+          <img src="{{ settings.logo_image | image_url: width: 80 }}" alt="" width="40" height="40">
+        {%- else -%}R{%- endif -%}
+      </span>
+      <span class="rk-logo__name">{{ shop.name }}</span>
+    </a>
+
+    <nav class="rk-nav" aria-label="Departments">
+      <a href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>Home</a>
+      {%- assign dept_handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
+      {%- assign dept_names = 'Korean,French,Makeup,Perfumes,Offers' | split: ',' -%}
+      {%- for h in dept_handles -%}
+        {%- assign i = forloop.index0 -%}
+        <a href="{{ routes.collections_url }}/{{ h }}" {% if collection.handle == h %}aria-current="page"{% endif %}>{{ dept_names[i] }}</a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="rk-header__actions">
+      <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: shop.name | append: ', I have a question.' | url_encode }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="rk-iconbtn rk-iconbtn--hide-sm">
+        {% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}
+      </a>
+      <a href="{{ routes.cart_url }}" aria-label="Open cart" class="rk-cartbtn">
+        {% render 'icon', name: 'shopping-bag', class: 'icon-lg icon' %}
+        <span class="rk-cartbtn__count" data-cart-count>{% if cart.item_count > 0 %}{{ cart.item_count }}{% endif %}</span>
+      </a>
+      <button type="button" class="rk-iconbtn rk-menubtn" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+        <span data-menu-icon-open>{% render 'icon', name: 'menu', class: 'icon-lg icon' %}</span>
+        <span data-menu-icon-close hidden>{% render 'icon', name: 'x', class: 'icon-lg icon' %}</span>
+        <span class="sr-only">Open menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="rk-mobile-menu" hidden>
+    <nav aria-label="Mobile">
+      <a href="{{ routes.root_url }}">Home</a>
+      {%- for h in dept_handles -%}
+        {%- assign i = forloop.index0 -%}
+        <a href="{{ routes.collections_url }}/{{ h }}">{{ dept_names[i] }}</a>
+      {%- endfor -%}
+      <a href="{{ routes.cart_url }}">Cart {% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</a>
+      <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
+        {% render 'icon', name: 'message-circle' %} Ask on WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{ "name": "Reka header", "settings": [] }
+{% endschema %}

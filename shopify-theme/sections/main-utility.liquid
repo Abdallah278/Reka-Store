@@ -1,0 +1,37 @@
+{%- comment -%} Shared utility page section: 404 / search / page (Reka styling) {%- endcomment -%}
+<div class="container" style="padding-top:7rem; padding-bottom:4rem;">
+  {%- case template.name -%}
+  {%- when '404' -%}
+    <div style="text-align:center;">
+      <p class="eyebrow text-burgundy">Not found</p>
+      <h1 class="font-display" style="margin-top:.75rem; font-size:clamp(2.4rem,6vw,4rem);">This page isn't here anymore.</h1>
+      <p style="margin:1rem auto 0; max-width:24rem; font-size:.875rem; line-height:1.75; color:var(--olive);">It may have been retired from the edit. The departments are full of good company, though.</p>
+      <a href="{{ routes.root_url }}" class="btn-ink" style="margin-top:1.75rem;">Back to the homepage</a>
+    </div>
+  {%- when 'search' -%}
+    <p class="eyebrow text-burgundy">Search</p>
+    <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem);">
+      {%- if search.performed -%}{{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %} for “{{ search.terms }}”{%- else -%}Search the edit{%- endif -%}
+    </h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" style="margin-top:1.5rem; display:flex; max-width:28rem; align-items:center; gap:.75rem; border-radius:9999px; border:1px solid color-mix(in srgb, var(--olive) 30%, transparent); background:var(--cream); padding-inline:1rem;">
+      {% render 'icon', name: 'search', class: 'icon text-olive' %}
+      <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Product name, brand…" style="min-height:3rem; width:100%; background:transparent; border:0; outline:none; font-size:.875rem;">
+    </form>
+    {%- if search.performed and search.results_count > 0 -%}
+      <ul class="rk-grid-products">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}<li>{% render 'product-card', product: item %}</li>{%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  {%- else -%}
+    <div class="rk-section-head">
+      <h1 class="font-display" style="font-size:clamp(2.2rem,5vw,3.4rem);">{{ page.title }}</h1>
+    </div>
+    <div style="margin-top:1.5rem; max-width:44rem; font-size:1rem; line-height:2; color:var(--olive);">{{ page.content }}</div>
+  {%- endcase -%}
+</div>
+
+{% schema %}
+{ "name": "Utility page", "settings": [] }
+{% endschema %}

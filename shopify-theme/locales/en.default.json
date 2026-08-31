@@ -1,0 +1,7 @@
+{
+  "general": {
+    "meta": { "tags": "Tagged \"{{ tags }}\"", "page": "Page {{ page }}" },
+    "404": { "title": "Page not found" },
+    "search": { "title": "Search" }
+  }
+}

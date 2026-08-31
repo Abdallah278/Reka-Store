@@ -1,0 +1,15 @@
+{%- comment -%}
+  Price with genuine-discount treatment (port of PriceTag).
+  Shopify's compare_at_price is the "genuine previous price".
+  Usage: {% render 'price', product: product, big: true %}
+{%- endcomment -%}
+{%- assign now = product.price | money_without_currency | remove: '.00' -%}
+{%- if product.compare_at_price > product.price -%}
+  {%- assign was = product.compare_at_price | money_without_currency | remove: '.00' -%}
+  <span class="rk-price rk-price--offer {% if big %}rk-price--big{% endif %} {{ class }}">
+    <span class="rk-price__now">{{ now }} EGP</span>
+    <s aria-label="Original price {{ was }} EGP">{{ was }} EGP</s>
+  </span>
+{%- else -%}
+  <span class="rk-price {% if big %}rk-price--big{% endif %} {{ class }}"><span class="rk-price__now">{{ now }} EGP</span></span>
+{%- endif -%}

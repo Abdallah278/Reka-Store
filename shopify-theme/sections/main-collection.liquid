@@ -1,0 +1,141 @@
+{%- comment -%}
+  Department page — port of DepartmentPage.tsx. The five department identities
+  (colour, tagline, intro, ritual, chips) are keyed by collection handle;
+  any other collection renders with the default (makeup-style) identity.
+{%- endcomment -%}
+{%- assign h = collection.handle -%}
+{%- assign dark = true -%}
+{%- case h -%}
+  {%- when 'korean-skincare' -%}
+    {%- assign grad = 'linear-gradient(160deg, #74070E 0%, #310E10 78%)' -%}
+    {%- assign eyebrow = 'Department 01 · Seoul routine' -%}
+    {%- assign intro = 'Dewy textures, honest formulas and the quiet discipline of a real routine — cleansers to creams, chosen one layer at a time.' -%}
+    {%- assign hero_art = 'serum-bottle' -%}{%- assign motif_art = 'droplets' -%}
+    {%- assign chips = 'Cleansers,Toners,Serums,Masks,Moisturizers' | split: ',' -%}
+    {%- assign ritual_title = 'The layering ritual' -%}
+    {%- assign r1t = 'Cleanse, twice' -%}{%- assign r1x = 'An oil first, a gel after. Skin that starts clean holds everything else better.' -%}
+    {%- assign r2t = 'Tone & essence' -%}{%- assign r2x = 'Light watery layers, pressed in with palms — this is where the dew comes from.' -%}
+    {%- assign r3t = 'Serum, then seal' -%}{%- assign r3x = 'Targeted actives, then a moisturizer to keep the whole layer story in place.' -%}
+  {%- when 'french-skincare' -%}
+    {%- assign dark = false -%}
+    {%- assign grad = 'linear-gradient(160deg, #F4E3B2 0%, #fbf4d6 70%)' -%}
+    {%- assign eyebrow = 'Department 02 · Paris apothecary' -%}
+    {%- assign intro = 'Parisian minimalism: linen light, milk cleansers and creams that do their work without announcing themselves.' -%}
+    {%- assign hero_art = 'cream-jar' -%}{%- assign motif_art = 'silk' -%}
+    {%- assign chips = 'Cleansing,Hydration,Body Care,Treatments,Sets' | split: ',' -%}
+    {%- assign ritual_title = 'La belle routine' -%}
+    {%- assign r1t = 'Milk, not foam' -%}{%- assign r1x = 'Gentle cleansing that respects the skin you already have.' -%}
+    {%- assign r2t = 'One good cream' -%}{%- assign r2x = 'Chosen well, used daily — quiet luxury is mostly consistency.' -%}
+    {%- assign r3t = 'Body included' -%}{%- assign r3x = 'The French never stop at the jawline. Neither should the ritual.' -%}
+  {%- when 'perfumes' -%}
+    {%- assign grad = 'linear-gradient(160deg, #947268 0%, #310E10 85%)' -%}
+    {%- assign eyebrow = 'Department 04 · The fragrance room' -%}
+    {%- assign intro = "Warm clay, amber and glass. Fragrance chosen the way you'd choose jewellery — slowly, and for yourself." -%}
+    {%- assign hero_art = 'perfume-bottle' -%}{%- assign motif_art = 'mist' -%}
+    {%- assign chips = 'Women,Unisex,Fresh,Floral,Woody,Gift Sets' | split: ',' -%}
+    {%- assign ritual_title = 'How to wear it' -%}
+    {%- assign r1t = 'Warm points' -%}{%- assign r1x = 'Wrists, neck, behind the ears — where skin warms the notes open.' -%}
+    {%- assign r2t = "Don't rub" -%}{%- assign r2x = "Let it dry. Rubbing breaks the top notes before they've spoken." -%}
+    {%- assign r3t = 'Layer lightly' -%}{%- assign r3x = 'An unscented cream underneath makes any fragrance last longer.' -%}
+  {%- when 'offers' -%}
+    {%- assign grad = 'linear-gradient(165deg, #310E10 0%, #74070E 130%)' -%}
+    {%- assign eyebrow = 'Department 05 · The honest sale' -%}
+    {%- assign intro = "Every offer here shows the true original price next to the new one. When it's gone, it's gone — no invented urgency." -%}
+    {%- assign hero_art = 'offer-mark' -%}{%- assign motif_art = 'vanity' -%}
+    {%- assign chips = '' | split: ',' -%}
+    {%- assign ritual_title = 'How offers work here' -%}
+    {%- assign r1t = 'Real original prices' -%}{%- assign r1x = 'Every strikethrough is the price the piece actually sold for.' -%}
+    {%- assign r2t = 'Real end dates' -%}{%- assign r2x = 'A countdown only appears when an offer truly expires.' -%}
+    {%- assign r3t = 'Same WhatsApp flow' -%}{%- assign r3x = 'Order request first, confirmation and transfer details in chat.' -%}
+  {%- else -%}
+    {%- assign grad = 'linear-gradient(160deg, #45462A 0%, #310E10 80%)' -%}
+    {%- assign eyebrow = 'Department 03 · The studio' -%}
+    {%- assign intro = "An editorial edit of lips, face and eyes — pigment that stays true, tools worth keeping, nothing you won't use." -%}
+    {%- assign hero_art = 'lipstick-bullet' -%}{%- assign motif_art = 'palette-quad' -%}
+    {%- assign chips = 'Lips,Face,Eyes,Brushes,Palettes' | split: ',' -%}
+    {%- assign ritual_title = 'Build your look' -%}
+    {%- assign r1t = 'Face first' -%}{%- assign r1x = 'Cream where skin should look like skin. Powder only where it must stay.' -%}
+    {%- assign r2t = 'One colour story' -%}{%- assign r2x = 'Let cheeks and lips share a family — olive, nude, burgundy.' -%}
+    {%- assign r3t = 'Eyes, last' -%}{%- assign r3x = 'Finish with definition once the rest of the face has settled.' -%}
+{%- endcase -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+{%- if dark -%}{%- assign fg = 'var(--canvas)' -%}{%- assign fg_soft = 'color-mix(in srgb, var(--canvas) 75%, transparent)' -%}
+{%- else -%}{%- assign fg = 'var(--ink)' -%}{%- assign fg_soft = 'var(--olive)' -%}{%- endif -%}
+
+<section class="rk-dept-hero" aria-labelledby="dept-title">
+  <div class="rk-dept-hero__panel" style="background: {{ grad }}; color: {{ fg }};">
+    <div class="rk-dept-hero__grid">
+      <div>
+        <p class="eyebrow" style="color: {{ fg_soft }};">{{ eyebrow }}</p>
+        <h1 id="dept-title" class="rk-dept-hero__title font-display">{{ collection.title }}</h1>
+        <p class="rk-dept-hero__intro" style="color: {{ fg_soft }};">{{ collection.description | default: intro | strip_html }}</p>
+        <div class="rk-dept-hero__ctas">
+          <a href="#collection" class="{% if dark %}rk-summary__cta{% else %}btn-ink{% endif %}" style="{% if dark %}width:auto;{% endif %}">Browse the edit ↓</a>
+          <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer" class="btn-outline {% if dark %}btn-outline--light{% endif %}">{% render 'icon', name: 'message-circle' %} WhatsApp</a>
+        </div>
+        {%- if chips.size > 0 -%}
+        <div class="rk-dept-hero__chips">
+          {%- for chip in chips -%}
+            <a class="rk-chip" style="background: color-mix(in srgb, {{ fg }} 12%, transparent); color: {{ fg }};" href="{{ collection.url }}/{{ chip | handleize }}">{{ chip }}</a>
+          {%- endfor -%}
+        </div>
+        {%- endif -%}
+      </div>
+      <div class="rk-dept-hero__art">
+        <div class="rk-dept-hero__art-main">{% render 'art', key: hero_art, title: collection.title %}</div>
+        <div class="rk-dept-hero__motif anim-float">{% render 'art', key: motif_art, title: collection.title %}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="collection" class="rk-collection {% if h == 'offers' %}rk-collection--dark{% endif %}" style="scroll-margin-top:6rem;">
+  <div class="container">
+    <div class="rk-section-head {% if h == 'offers' %}rk-section-head--dark{% endif %}">
+      <p class="eyebrow {% unless h == 'offers' %}text-burgundy{% endunless %}">The collection</p>
+      <h2 class="font-display">The {{ collection.title | downcase }} edit</h2>
+    </div>
+    {%- if current_tags.size > 0 -%}
+      <p style="margin-top:1rem; font-size:.875rem; color: {% if h == 'offers' %}color-mix(in srgb, var(--canvas) 75%, transparent){% else %}var(--olive){% endif %};">
+        Filtered by “{{ current_tags | join: ', ' }}” · <a href="{{ collection.url }}" style="font-weight:600; color:var(--burgundy);">Clear</a>
+      </p>
+    {%- endif -%}
+    {%- if collection.products_count == 0 -%}
+      <div class="rk-empty {% if h == 'offers' %}rk-empty--dark{% endif %}">
+        <p class="rk-empty__title font-display">Nothing here yet</p>
+        <p>The {{ collection.title }} edit is being curated. Ask us on WhatsApp and we'll tell you what's coming.</p>
+        <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer" class="{% if h == 'offers' %}btn-wa{% else %}btn-ink{% endif %}">{% render 'icon', name: 'message-circle' %} Ask on WhatsApp</a>
+      </div>
+    {%- else -%}
+      {%- paginate collection.products by 24 -%}
+        <ul class="rk-grid-products">
+          {%- for product in collection.products -%}
+            <li>{% render 'product-card', product: product %}</li>
+          {%- endfor -%}
+        </ul>
+        {%- if paginate.pages > 1 -%}
+          <nav style="margin-top:2.5rem; display:flex; justify-content:center; gap:.75rem;" aria-label="Pagination">
+            {%- if paginate.previous -%}<a class="btn-outline {% if h == 'offers' %}btn-outline--light{% endif %}" href="{{ paginate.previous.url }}">← Previous</a>{%- endif -%}
+            {%- if paginate.next -%}<a class="btn-outline {% if h == 'offers' %}btn-outline--light{% endif %}" href="{{ paginate.next.url }}">Next →</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+<section class="container rk-ritual" aria-labelledby="ritual-title">
+  <div class="rk-section-head">
+    <p class="eyebrow text-burgundy">The ritual</p>
+    <h2 id="ritual-title" class="font-display">{{ ritual_title }}</h2>
+  </div>
+  <ol class="rk-steps">
+    <li class="rk-step"><div class="rk-step__top"><span class="rk-step__n font-display">01</span></div><h3 class="font-display">{{ r1t }}</h3><p>{{ r1x }}</p></li>
+    <li class="rk-step"><div class="rk-step__top"><span class="rk-step__n font-display">02</span></div><h3 class="font-display">{{ r2t }}</h3><p>{{ r2x }}</p></li>
+    <li class="rk-step"><div class="rk-step__top"><span class="rk-step__n font-display">03</span></div><h3 class="font-display">{{ r3t }}</h3><p>{{ r3x }}</p></li>
+  </ol>
+</section>
+
+{% schema %}
+{ "name": "Department page", "settings": [] }
+{% endschema %}

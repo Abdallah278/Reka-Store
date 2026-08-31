@@ -1,0 +1,25 @@
+{%- comment -%} Closing CTA — port of Home.tsx Closing {%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+<section class="container" style="padding-bottom:3.5rem;">
+  <div class="rk-inkpanel">
+    <div class="rk-inkpanel__blob" aria-hidden="true" style="right:-2.5rem; top:-2.5rem; height:16rem; width:16rem; background: color-mix(in srgb, var(--burgundy) 60%, transparent);"></div>
+    <div class="rk-inkpanel__blob" aria-hidden="true" style="bottom:-4rem; left:33%; height:14rem; width:14rem; background: color-mix(in srgb, var(--clay) 40%, transparent);"></div>
+    <div class="rk-inkpanel__grid">
+      <div>
+        <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Say hello</p>
+        <h2 class="font-display">Tell us what you're looking for. We'll point you to the right room.</h2>
+        <div class="rk-inkpanel__ctas">
+          <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: shop.name | append: ', I would like some help choosing.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
+            {% render 'icon', name: 'message-circle' %} Chat on WhatsApp
+          </a>
+          <a href="#departments" class="btn-outline btn-outline--light">Back to departments</a>
+        </div>
+      </div>
+      <div class="rk-inkpanel__art">{% render 'art', key: 'perfume-bottle', title: 'Amber perfume bottle illustration' %}</div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Reka closing", "settings": [], "presets": [{ "name": "Reka closing" }] }
+{% endschema %}

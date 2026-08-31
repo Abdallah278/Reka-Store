@@ -1,0 +1,91 @@
+{%- comment -%} Hero — port of Home.tsx Hero (compact layout + department chips) {%- endcomment -%}
+{%- assign hero_title = section.settings.hero_title | default: 'Beauty, your way' -%}
+{%- assign hero_subtitle = section.settings.hero_subtitle | default: 'A considered edit of colour, skin and ritual — chosen for the way you actually live.' -%}
+{%- assign feature = nil -%}
+{%- assign fc = collections[section.settings.featured_collection] -%}
+{%- if fc != blank -%}
+  {%- for p in fc.products limit: 3 -%}
+    {%- if p.available -%}{%- assign feature = p -%}{%- break -%}{%- endif -%}
+    {%- if feature == nil -%}{%- assign feature = p -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+<section class="rk-hero">
+  <div class="rk-hero__blob rk-hero__blob--1" aria-hidden="true"></div>
+  <div class="rk-hero__blob rk-hero__blob--2" aria-hidden="true"></div>
+  <div class="rk-hero__blob rk-hero__blob--3" aria-hidden="true"></div>
+
+  <div class="container rk-hero__grid">
+    <div class="rk-hero__copy">
+      <p class="eyebrow rk-hero__eyebrow">{% render 'icon', name: 'sparkles' %} five departments · one point of view</p>
+      <h1 class="rk-hero__title">{{ hero_title }}</h1>
+      <p class="rk-hero__sub">{{ hero_subtitle }}</p>
+      <div class="rk-hero__ctas">
+        <a href="#departments" class="btn-ink">Choose your ritual {% render 'icon', name: 'arrow-right' %}</a>
+        <a href="{{ routes.collections_url }}/offers" class="btn-outline">Browse offers</a>
+      </div>
+      <nav aria-label="Departments" class="rk-hero__chips">
+        <a href="{{ routes.collections_url }}/korean-skincare">Korean Skincare</a>
+        <a href="{{ routes.collections_url }}/french-skincare">French Skincare</a>
+        <a href="{{ routes.collections_url }}/makeup">Makeup</a>
+        <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
+        <a href="{{ routes.collections_url }}/offers">Offers</a>
+      </nav>
+      <dl class="rk-hero__facts">
+        <div><dt>Korean → Perfume</dt><dd>Five departments</dd></div>
+        <div><dt>Prices in EGP</dt><dd>No surprises</dd></div>
+        <div><dt>Order on WhatsApp</dt><dd>Confirmed in chat</dd></div>
+      </dl>
+    </div>
+
+    <div class="rk-hero__scene">
+      <div class="rk-hero__main">
+        <div class="brand-tone">
+          {%- if section.settings.hero_image -%}
+            <img src="{{ section.settings.hero_image | image_url: width: 1100 }}" alt="{{ shop.name }} — featured beauty portrait" loading="eager" fetchpriority="high">
+          {%- else -%}
+            {% render 'art', key: 'portrait', title: 'Illustrated portrait of a woman applying burgundy lipstick, lit warm on a golden canvas' %}
+          {%- endif -%}
+        </div>
+      </div>
+      <figure class="rk-hero__card">
+        <div class="rk-hero__card-art">{% render 'art', key: 'perfume-bottle', title: "Illustration of a woman's perfume bottle in amber glass" %}</div>
+        <figcaption>Perfume edit</figcaption>
+      </figure>
+      <div class="rk-hero__bubble">{% render 'art', key: 'hands', title: 'Illustration of a hand applying a skincare serum' %}</div>
+      {%- if feature -%}
+        <a href="{{ feature.url }}" class="panel rk-hero__feature" aria-label="Open {{ feature.title | escape }}">
+          <span class="rk-hero__feature-img">
+            {%- if feature.featured_image -%}
+              <img src="{{ feature.featured_image | image_url: width: 120 }}" alt="" width="56" height="56">
+            {%- else -%}
+              {% render 'product-art', product: feature %}
+            {%- endif -%}
+          </span>
+          <span style="min-width:0;">
+            <span class="rk-hero__feature-name">{{ feature.title }}</span>
+            <span class="rk-hero__feature-price">{% if feature.available %}{% render 'price', product: feature %}{% else %}Sold out{% endif %}</span>
+          </span>
+          {% render 'icon', name: 'arrow-up-right', class: 'icon text-burgundy' %}
+        </a>
+      {%- else -%}
+        <div class="panel rk-hero__feature" style="display:block;">
+          <p class="eyebrow text-burgundy" style="letter-spacing:.2em;">New edit</p>
+          <p class="font-display" style="font-size:1.25rem;">Arriving soon</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Reka hero",
+  "settings": [
+    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Beauty, your way" },
+    { "type": "textarea", "id": "hero_subtitle", "label": "Hero subtitle", "default": "A considered edit of colour, skin and ritual — chosen for the way you actually live." },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image (replaces the brand portrait)" },
+    { "type": "collection", "id": "featured_collection", "label": "Collection for the floating featured card" }
+  ],
+  "presets": [{ "name": "Reka hero" }]
+}
+{% endschema %}

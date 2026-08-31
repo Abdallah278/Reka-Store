@@ -1,0 +1,30 @@
+{%- comment -%} Manifesto marquee — port of Home.tsx Manifesto (compact) {%- endcomment -%}
+<section class="rk-manifesto">
+  <div class="rk-marquee-band" aria-hidden="true">
+    <div class="marquee">
+      {%- for pass in (1..2) -%}
+        <span>Korean skincare <i></i></span>
+        <span>French skincare <i></i></span>
+        <span>Makeup <i></i></span>
+        <span>Perfumes <i></i></span>
+        <span>Honest offers <i></i></span>
+        <span>Real prices <i></i></span>
+      {%- endfor -%}
+    </div>
+  </div>
+  <div class="container rk-manifesto__grid">
+    <div>
+      <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Manifesto</p>
+      <h2 class="font-display">Beauty that fits the <em>morning you already have.</em></h2>
+      <p class="rk-manifesto__text">{{ shop.name }} is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.</p>
+    </div>
+    <div class="rk-manifesto__art">
+      <div class="rk-manifesto__art-frame">{% render 'art', key: 'hands', title: 'Illustration of a hand holding a serum bottle in warm light' %}</div>
+      <div class="rk-manifesto__dot" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Reka manifesto", "settings": [], "presets": [{ "name": "Reka manifesto" }] }
+{% endschema %}

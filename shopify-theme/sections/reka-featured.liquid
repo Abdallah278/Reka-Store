@@ -1,0 +1,31 @@
+{%- comment -%} Featured edit — port of Home.tsx Featured (real Shopify products) {%- endcomment -%}
+{%- assign fc = collections[section.settings.collection] -%}
+{%- if fc != blank and fc.products_count > 0 -%}
+<section class="rk-section" style="background: color-mix(in srgb, var(--cream) 60%, transparent);" aria-labelledby="featured-title">
+  <div class="container">
+    <div class="rk-split">
+      <div class="rk-section-head">
+        <p class="eyebrow text-burgundy">This week</p>
+        <h2 id="featured-title" class="font-display">The featured edit</h2>
+      </div>
+      <a href="{{ routes.collections_url }}/makeup" class="btn-outline">Browse departments</a>
+    </div>
+    <ul class="rk-grid-products">
+      {%- for product in fc.products limit: section.settings.limit -%}
+        <li>{% render 'product-card', product: product, show_department: true %}</li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Reka featured edit",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection to feature" },
+    { "type": "range", "id": "limit", "label": "Products shown", "min": 2, "max": 8, "step": 1, "default": 4 }
+  ],
+  "presets": [{ "name": "Reka featured edit" }]
+}
+{% endschema %}

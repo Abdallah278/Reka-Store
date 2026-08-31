@@ -1,0 +1,31 @@
+{%- comment -%} How ordering works — port of Home.tsx HowItWorks {%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+<section class="container rk-section" aria-labelledby="how-title">
+  <div class="rk-section-head">
+    <p class="eyebrow text-burgundy">How it works</p>
+    <h2 id="how-title" class="font-display">Ordering is a conversation</h2>
+    <p>There is no online payment here — by design. Every order is confirmed personally on WhatsApp.</p>
+  </div>
+  <ol class="rk-steps">
+    <li class="rk-step">
+      <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'shield-check', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">01</span></div>
+      <h3 class="font-display">Build your order</h3>
+      <p>Add pieces to your cart and share your delivery details. Nothing is charged on this site.</p>
+    </li>
+    <li class="rk-step">
+      <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">02</span></div>
+      <h3 class="font-display">Confirm on WhatsApp</h3>
+      <p>Your order opens as a ready message — press send and we confirm availability in chat.</p>
+    </li>
+    <li class="rk-step">
+      <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'truck', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">03</span></div>
+      <h3 class="font-display">Transfer, then delivery</h3>
+      <p>We send payment-transfer instructions manually. Once received, your order ships.</p>
+    </li>
+  </ol>
+  <p class="rk-how__note">Questions first? <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: shop.name | append: ', I have a question before ordering.' | url_encode }}" target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>.</p>
+</section>
+
+{% schema %}
+{ "name": "Reka how it works", "settings": [], "presets": [{ "name": "Reka how it works" }] }
+{% endschema %}

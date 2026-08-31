@@ -1,0 +1,29 @@
+{%- comment -%} Footer — port of chrome.tsx Footer {%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+<footer id="contact" class="rk-footer">
+  <div class="container rk-footer__grid">
+    <div>
+      <p class="rk-footer__name font-display">{{ shop.name }}</p>
+      <p class="rk-footer__about">A women's beauty edit across five departments. Prices in EGP. Orders are confirmed on WhatsApp and payment instructions are sent manually — no online payment happens on this site.</p>
+    </div>
+    <nav aria-label="Departments" class="rk-footer__nav">
+      <a href="{{ routes.collections_url }}/korean-skincare">Korean Skincare</a>
+      <a href="{{ routes.collections_url }}/french-skincare">French Skincare</a>
+      <a href="{{ routes.collections_url }}/makeup">Makeup</a>
+      <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
+      <a href="{{ routes.collections_url }}/offers">Offers</a>
+      <a href="{{ routes.cart_url }}">Cart</a>
+    </nav>
+    <nav aria-label="Contact" class="rk-footer__contact">
+      <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'message-circle' %} WhatsApp</a>
+      {%- if settings.instagram_url != blank -%}
+        <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'instagram' %} Instagram</a>
+      {%- endif -%}
+    </nav>
+  </div>
+  <div class="container rk-footer__legal">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Illustrations are original brand artwork.</div>
+</footer>
+
+{% schema %}
+{ "name": "Reka footer", "settings": [] }
+{% endschema %}

@@ -1,0 +1,48 @@
+{%- comment -%} Offers teaser — port of Home.tsx OffersTeaser. Shown only when real offers exist. {%- endcomment -%}
+{%- assign offers_col = collections['offers'] -%}
+{%- if offers_col != blank and offers_col.products_count > 0 -%}
+<section class="container rk-section" aria-labelledby="offers-teaser-title">
+  <div class="rk-inkpanel">
+    <div class="rk-inkpanel__blob" style="right:-4rem; top:-4rem; height:18rem; width:18rem; background: color-mix(in srgb, var(--burgundy) 50%, transparent);" aria-hidden="true"></div>
+    <div class="rk-inkpanel__grid" style="grid-template-columns:1fr;">
+      <div style="display:grid; gap:2.5rem; align-items:center;" class="rk-offers-grid">
+        <div>
+          <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Honest offers</p>
+          <h2 id="offers-teaser-title" class="font-display">Real pieces, really reduced.</h2>
+          <p style="margin-top:1rem; max-width:28rem; font-size:.875rem; line-height:1.75; color: color-mix(in srgb, var(--canvas) 75%, transparent);">Every strikethrough is a genuine previous price. When an offer has an end date, it's a real one.</p>
+          <a href="{{ routes.collections_url }}/offers" class="rk-summary__cta" style="width:auto; margin-top:1.75rem;">Enter the offers room {% render 'icon', name: 'arrow-right' %}</a>
+        </div>
+        <ul style="display:grid; gap:.75rem; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));" aria-label="Current offers">
+          {%- for product in offers_col.products limit: 3 -%}
+            {%- if product.compare_at_price > product.price and product.available -%}
+            {%- assign diff = product.compare_at_price | minus: product.price | times: 100.0 -%}
+            {%- assign off = diff | divided_by: product.compare_at_price | round -%}
+            <li>
+              <a href="{{ product.url }}" style="display:block; overflow:hidden; border-radius:1.25rem; background: color-mix(in srgb, var(--canvas) 5%, transparent); outline:1px solid color-mix(in srgb, var(--canvas) 15%, transparent);">
+                <div style="position:relative; aspect-ratio:1; overflow:hidden;">
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" style="height:100%; width:100%; object-fit:cover;">
+                  {%- else -%}
+                    {% render 'product-art', product: product %}
+                  {%- endif -%}
+                  <span style="position:absolute; left:.5rem; top:.5rem; border-radius:9999px; background:var(--canvas); padding:.25rem .625rem; font-size:11px; font-weight:700; color:var(--ink);">−{{ off }}%</span>
+                </div>
+                <div style="padding:.75rem;">
+                  <p style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.875rem; font-weight:600;">{{ product.title }}</p>
+                  {% render 'price', product: product %}
+                </div>
+              </a>
+            </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<style>@media (min-width:1024px){ .rk-offers-grid { grid-template-columns: .9fr 1.1fr; } }</style>
+{%- endif -%}
+
+{% schema %}
+{ "name": "Reka offers teaser", "settings": [], "presets": [{ "name": "Reka offers teaser" }] }
+{% endschema %}

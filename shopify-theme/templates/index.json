@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "hero": { "type": "reka-hero", "settings": {} },
+    "departments": { "type": "reka-departments", "settings": {} },
+    "featured": { "type": "reka-featured", "settings": {} },
+    "offers": { "type": "reka-offers-teaser", "settings": {} },
+    "manifesto": { "type": "reka-manifesto", "settings": {} },
+    "how": { "type": "reka-how", "settings": {} },
+    "closing": { "type": "reka-closing", "settings": {} }
+  },
+  "order": ["hero", "departments", "featured", "offers", "manifesto", "how", "closing"]
+}

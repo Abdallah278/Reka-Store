@@ -1,0 +1,159 @@
+{%- comment -%}
+  Cart + delivery details + WhatsApp handoff — port of CartPage.tsx and
+  CheckoutPage.tsx. Same two screens, served from /cart: step 1 (order),
+  step 2 (delivery details form), then the ready WhatsApp message opens and a
+  confirmation panel shows the order reference. No online payment, by design.
+{%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+{%- assign fee = settings.delivery_fee | default: 0 -%}
+
+{%- if cart.item_count == 0 -%}
+<div class="rk-cart-empty" data-cart-empty>
+  <span class="rk-cart-empty__icon">{% render 'icon', name: 'shopping-bag', class: 'icon-lg icon' %}</span>
+  <h1 class="font-display">Your order is empty</h1>
+  <p>Wander through the departments and add the pieces you'd like — then we'll confirm everything on WhatsApp.</p>
+  <a href="{{ routes.root_url }}" class="btn-ink">Explore departments</a>
+</div>
+{%- else -%}
+<div class="container rk-cart" data-cart-root data-delivery-fee="{{ fee }}" data-wa="{{ wa }}">
+
+  {%- comment -%} STEP 1 — the order {%- endcomment -%}
+  <div data-step="1">
+    <ol class="rk-steps-nav" aria-label="Order steps">
+      <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">1. Your order</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
+      <li><span class="rk-step-chip">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
+      <li><span class="rk-step-chip">3. Send on WhatsApp</span></li>
+    </ol>
+    <h1 class="font-display">Your order</h1>
+    <p class="rk-cart__lede">Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat.</p>
+
+    <div class="rk-cart__grid">
+      <ul class="rk-lines" aria-label="Order items">
+        {%- for item in cart.items -%}
+        <li class="rk-line" data-line="{{ forloop.index }}">
+          <a href="{{ item.url }}" class="rk-line__img" aria-label="Open {{ item.product.title | escape }}">
+            {%- if item.image -%}
+              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title | escape }}">
+            {%- else -%}
+              {% render 'product-art', product: item.product %}
+            {%- endif -%}
+          </a>
+          <div class="rk-line__body">
+            <div class="rk-line__top">
+              <div style="min-width:0;">
+                <h2 class="rk-line__name"><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
+                <p class="rk-line__each">{{ item.price | money_without_currency | remove: '.00' }} EGP each</p>
+              </div>
+              <p class="rk-line__total">{{ item.line_price | money_without_currency | remove: '.00' }} EGP</p>
+            </div>
+            <div class="rk-line__controls">
+              <div class="rk-qty" role="group" aria-label="Quantity for {{ item.product.title | escape }}">
+                <button type="button" aria-label="Decrease quantity" data-qty-minus data-line-index="{{ forloop.index }}">{% render 'icon', name: 'minus' %}</button>
+                <span aria-live="polite">{{ item.quantity }}</span>
+                <button type="button" aria-label="Increase quantity" data-qty-plus data-line-index="{{ forloop.index }}" {% if item.quantity >= 20 %}disabled{% endif %}>{% render 'icon', name: 'plus' %}</button>
+              </div>
+              <button type="button" class="rk-line__remove" aria-label="Remove {{ item.product.title | escape }}" data-remove data-line-index="{{ forloop.index }}">
+                {% render 'icon', name: 'trash' %} Remove
+              </button>
+            </div>
+          </div>
+        </li>
+        {%- endfor -%}
+      </ul>
+
+      <aside class="rk-summary" aria-label="Order summary">
+        <h2 class="font-display">Summary</h2>
+        <dl>
+          <div><dt>Subtotal</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} EGP</dd></div>
+          <div><dt>Delivery</dt><dd>{% if fee > 0 %}{{ fee }} EGP{% else %}Confirmed on WhatsApp{% endif %}</dd></div>
+          <div class="rk-summary__total"><dt>Total</dt><dd>{{ cart.total_price | divided_by: 100 | plus: fee | append: ' EGP' }}</dd></div>
+        </dl>
+        <button type="button" class="rk-summary__cta" data-goto-step2>Delivery details {% render 'icon', name: 'arrow-right' %}</button>
+        <p class="rk-summary__note">No payment on this site — final confirmation and payment instructions happen on WhatsApp.</p>
+      </aside>
+    </div>
+  </div>
+
+  {%- comment -%} STEP 2 — delivery details (port of CheckoutPage form) {%- endcomment -%}
+  <div class="rk-checkout" data-step="2" hidden>
+    <ol class="rk-steps-nav" aria-label="Order steps">
+      <li><span class="rk-step-chip rk-step-chip--done">1. Your order</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
+      <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
+      <li><span class="rk-step-chip">3. Send on WhatsApp</span></li>
+    </ol>
+    <h1 class="font-display">Delivery details</h1>
+    <p class="rk-cart__lede">This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat.</p>
+
+    <div class="rk-cart__grid" style="grid-template-columns:1fr;">
+      <form class="rk-form" data-checkout-form novalidate style="max-width:44rem;">
+        <div class="rk-form__row">
+          <div class="rk-field" data-field="name">
+            <label for="co-name">Full name</label>
+            <input id="co-name" name="name" autocomplete="name" maxlength="120">
+            <p class="rk-field__err" role="alert"></p>
+          </div>
+          <div class="rk-field" data-field="phone">
+            <label for="co-phone">Mobile number</label>
+            <input id="co-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="32" placeholder="010xxxxxxxx">
+            <p class="rk-field__err" role="alert"></p>
+          </div>
+          <div class="rk-field" data-field="whatsapp">
+            <label for="co-wa">WhatsApp number <small>(if different)</small></label>
+            <input id="co-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="32">
+            <p class="rk-field__err" role="alert"></p>
+          </div>
+          <div class="rk-field" data-field="city">
+            <label for="co-city">Governorate / city</label>
+            <input id="co-city" name="city" autocomplete="address-level1" maxlength="80" placeholder="Cairo, Giza, Alexandria…">
+            <p class="rk-field__err" role="alert"></p>
+          </div>
+        </div>
+        <div class="rk-field" data-field="address">
+          <label for="co-address">Full delivery address</label>
+          <textarea id="co-address" name="address" autocomplete="street-address" rows="3" maxlength="1000" placeholder="Street, area, nearest landmark…"></textarea>
+          <p class="rk-field__err" role="alert"></p>
+        </div>
+        <div class="rk-form__row">
+          <div class="rk-field">
+            <label for="co-building">Building / floor / apartment <small>(optional)</small></label>
+            <input id="co-building" name="building" maxlength="160">
+          </div>
+          <div class="rk-field">
+            <label for="co-notes">Delivery notes <small>(optional)</small></label>
+            <input id="co-notes" name="notes" maxlength="1000" placeholder="Call before arriving…">
+          </div>
+        </div>
+        <label class="rk-consent" data-field="consent">
+          <input type="checkbox" name="consent">
+          <span>I agree to be contacted on WhatsApp about this order. <span class="rk-field__err" role="alert"></span></span>
+        </label>
+
+        <button type="submit" class="btn-wa btn-lg btn-block" data-submit-order>
+          {% render 'icon', name: 'message-circle' %} <span data-submit-label>Send order via WhatsApp</span>
+        </button>
+        <p class="rk-secure-note">{% render 'icon', name: 'lock', class: 'icon' %} No card numbers, no passwords — we only collect delivery details.</p>
+        <button type="button" class="rk-line__remove" data-back-step1 style="justify-self:start;">← Edit order</button>
+      </form>
+    </div>
+  </div>
+
+  {%- comment -%} STEP 3 — confirmation with the order reference {%- endcomment -%}
+  <div class="rk-checkout" data-step="3" hidden>
+    <ol class="rk-steps-nav" aria-label="Order steps">
+      <li><span class="rk-step-chip rk-step-chip--done">1. Your order</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
+      <li><span class="rk-step-chip rk-step-chip--done">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
+      <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">3. Send on WhatsApp</span></li>
+    </ol>
+    <div class="rk-order-done" style="margin-top:1.5rem; max-width:36rem;">
+      <h2 class="font-display">Order request created</h2>
+      <p class="rk-order-done__ref" data-order-ref></p>
+      <p>Your WhatsApp message opened in a new tab with every detail filled in — just press send. If it didn't open, use the button below. We confirm availability and send transfer instructions in chat; payment is confirmed manually by {{ shop.name }}.</p>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="btn-wa" data-wa-resend>{% render 'icon', name: 'message-circle' %} Open WhatsApp message</a>
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{ "name": "Cart & WhatsApp checkout", "settings": [] }
+{% endschema %}

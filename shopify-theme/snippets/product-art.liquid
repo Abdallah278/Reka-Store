@@ -1,0 +1,28 @@
+{%- comment -%}
+  Brand-art fallback for products without photos (port of productArtKey).
+  Usage: {% render 'product-art', product: product %}
+{%- endcomment -%}
+{%- assign cat = product.type | downcase -%}
+{%- assign art_key = blank -%}
+{%- if cat contains 'lip' -%}{%- assign art_key = 'lips' -%}
+{%- elsif cat contains 'eye' -%}{%- assign art_key = 'eye' -%}
+{%- elsif cat contains 'face' or cat contains 'skin' or cat contains 'serum' or cat contains 'cream' -%}{%- assign art_key = 'texture' -%}
+{%- elsif cat contains 'tool' or cat contains 'brush' -%}{%- assign art_key = 'brush' -%}
+{%- endif -%}
+{%- if art_key == blank -%}
+  {%- for c in product.collections -%}
+    {%- if c.handle == 'perfumes' -%}{%- assign art_key = 'botanical' -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- if art_key == blank -%}
+  {%- assign m = product.id | modulo: 6 -%}
+  {%- case m -%}
+    {%- when 0 -%}{%- assign art_key = 'lips' -%}
+    {%- when 1 -%}{%- assign art_key = 'compact' -%}
+    {%- when 2 -%}{%- assign art_key = 'brush' -%}
+    {%- when 3 -%}{%- assign art_key = 'texture' -%}
+    {%- when 4 -%}{%- assign art_key = 'hands' -%}
+    {%- else -%}{%- assign art_key = 'eye' -%}
+  {%- endcase -%}
+{%- endif -%}
+{%- render 'art', key: art_key, title: product.title -%}

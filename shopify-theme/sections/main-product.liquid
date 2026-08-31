@@ -1,0 +1,131 @@
+{%- comment -%} Product page — port of ProductPage.tsx (gallery, details, add-to-order, WhatsApp) {%- endcomment -%}
+{%- assign v = product.selected_or_first_available_variant | default: product.variants.first -%}
+{%- assign sold_out = false -%}{%- unless product.available -%}{%- assign sold_out = true -%}{%- endunless -%}
+{%- assign stock_left = nil -%}
+{%- if sold_out == false and v.inventory_management == 'shopify' and v.inventory_policy == 'deny' and v.inventory_quantity > 0 and v.inventory_quantity <= 5 -%}
+  {%- assign stock_left = v.inventory_quantity -%}
+{%- endif -%}
+{%- assign off = 0 -%}
+{%- if product.compare_at_price > product.price -%}
+  {%- assign diff = product.compare_at_price | minus: product.price | times: 100.0 -%}
+  {%- assign off = diff | divided_by: product.compare_at_price | round -%}
+{%- endif -%}
+{%- assign dept = product.collections.first -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+{%- assign price_txt = product.price | money_without_currency | remove: '.00' | append: ' EGP' -%}
+{%- assign ask = 'Hi, I would like to ask about ' | append: product.title | append: ', priced at ' | append: price_txt | append: '.' -%}
+
+<div class="rk-product">
+  <nav aria-label="Breadcrumb" class="container rk-breadcrumb">
+    <ol>
+      <li><a href="{{ routes.root_url }}">Home</a></li>
+      {%- if dept -%}<li aria-hidden="true">/</li><li><a href="{{ dept.url }}">{{ dept.title }}</a></li>{%- endif -%}
+      <li aria-hidden="true">/</li>
+      <li aria-current="page">{{ product.title }}</li>
+    </ol>
+  </nav>
+
+  <section class="container rk-product__grid" aria-label="{{ product.title | escape }}">
+    <div>
+      <figure class="rk-gallery__main">
+        <div class="brand-tone" data-gallery-main>
+          {%- if product.images.size > 0 -%}
+            {%- for image in product.images -%}
+              <img src="{{ image | image_url: width: 1000 }}" alt="{{ image.alt | default: product.title | escape }}" {% unless forloop.first %}hidden{% endunless %} data-gallery-img="{{ forloop.index0 }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+            {%- endfor -%}
+          {%- else -%}
+            {% render 'product-art', product: product %}
+          {%- endif -%}
+        </div>
+        {%- if sold_out -%}<figcaption class="rk-gallery__badge">Sold out</figcaption>{%- endif -%}
+        {%- if off > 0 and sold_out == false -%}<span class="rk-gallery__off">−{{ off }}%</span>{%- endif -%}
+        {%- if product.images.size > 1 -%}
+          <button type="button" class="rk-gallery__nav rk-gallery__nav--prev" aria-label="Previous image" data-gallery-prev>{% render 'icon', name: 'chevron-left', class: 'icon-lg icon' %}</button>
+          <button type="button" class="rk-gallery__nav rk-gallery__nav--next" aria-label="Next image" data-gallery-next>{% render 'icon', name: 'chevron-right', class: 'icon-lg icon' %}</button>
+        {%- endif -%}
+      </figure>
+      {%- if product.images.size > 1 -%}
+        <div class="rk-thumbs" role="tablist" aria-label="Product images">
+          {%- for image in product.images -%}
+            <button type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Show image {{ forloop.index }} of {{ product.images.size }}" data-gallery-thumb="{{ forloop.index0 }}">
+              <img src="{{ image | image_url: width: 160 }}" alt="" loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      <p class="rk-gallery__note">
+        {%- if product.images.size > 1 -%}<span data-gallery-note>Image 1 of {{ product.images.size }}</span> · use ← → keys
+        {%- elsif product.images.size == 1 -%}1 image
+        {%- else -%}Brand illustration shown until photography is added{%- endif -%}
+      </p>
+    </div>
+
+    <div class="rk-pdetails">
+      {%- if dept -%}<p class="eyebrow text-burgundy">{{ dept.title }}{% if product.type != blank %} · {{ product.type }}{% endif %}</p>{%- endif -%}
+      <h1 class="font-display">{{ product.title }}</h1>
+      {%- if product.vendor != blank and product.vendor != shop.name -%}<p class="rk-pdetails__brand">{{ product.vendor }}</p>{%- endif -%}
+      <p class="rk-pdetails__desc">{{ product.description | strip_html | default: 'Details for this piece are coming soon. Ask us on WhatsApp for the full story.' }}</p>
+      {%- if v.title != 'Default Title' -%}
+        <p class="rk-pdetails__variant">{{ v.title }}</p>
+      {%- endif -%}
+
+      <div class="rk-pdetails__pricerow">
+        <div>
+          {% render 'price', product: product, big: true %}
+        </div>
+        <p class="rk-status-chip {% if sold_out %}rk-status-chip--soldout{% elsif stock_left %}rk-status-chip--low{% endif %}" aria-live="polite">
+          {%- if sold_out -%}Sold out{%- elsif stock_left -%}Only {{ stock_left }} left{%- else -%}Available{%- endif -%}
+        </p>
+      </div>
+
+      <div class="rk-pdetails__actions">
+        {%- if sold_out -%}
+          <div role="status" class="rk-soldout-note">
+            <strong>This piece is currently sold out.</strong>
+            It can't be added to an order right now. Message us and we'll tell you when it returns.
+          </div>
+        {%- else -%}
+          <button type="button" class="btn-ink btn-block" data-add-to-cart="{{ v.id }}" data-product-title="{{ product.title | escape }}">
+            {% render 'icon', name: 'shopping-bag' %} Add to order — {{ price_txt }}
+          </button>
+        {%- endif -%}
+        <a href="https://wa.me/{{ wa }}?text={{ ask | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa btn-block">
+          {% render 'icon', name: 'message-circle' %} Ask about this on WhatsApp
+        </a>
+        <p class="rk-pdetails__nopay">No online payment — your order is confirmed on WhatsApp and payment instructions are sent manually.</p>
+      </div>
+
+      {%- assign notes = product.metafields.reka.notes.value | default: product.metafields.custom.notes.value -%}
+      {%- if notes != blank -%}
+        <div class="rk-pdetails__notes">
+          <h2>Notes & details</h2>
+          <p>{{ notes }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- assign rel_source = dept.products | default: collections['all'].products -%}
+  {%- assign shown = 0 -%}
+  {%- capture related -%}
+    {%- for p in rel_source -%}
+      {%- if p.id != product.id and p.available and shown < 4 -%}
+        <li>{% render 'product-card', product: p %}</li>
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if related contains '<li' -%}
+  <section class="container rk-related" aria-labelledby="related-title">
+    <div class="rk-section-head">
+      <p class="eyebrow text-burgundy">Keep browsing</p>
+      <h2 id="related-title" class="font-display">More from this room</h2>
+    </div>
+    <ul class="rk-grid-products">{{ related }}</ul>
+  </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{ "name": "Product page", "settings": [] }
+{% endschema %}
