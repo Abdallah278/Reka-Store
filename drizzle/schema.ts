@@ -72,6 +72,12 @@ export const products = pgTable("products", {
   categoryId: integer("categoryId"),
   isSoldOut: integer("isSoldOut").notNull().default(0),
   isPublished: integer("isPublished").notNull().default(1),
+  /**
+   * Optional tracked stock. NULL = not tracked (behaves exactly as before).
+   * When tracked: orders cannot exceed it, it is decremented on order
+   * creation, and 0 shows the product as sold out on the storefront.
+   */
+  stockQuantity: integer("stockQuantity"),
   createdAt: timestamp("createdAt", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }).defaultNow().notNull().$onUpdate(() => new Date()),
 });

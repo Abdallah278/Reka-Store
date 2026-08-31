@@ -67,8 +67,8 @@ export function ProductCard({ product, eager = false, showDepartment = false, to
         <div className={`brand-tone relative aspect-[4/5] ${product.isSoldOut ? "grayscale-[.4]" : ""}`}>
           <ProductImage product={product} eager={eager} className="transition-transform duration-500 group-hover:scale-[1.04]" />
         </div>
-        <span className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.18em] ${product.isSoldOut ? "bg-burgundy text-canvas" : "bg-canvas/95 text-ink"}`}>
-          {product.isSoldOut ? "Sold out" : "Available"}
+        <span className={`absolute left-3 top-3 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.18em] ${product.isSoldOut ? "bg-burgundy text-canvas" : product.stockLeft != null ? "bg-burgundy/90 text-canvas" : "bg-canvas/95 text-ink"}`}>
+          {product.isSoldOut ? "Sold out" : product.stockLeft != null ? `Only ${product.stockLeft} left` : "Available"}
         </span>
         {off > 0 && !product.isSoldOut && (
           <span className="absolute right-3 top-3 rounded-full bg-ink px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.14em] text-canvas">−{off}%</span>

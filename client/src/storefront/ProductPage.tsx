@@ -30,7 +30,7 @@ export default function ProductPage({ slug, settings, products, loading, error, 
 
   if (loading) {
     return (
-      <div className="container pt-32 pb-24" aria-busy="true">
+      <div className="container pt-26 pb-16" aria-busy="true">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="aspect-[4/5] animate-pulse rounded-[2rem] bg-clay/40" />
           <div className="space-y-4 pt-6">
@@ -45,7 +45,7 @@ export default function ProductPage({ slug, settings, products, loading, error, 
 
   if (error) {
     return (
-      <div role="alert" className="container pt-36 pb-24 text-center">
+      <div role="alert" className="container pt-28 pb-16 text-center">
         <p className="font-display text-4xl">We couldn't load this product.</p>
         <button type="button" onClick={retry} className="btn-ink mt-6"><RefreshCw className="h-4 w-4" aria-hidden="true" /> Try again</button>
       </div>
@@ -54,7 +54,7 @@ export default function ProductPage({ slug, settings, products, loading, error, 
 
   if (!product) {
     return (
-      <div className="container pt-36 pb-24 text-center">
+      <div className="container pt-28 pb-16 text-center">
         <p className="eyebrow text-burgundy">Not found</p>
         <h1 className="mt-3 font-display text-5xl">This piece isn't here anymore.</h1>
         <p className="mx-auto mt-4 max-w-sm text-sm leading-7 text-olive">It may have been retired from the edit. The departments are full of good company, though.</p>
@@ -87,7 +87,7 @@ function ProductView({ product, settings, products }: { product: PublicProduct; 
   };
 
   return (
-    <div className="pt-24 sm:pt-28">
+    <div className="pt-20 sm:pt-24">
       <nav aria-label="Breadcrumb" className="container pb-4 text-sm text-olive">
         <ol className="flex flex-wrap items-center gap-2">
           <li><Link href="/" className="hover:text-burgundy">Home</Link></li>
@@ -177,8 +177,8 @@ function ProductView({ product, settings, products }: { product: PublicProduct; 
                 <p className="mt-1 text-xs font-semibold text-burgundy">Offer ends {new Date(product.offerEndsAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}</p>
               )}
             </div>
-            <p className={`rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-[.18em] ${product.isSoldOut ? "bg-burgundy text-canvas" : "bg-olive/15 text-olive"}`} aria-live="polite">
-              {product.isSoldOut ? "Sold out" : "Available"}
+            <p className={`rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-[.18em] ${product.isSoldOut ? "bg-burgundy text-canvas" : product.stockLeft != null ? "bg-burgundy/90 text-canvas" : "bg-olive/15 text-olive"}`} aria-live="polite">
+              {product.isSoldOut ? "Sold out" : product.stockLeft != null ? `Only ${product.stockLeft} left` : "Available"}
             </p>
           </div>
 
@@ -204,7 +204,7 @@ function ProductView({ product, settings, products }: { product: PublicProduct; 
       <Reviews product={product} />
 
       {related.length > 0 && (
-        <section className="container pb-20 lg:pb-28" aria-labelledby="related-title">
+        <section className="container pb-14 lg:pb-20" aria-labelledby="related-title">
           <p className="eyebrow text-burgundy">Same department</p>
           <h2 id="related-title" className="mt-2 font-display text-4xl font-medium tracking-tight">You might also like</h2>
           <ul className="mt-8 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">

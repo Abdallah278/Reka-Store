@@ -34,7 +34,7 @@ describe("public storefront reads", () => {
 
   it("expose only public product fields (no storageKey / isPublished / createdAt)", async () => {
     const [row] = await appRouter.createCaller(makeContext(null)).storefront.products();
-    expect(Object.keys(row).sort()).toEqual(["brand", "categoryId", "categoryName", "department", "description", "id", "images", "isSoldOut", "name", "offerEndsAt", "originalPrice", "price", "productNotes", "slug", "updatedAt", "variantLabel"].sort());
+    expect(Object.keys(row).sort()).toEqual(["brand", "categoryId", "categoryName", "department", "description", "id", "images", "isSoldOut", "name", "offerEndsAt", "originalPrice", "price", "productNotes", "slug", "stockLeft", "updatedAt", "variantLabel"].sort());
     expect(row.images[0]).toEqual({ id: 100, url: "/manus-storage/reka/products/a.jpg", sortOrder: 0 });
     expect(row.images[0]).not.toHaveProperty("storageKey");
     expect(typeof row.isSoldOut).toBe("boolean");

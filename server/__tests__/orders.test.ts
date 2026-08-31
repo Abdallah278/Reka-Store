@@ -39,6 +39,7 @@ const rawProduct = (overrides: Record<string, unknown> = {}) => ({
   categoryId: 1,
   isSoldOut: 0,
   isPublished: 1,
+  stockQuantity: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   ...overrides,
@@ -108,6 +109,37 @@ describe("storefront.createOrder", () => {
     const caller = appRouter.createCaller(makeContext(null));
     await expect(caller.storefront.createOrder(validCheckout)).rejects.toMatchObject({ code: "BAD_REQUEST" });
     expect(fake.current!.inserted).toHaveLength(0);
+  });
+
+  it("treats tracked stock 0 as sold out", async () => {
+    fake.current!.setSelectRows([productRow({ stockQuantity: 0 })]);
+    const caller = appRouter.createCaller(makeContext(null));
+    await expect(caller.storefront.createOrder(validCheckout)).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    expect(fake.current!.inserted).toHaveLength(0);
+  });
+
+  it("rejects quantities above tracked stock", async () => {
+    fake.current!.setSelectRows([productRow({ stockQuantity: 1 })]);
+    const caller = appRouter.createCaller(makeContext(null));
+    await expect(caller.storefront.createOrder(validCheckout)).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    expect(fake.current!.inserted).toHaveLength(0);
+  });
+
+  it("decrements tracked stock after the order is created", async () => {
+    fake.current!.setSelectRows([productRow({ stockQuantity: 5 })]);
+    const caller = appRouter.createCaller(makeContext(null));
+    await caller.storefront.createOrder(validCheckout); // quantity 2
+    const stockUpdate = fake.current!.updated.find(u => (u.values as Record<string, unknown>).stockQuantity !== undefined);
+    expect(stockUpdate).toBeDefined();
+    expect((stockUpdate!.values as Record<string, unknown>).stockQuantity).toBe(3);
+  });
+
+  it("leaves untracked stock (null) untouched", async () => {
+    fake.current!.setSelectRows([productRow({ stockQuantity: null })]);
+    const caller = appRouter.createCaller(makeContext(null));
+    await caller.storefront.createOrder(validCheckout);
+    const stockUpdate = fake.current!.updated.find(u => (u.values as Record<string, unknown>).stockQuantity !== undefined);
+    expect(stockUpdate).toBeUndefined();
   });
 
   it("rejects unpublished products", async () => {

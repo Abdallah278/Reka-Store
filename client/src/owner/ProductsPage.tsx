@@ -32,10 +32,12 @@ type Form = {
   categoryId: number | null;
   isSoldOut: boolean;
   isPublished: boolean;
+  /** Empty string = stock not tracked. */
+  stockQuantity: string;
   images: FormImage[];
 };
 
-const emptyForm: Form = { name: "", description: "", price: "", originalPrice: "", offerEndsAt: "", department: "makeup", brand: "", sku: "", variantLabel: "", productNotes: "", categoryId: null, isSoldOut: false, isPublished: true, images: [] };
+const emptyForm: Form = { name: "", description: "", price: "", originalPrice: "", offerEndsAt: "", department: "makeup", brand: "", sku: "", variantLabel: "", productNotes: "", categoryId: null, isSoldOut: false, isPublished: true, stockQuantity: "", images: [] };
 
 const toDateInput = (value: Date | string | null | undefined) => {
   if (!value) return "";
@@ -127,6 +129,9 @@ export default function ProductsPage() {
                     <h2 className="truncate font-semibold">{p.name}</h2>
                     <p className="text-xs text-olive">
                       {(DEPARTMENTS as Record<string, { shortName: string }>)[p.department]?.shortName ?? p.department} · {p.categoryName} · {p.images.length} image{p.images.length === 1 ? "" : "s"}
+                      {p.stockQuantity != null && (
+                        <span className={p.stockQuantity <= 5 ? " font-bold text-burgundy" : ""}> · {p.stockQuantity} in stock</span>
+                      )}
                     </p>
                   </div>
                   <p className="shrink-0 text-right font-semibold">
@@ -192,6 +197,7 @@ function ProductDialog({ product, open, onClose, categories, onSaved }: { produc
           categoryId: product.categoryId ?? null,
           isSoldOut: Boolean(product.isSoldOut),
           isPublished: Boolean(product.isPublished),
+          stockQuantity: product.stockQuantity != null ? String(product.stockQuantity) : "",
           images: product.images.map(i => ({ url: i.imageUrl, key: i.storageKey })),
         }
       : emptyForm
@@ -249,6 +255,8 @@ function ProductDialog({ product, open, onClose, categories, onSaved }: { produc
       problems.push("Original price must be a whole number HIGHER than the sale price — discounts must be genuine.");
     }
     if (form.offerEndsAt && originalPrice === null) problems.push("An offer end date needs an original price — otherwise there is no real offer.");
+    const stockQuantity = form.stockQuantity.trim() ? Number(form.stockQuantity) : null;
+    if (stockQuantity !== null && (!Number.isInteger(stockQuantity) || stockQuantity < 0)) problems.push("Stock must be a whole number of units (leave empty to not track stock).");
     setErrors(problems);
     if (problems.length) return;
     const payload = {
@@ -265,6 +273,7 @@ function ProductDialog({ product, open, onClose, categories, onSaved }: { produc
       categoryId: form.categoryId,
       isSoldOut: form.isSoldOut,
       isPublished: form.isPublished,
+      stockQuantity,
       images: form.images,
     };
     try {
@@ -350,7 +359,7 @@ function ProductDialog({ product, open, onClose, categories, onSaved }: { produc
               <Label htmlFor="p-notes">Ingredients / fragrance notes (optional)</Label>
               <Textarea id="p-notes" rows={3} value={form.productNotes} onChange={e => field("productNotes", e.target.value)} maxLength={4000} placeholder="Key ingredients, fragrance notes, how to use…" />
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-3">
               <label className="flex min-h-12 items-center justify-between rounded-xl bg-canvas px-4 text-sm font-semibold">
                 <span className="flex items-center gap-2">{form.isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />} Published on storefront</span>
                 <Switch checked={form.isPublished} onCheckedChange={v => field("isPublished", v)} />
@@ -359,7 +368,12 @@ function ProductDialog({ product, open, onClose, categories, onSaved }: { produc
                 Sold out
                 <Switch checked={form.isSoldOut} onCheckedChange={v => field("isSoldOut", v)} />
               </label>
+              <div className="grid gap-1">
+                <Label htmlFor="p-stock">Stock (units)</Label>
+                <Input id="p-stock" className="min-h-12" inputMode="numeric" value={form.stockQuantity} onChange={e => field("stockQuantity", e.target.value.replace(/[^\d]/g, ""))} placeholder="Empty = not tracked" />
+              </div>
             </div>
+            {form.stockQuantity.trim() === "0" && <p className="text-xs text-burgundy">Stock 0 shows the product as sold out on the storefront.</p>}
 
             <div className="grid gap-2">
               <div className="flex items-center justify-between">

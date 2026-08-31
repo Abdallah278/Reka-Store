@@ -62,6 +62,8 @@ const productInput = z
     categoryId: z.number().int().nullable().optional(),
     isSoldOut: z.boolean().default(false),
     isPublished: z.boolean().default(true),
+    /** Optional tracked stock — null/omitted means "not tracked". */
+    stockQuantity: z.number().int().min(0).max(1_000_000).nullable().optional(),
     images: z.array(imageInput).max(8).default([]),
   })
   .refine(v => v.originalPrice == null || v.originalPrice > v.price, {
@@ -263,6 +265,7 @@ export const appRouter = router({
         categoryId: input.categoryId ?? null,
         isSoldOut: input.isSoldOut ? 1 : 0,
         isPublished: input.isPublished ? 1 : 0,
+        stockQuantity: input.stockQuantity ?? null,
       }).returning({ id: products.id });
       const productId = Number(created[0]?.id);
       if (input.images.length) {
@@ -290,6 +293,7 @@ export const appRouter = router({
         categoryId: input.categoryId ?? null,
         isSoldOut: input.isSoldOut ? 1 : 0,
         isPublished: input.isPublished ? 1 : 0,
+        stockQuantity: input.stockQuantity ?? null,
       };
       await db.update(products).set(next).where(eq(products.id, input.id));
       await db.delete(productImages).where(eq(productImages.productId, input.id));

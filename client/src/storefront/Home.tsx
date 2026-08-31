@@ -32,12 +32,12 @@ function Hero({ settings, featured }: { settings: PublicSettings; featured: Publ
   const scene = useTilt<HTMLDivElement>(6);
   const feature = featured.find(p => !p.isSoldOut) ?? featured[0];
   return (
-    <section className="relative overflow-hidden pt-28 sm:pt-32 lg:pt-36">
+    <section className="relative overflow-hidden pt-24 sm:pt-28 lg:pt-30">
       <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-cream/70 blur-2xl" />
       <div aria-hidden="true" className="pointer-events-none absolute right-[-10%] top-[20%] h-[28rem] w-[28rem] rounded-full bg-clay/30 blur-3xl anim-drift" />
       <div aria-hidden="true" className="pointer-events-none absolute bottom-[-6rem] left-[30%] h-64 w-64 rounded-full bg-burgundy/15 blur-3xl" />
 
-      <div className="container grid items-center gap-12 pb-16 lg:grid-cols-[1fr_1.05fr] lg:gap-8 lg:pb-24">
+      <div className="container grid items-center gap-10 pb-12 lg:grid-cols-[1fr_1.05fr] lg:gap-8 lg:pb-16">
         <div className="relative z-10 max-w-2xl">
           <p className="eyebrow inline-flex items-center gap-2 rounded-full border border-burgundy/30 bg-cream/50 px-4 py-2 text-burgundy">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> five departments · one point of view
@@ -165,7 +165,7 @@ function Gateways({ products }: { products: PublicProduct[] }) {
     if (p.originalPrice) counts.set(p.department, (counts.get(p.department) ?? 0) + 1);
   }
   return (
-    <section id="departments" ref={ref} className="container scroll-mt-24 py-20 lg:py-28" aria-labelledby="departments-title">
+    <section id="departments" ref={ref} className="container scroll-mt-24 py-14 lg:py-20" aria-labelledby="departments-title">
       <div className="reveal flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <SectionHead eyebrow="Choose your ritual" title="Five departments, five moods" id="departments-title" />
         <p className="max-w-sm text-sm leading-7 text-olive">Each department is its own room — its own light, colour and pace. Step into the one closest to today.</p>
@@ -215,7 +215,7 @@ function Featured({ products, loading }: { products: PublicProduct[]; loading: b
   const ref = useReveal<HTMLElement>();
   if (!loading && products.length === 0) return null;
   return (
-    <section ref={ref} className="bg-cream/60 py-20 lg:py-28" aria-labelledby="featured-title">
+    <section ref={ref} className="bg-cream/60 py-14 lg:py-20" aria-labelledby="featured-title">
       <div className="container">
         <div className="reveal flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <SectionHead eyebrow="This week" title="The featured edit" id="featured-title" />
@@ -252,7 +252,7 @@ function Featured({ products, loading }: { products: PublicProduct[]; loading: b
 function OffersTeaser({ offers }: { offers: PublicProduct[] }) {
   const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} className="container py-20 lg:py-24" aria-labelledby="offers-teaser-title">
+    <section ref={ref} className="container py-14 lg:py-18" aria-labelledby="offers-teaser-title">
       <div className="reveal relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-12 text-canvas sm:px-10 lg:px-16 lg:py-16">
         <div aria-hidden="true" className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-burgundy/50 blur-3xl" />
         <div className="relative grid items-center gap-10 lg:grid-cols-[.9fr_1.1fr]">
@@ -300,7 +300,7 @@ function HowItWorks({ settings }: { settings: PublicSettings }) {
     { icon: Truck, title: "Transfer, then delivery", text: "We send payment-transfer instructions manually. Once received, your order ships." },
   ];
   return (
-    <section ref={ref} className="container py-20 lg:py-24" aria-labelledby="how-title">
+    <section ref={ref} className="container py-14 lg:py-18" aria-labelledby="how-title">
       <div className="reveal">
         <SectionHead eyebrow="How it works" title="Ordering is a conversation" text="There is no online payment here — by design. Every order is confirmed personally on WhatsApp." id="how-title" />
       </div>
@@ -332,8 +332,8 @@ function HowItWorks({ settings }: { settings: PublicSettings }) {
 function Closing({ settings }: { settings: PublicSettings }) {
   const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} className="container pb-20 lg:pb-28">
-      <div className="reveal relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-16 text-canvas sm:px-12 lg:px-20 lg:py-24">
+    <section ref={ref} className="container pb-14 lg:pb-20">
+      <div className="reveal relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-12 text-canvas sm:px-12 lg:px-16 lg:py-16">
         <div aria-hidden="true" className="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-burgundy/60 blur-3xl" />
         <div aria-hidden="true" className="absolute -bottom-16 left-1/3 h-56 w-56 rounded-full bg-clay/40 blur-3xl" />
         <div className="relative grid items-center gap-10 lg:grid-cols-[1fr_.6fr]">

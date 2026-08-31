@@ -18,7 +18,7 @@ export default function CartPage({ settings, products, loading }: { settings: Pu
 
   if (!loading && cart.lines.length === 0) {
     return (
-      <div className="container pt-36 pb-24 text-center">
+      <div className="container pt-28 pb-16 text-center">
         <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-cream ring-1 ring-ink/10">
           <ShoppingBag className="h-7 w-7 text-burgundy" aria-hidden="true" />
         </span>
@@ -30,7 +30,7 @@ export default function CartPage({ settings, products, loading }: { settings: Pu
   }
 
   return (
-    <div className="container pt-28 pb-20 sm:pt-32">
+    <div className="container pt-24 pb-14 sm:pt-26">
       <p className="eyebrow text-burgundy">Request order</p>
       <h1 className="mt-2 font-display text-[clamp(2.6rem,6vw,4.5rem)] font-medium leading-none tracking-tight">Your order</h1>
       <p className="mt-3 max-w-lg text-sm leading-7 text-olive">

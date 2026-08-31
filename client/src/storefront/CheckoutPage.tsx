@@ -107,7 +107,7 @@ export default function CheckoutPage({ settings, products, loading }: { settings
     `min-h-12 w-full rounded-xl border bg-cream px-4 text-sm outline-none focus:ring-2 focus:ring-burgundy ${errors[key] ? "border-burgundy" : "border-olive/30"}`;
 
   return (
-    <div className="container pt-28 pb-20 sm:pt-32">
+    <div className="container pt-24 pb-14 sm:pt-26">
       <p className="eyebrow text-burgundy">Almost there</p>
       <h1 className="mt-2 font-display text-[clamp(2.6rem,6vw,4.5rem)] font-medium leading-none tracking-tight">Delivery details</h1>
       <p className="mt-3 max-w-lg text-sm leading-7 text-olive">

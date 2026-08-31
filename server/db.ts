@@ -159,12 +159,20 @@ export type PublicProduct = {
   categoryId: number | null;
   categoryName: string;
   isSoldOut: boolean;
+  /** Genuine low-stock signal: remaining units when tracked and ≤ 5, else null. */
+  stockLeft: number | null;
   updatedAt: Date;
   images: { id: number; url: string; sortOrder: number }[];
 };
 
+/** Sold out when flagged manually OR when tracked stock has run out. */
+export function isEffectivelySoldOut(p: Pick<Product, "isSoldOut" | "stockQuantity">): boolean {
+  return Boolean(p.isSoldOut) || (p.stockQuantity != null && p.stockQuantity <= 0);
+}
+
 export function toPublicProduct(product: ProductWithRelations): PublicProduct {
   const offer = hasActiveOffer(product);
+  const soldOut = isEffectivelySoldOut(product);
   return {
     id: product.id,
     name: product.name,
@@ -179,7 +187,8 @@ export function toPublicProduct(product: ProductWithRelations): PublicProduct {
     variantLabel: product.variantLabel,
     categoryId: product.categoryId,
     categoryName: product.categoryName,
-    isSoldOut: Boolean(product.isSoldOut),
+    isSoldOut: soldOut,
+    stockLeft: !soldOut && product.stockQuantity != null && product.stockQuantity <= 5 ? product.stockQuantity : null,
     updatedAt: product.updatedAt,
     images: product.images.map(image => ({ id: image.id, url: image.imageUrl, sortOrder: image.sortOrder })),
   };
@@ -332,13 +341,16 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
     wanted.set(item.productId, (wanted.get(item.productId) ?? 0) + item.quantity);
   }
 
-  const catalogue = await listPublicProducts();
+  const catalogue = (await listProducts(false)).filter(p => p.isPublished === 1);
   const items: CreatedOrder["items"] = [];
   for (const [productId, quantity] of Array.from(wanted.entries())) {
     const product = catalogue.find(p => p.id === productId);
     if (!product) throw new OrderCreationError("unavailable", "A product in your cart is no longer available");
-    if (product.isSoldOut) throw new OrderCreationError("sold-out", `${product.name} is sold out`);
+    if (isEffectivelySoldOut(product)) throw new OrderCreationError("sold-out", `${product.name} is sold out`);
     if (quantity < 1 || quantity > 20) throw new OrderCreationError("quantity", "Quantity must be between 1 and 20");
+    if (product.stockQuantity != null && quantity > product.stockQuantity) {
+      throw new OrderCreationError("stock", `Only ${product.stockQuantity} of ${product.name} left in stock`);
+    }
     items.push({
       productId,
       name: product.name,
@@ -377,6 +389,18 @@ export async function createOrder(input: CreateOrderInput): Promise<CreatedOrder
   await db.update(orders).set({ reference }).where(eq(orders.id, orderId));
   await db.insert(orderItems).values(items.map(item => ({ orderId, ...item })));
   await db.insert(orderStatusHistory).values({ orderId, fromStatus: null, toStatus: "pending_contact", actor: "customer", note: null });
+
+  // Decrement tracked stock (never below zero). Untracked products (null) are
+  // left untouched, so existing behaviour is unchanged for them.
+  for (const item of items) {
+    const product = catalogue.find(p => p.id === item.productId);
+    if (product && product.stockQuantity != null) {
+      await db
+        .update(products)
+        .set({ stockQuantity: Math.max(0, product.stockQuantity - item.quantity) })
+        .where(eq(products.id, product.id));
+    }
+  }
 
   return {
     id: orderId,

@@ -54,7 +54,7 @@ export default function DepartmentPage({ slug, settings, products, loading, erro
       {slug === "perfumes" && <ScrollBottle />}
 
       {/* Collection */}
-      <section id="collection" className={`scroll-mt-24 py-16 lg:py-24 ${isOffers ? "bg-ink" : ""}`} aria-labelledby="collection-title">
+      <section id="collection" className={`scroll-mt-24 py-12 lg:py-16 ${isOffers ? "bg-ink" : ""}`} aria-labelledby="collection-title">
         <div className="container">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHead
@@ -128,7 +128,7 @@ export default function DepartmentPage({ slug, settings, products, loading, erro
       <Editorial slug={slug} />
 
       {/* CTA */}
-      <section className="container pb-20 lg:pb-28">
+      <section className="container pb-14 lg:pb-20">
         <div className="relative overflow-hidden rounded-[2.5rem] px-6 py-14 text-canvas sm:px-12" style={visual.heroStyle}>
           <div aria-hidden="true" className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-canvas/10 blur-2xl" />
           <div className={`relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between ${dark ? "" : "text-ink"}`}>
@@ -264,7 +264,7 @@ function Ritual({ slug }: { slug: DepartmentSlug }) {
   const visual = DEPT_VISUALS[slug];
   const ref = useReveal<HTMLElement>();
   return (
-    <section ref={ref} className="container py-16 lg:py-24" aria-labelledby="ritual-title">
+    <section ref={ref} className="container py-12 lg:py-16" aria-labelledby="ritual-title">
       <div className="reveal">
         <SectionHead eyebrow={DEPARTMENTS[slug].name} title={visual.ritualTitle} id="ritual-title" />
       </div>
