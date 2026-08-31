@@ -116,3 +116,4 @@ client/public/__manus__/version.json
 .vercel
 .env*
 supabase/.temp/
+api/_app.mjs

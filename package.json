@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "NODE_ENV=development tsx watch server/_core/index.ts",
     "build": "npm run build:public && npm run build:admin && npm run build:server",
-    "build:vercel": "npm run build:public && npm run build:admin && node scripts/merge-admin.mjs",
+    "build:vercel": "npm run build:public && npm run build:admin && node scripts/merge-admin.mjs && npm run build:api",
+    "build:api": "esbuild server/app.ts --platform=node --packages=external --bundle --format=esm --outfile=api/_app.mjs",
     "build:public": "vite build",
     "build:admin": "vite build --config vite.admin.config.ts",
     "build:server": "esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
