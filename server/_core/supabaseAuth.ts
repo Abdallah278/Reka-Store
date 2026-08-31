@@ -41,6 +41,12 @@ function supabaseAuthClient(): SupabaseClient | null {
   if (!_client) {
     _client = createClient(ENV.supabaseUrl, ENV.supabaseAnonKey, {
       auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      // Bounded fetch: this client is cached across serverless invocations and
+      // a stalled keep-alive socket must fail fast (treated as logged out)
+      // instead of hanging the whole request until the platform kills it.
+      global: {
+        fetch: (input, init) => fetch(input, { ...init, signal: AbortSignal.timeout(10_000) }),
+      },
     });
   }
   return _client;

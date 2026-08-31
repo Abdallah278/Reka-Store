@@ -41,7 +41,16 @@ export async function getDb() {
     try {
       // Supabase PostgreSQL. `prepare: false` is required behind the Supabase
       // transaction pooler (PgBouncer); max 1 keeps serverless connections lean.
-      const client = postgres(process.env.DATABASE_URL, { prepare: false, max: 1 });
+      // The timeouts matter on Vercel: a frozen-then-thawed function reuses
+      // this cached client, and a socket the pooler already dropped would
+      // otherwise make the next query hang until the platform's 300s kill.
+      const client = postgres(process.env.DATABASE_URL, {
+        prepare: false,
+        max: 1,
+        connect_timeout: 10,
+        idle_timeout: 20,
+        max_lifetime: 60 * 5,
+      });
       _db = drizzle(client);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
