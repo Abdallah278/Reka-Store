@@ -16,7 +16,7 @@
     <div>
       <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Manifesto</p>
       <h2 class="font-display">Beauty that fits the <em>morning you already have.</em></h2>
-      <p class="rk-manifesto__text">{{ shop.name }} is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.</p>
+      <p class="rk-manifesto__text">{{ settings.store_name | default: 'Reka Store' }} is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.</p>
     </div>
     <div class="rk-manifesto__art">
       <div class="rk-manifesto__art-frame">{% render 'art', key: 'hands', title: 'Illustration of a hand holding a serum bottle in warm light' %}</div>

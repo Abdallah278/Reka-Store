@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ settings.store_name | default: 'Reka Store' }}{% endunless %}</title>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
     window.REKA = {
       whatsapp: {{ settings.whatsapp_number | json }},
       deliveryFee: {{ settings.delivery_fee | default: 0 | json }},
-      storeName: {{ shop.name | json }},
+      storeName: {{ settings.store_name | default: 'Reka Store' | json }},
       moneyFormat: "EGP"
     };
   </script>

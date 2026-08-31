@@ -144,11 +144,31 @@
       <li><span class="rk-step-chip rk-step-chip--done">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
       <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">3. Send on WhatsApp</span></li>
     </ol>
-    <div class="rk-order-done" style="margin-top:1.5rem; max-width:36rem;">
-      <h2 class="font-display">Order request created</h2>
-      <p class="rk-order-done__ref" data-order-ref></p>
-      <p>Your WhatsApp message opened in a new tab with every detail filled in — just press send. If it didn't open, use the button below. We confirm availability and send transfer instructions in chat; payment is confirmed manually by {{ shop.name }}.</p>
-      <a href="#" target="_blank" rel="noopener noreferrer" class="btn-wa" data-wa-resend>{% render 'icon', name: 'message-circle' %} Open WhatsApp message</a>
+    {%- comment -%} Port of OrderStatusPage.tsx — reference + WhatsApp handoff fallback {%- endcomment -%}
+    <div style="margin-inline:auto; max-width:48rem; padding-top:1.5rem;">
+      <div style="text-align:center;">
+        <span style="margin-inline:auto; display:grid; height:4rem; width:4rem; place-items:center; border-radius:9999px; background: color-mix(in srgb, var(--olive) 10%, transparent); color: var(--olive);">
+          {% render 'icon', name: 'shield-check', class: 'icon-lg icon' %}
+        </span>
+        <p class="eyebrow text-burgundy" style="margin-top:1.25rem;">Order request</p>
+        <h2 class="font-display" style="margin-top:.5rem; font-size:clamp(2.4rem,6vw,4rem); font-weight:500; letter-spacing:-.01em;" data-order-ref></h2>
+        <div style="margin-top:1.5rem;" aria-live="polite">
+          <span style="display:inline-flex; border-radius:9999px; background:var(--ink); padding:.625rem 1.25rem; font-size:.875rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--canvas);">Pending contact</span>
+          <p style="margin:1rem auto 0; max-width:28rem; font-size:.875rem; line-height:1.75; color:var(--olive);">We're waiting for your WhatsApp message to start the conversation.</p>
+        </div>
+      </div>
+      <section class="rk-order-done" style="margin-top:2.5rem; text-align:left;" aria-labelledby="handoff-title">
+        <h3 id="handoff-title" class="font-display" style="font-size:1.5rem; font-weight:600;">Haven't sent it yet?</h3>
+        <p style="margin-top:.25rem; text-align:left;">Your order is saved either way — but we only see it once you send the WhatsApp message. If WhatsApp didn't open, use the buttons below.</p>
+        <div style="margin-top:1.25rem; display:flex; flex-wrap:wrap; gap:.75rem;">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-wa" data-wa-resend>{% render 'icon', name: 'message-circle' %} Open WhatsApp again</a>
+          <button type="button" class="btn-outline" data-copy-message>{% render 'icon', name: 'copy', class: 'icon' %} Copy order message</button>
+        </div>
+        <details style="margin-top:1.25rem;">
+          <summary style="cursor:pointer; font-size:.875rem; font-weight:600; color:var(--burgundy);">Show the message</summary>
+          <pre style="margin-top:.75rem; overflow-x:auto; white-space:pre-wrap; border-radius:1rem; background: color-mix(in srgb, var(--canvas) 70%, transparent); padding:1rem; font-size:.75rem; line-height:1.5; outline:1px solid color-mix(in srgb, var(--ink) 10%, transparent); text-align:left;" data-order-message></pre>
+        </details>
+      </section>
     </div>
   </div>
 </div>

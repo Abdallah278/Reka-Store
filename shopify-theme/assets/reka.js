@@ -160,10 +160,20 @@
 
             // Save the order request as a Shopify cart note before handoff so
             // the reference survives, then open WhatsApp and show step 3.
+            var message = lines.join("\n");
             var refEl = root.querySelector("[data-order-ref]");
             if (refEl) refEl.textContent = ref;
             var resend = root.querySelector("[data-wa-resend]");
             if (resend) resend.href = url;
+            var msgEl = root.querySelector("[data-order-message]");
+            if (msgEl) msgEl.textContent = message;
+            var copyBtn = root.querySelector("[data-copy-message]");
+            if (copyBtn) copyBtn.onclick = function () {
+              navigator.clipboard.writeText(message).then(
+                function () { toast("Order message copied"); },
+                function () { toast("Could not copy — long-press the message to copy it manually.", true); }
+              );
+            };
             try { sessionStorage.setItem("reka-last-order", JSON.stringify({ reference: ref, whatsappUrl: url, total: total })); } catch (e2) {}
             return fetch("/cart/update.js", {
               method: "POST",

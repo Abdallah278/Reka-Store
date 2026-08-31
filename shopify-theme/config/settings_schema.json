@@ -10,6 +10,7 @@
   {
     "name": "Store identity",
     "settings": [
+      { "type": "text", "id": "store_name", "label": "Store display name", "default": "Reka Store" },
       { "type": "image_picker", "id": "logo_image", "label": "Logo (round, replaces the R mark)" },
       { "type": "text", "id": "instagram_url", "label": "Instagram profile URL" }
     ]

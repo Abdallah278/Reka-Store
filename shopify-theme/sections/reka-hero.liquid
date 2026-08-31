@@ -41,7 +41,7 @@
       <div class="rk-hero__main">
         <div class="brand-tone">
           {%- if section.settings.hero_image -%}
-            <img src="{{ section.settings.hero_image | image_url: width: 1100 }}" alt="{{ shop.name }} — featured beauty portrait" loading="eager" fetchpriority="high">
+            <img src="{{ section.settings.hero_image | image_url: width: 1100 }}" alt="{{ settings.store_name | default: 'Reka Store' }} — featured beauty portrait" loading="eager" fetchpriority="high">
           {%- else -%}
             {% render 'art', key: 'portrait', title: 'Illustrated portrait of a woman applying burgundy lipstick, lit warm on a golden canvas' %}
           {%- endif -%}

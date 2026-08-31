@@ -2,13 +2,13 @@
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
 <header class="rk-header">
   <div class="rk-header__bar" data-header-bar>
-    <a href="{{ routes.root_url }}" class="rk-logo" aria-label="{{ shop.name }} home">
+    <a href="{{ routes.root_url }}" class="rk-logo" aria-label="{{ settings.store_name | default: 'Reka Store' }} home">
       <span class="rk-logo__mark">
         {%- if settings.logo_image -%}
           <img src="{{ settings.logo_image | image_url: width: 80 }}" alt="" width="40" height="40">
         {%- else -%}R{%- endif -%}
       </span>
-      <span class="rk-logo__name">{{ shop.name }}</span>
+      <span class="rk-logo__name">{{ settings.store_name | default: 'Reka Store' }}</span>
     </a>
 
     <nav class="rk-nav" aria-label="Departments">
@@ -22,7 +22,7 @@
     </nav>
 
     <div class="rk-header__actions">
-      <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: shop.name | append: ', I have a question.' | url_encode }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="rk-iconbtn rk-iconbtn--hide-sm">
+      <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: settings.store_name | append: ', I have a question.' | url_encode }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="rk-iconbtn rk-iconbtn--hide-sm">
         {% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}
       </a>
       <a href="{{ routes.cart_url }}" aria-label="Open cart" class="rk-cartbtn">

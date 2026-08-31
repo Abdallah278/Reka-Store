@@ -3,7 +3,7 @@
 <footer id="contact" class="rk-footer">
   <div class="container rk-footer__grid">
     <div>
-      <p class="rk-footer__name font-display">{{ shop.name }}</p>
+      <p class="rk-footer__name font-display">{{ settings.store_name | default: 'Reka Store' }}</p>
       <p class="rk-footer__about">A women's beauty edit across five departments. Prices in EGP. Orders are confirmed on WhatsApp and payment instructions are sent manually — no online payment happens on this site.</p>
     </div>
     <nav aria-label="Departments" class="rk-footer__nav">
@@ -21,7 +21,7 @@
       {%- endif -%}
     </nav>
   </div>
-  <div class="container rk-footer__legal">© {{ 'now' | date: '%Y' }} {{ shop.name }}. Illustrations are original brand artwork.</div>
+  <div class="container rk-footer__legal">© {{ 'now' | date: '%Y' }} {{ settings.store_name | default: 'Reka Store' }}. Illustrations are original brand artwork.</div>
 </footer>
 
 {% schema %}
