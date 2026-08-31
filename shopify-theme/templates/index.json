@@ -1,8 +1,8 @@
 {
   "sections": {
-    "hero": { "type": "reka-hero", "settings": {} },
+    "hero": { "type": "reka-hero", "settings": { "featured_collection": "all" } },
     "departments": { "type": "reka-departments", "settings": {} },
-    "featured": { "type": "reka-featured", "settings": {} },
+    "featured": { "type": "reka-featured", "settings": { "collection": "all", "limit": 4 } },
     "offers": { "type": "reka-offers-teaser", "settings": {} },
     "manifesto": { "type": "reka-manifesto", "settings": {} },
     "how": { "type": "reka-how", "settings": {} },
