@@ -3,7 +3,7 @@ import { ArrowRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { MAX_QTY, resolveCart, useCart } from "./cart";
-import { ProductImage } from "./components";
+import { CheckoutSteps, ProductImage } from "./components";
 import type { PublicProduct, PublicSettings } from "./types";
 
 export default function CartPage({ settings, products, loading }: { settings: PublicSettings; products: PublicProduct[]; loading: boolean }) {
@@ -31,13 +31,13 @@ export default function CartPage({ settings, products, loading }: { settings: Pu
 
   return (
     <div className="container pt-24 pb-14 sm:pt-26">
-      <p className="eyebrow text-burgundy">Request order</p>
-      <h1 className="mt-2 font-display text-[clamp(2.6rem,6vw,4.5rem)] font-medium leading-none tracking-tight">Your order</h1>
+      <CheckoutSteps current={1} />
+      <h1 className="mt-4 font-display text-[clamp(2.2rem,5vw,3.4rem)] font-medium leading-none tracking-tight">Your order</h1>
       <p className="mt-3 max-w-lg text-sm leading-7 text-olive">
         Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat.
       </p>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[1.15fr_.85fr]">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1.15fr_.85fr]">
         <ul className="grid gap-4" aria-label="Order items">
           {loading && items.length === 0
             ? [0, 1].map(i => <li key={i} className="h-28 animate-pulse rounded-[1.5rem] bg-clay/30" />)

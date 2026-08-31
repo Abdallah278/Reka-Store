@@ -14,10 +14,10 @@ export default function Home({ settings, products, loading }: { settings: Public
   return (
     <>
       <Hero settings={settings} featured={products.slice(0, 3)} />
-      <Manifesto />
       <Gateways products={products} />
       <Featured products={featured} loading={loading} />
       {offers.length > 0 && <OffersTeaser offers={offers.slice(0, 3)} />}
+      <Manifesto />
       <HowItWorks settings={settings} />
       <Closing settings={settings} />
     </>
@@ -32,7 +32,7 @@ function Hero({ settings, featured }: { settings: PublicSettings; featured: Publ
   const scene = useTilt<HTMLDivElement>(6);
   const feature = featured.find(p => !p.isSoldOut) ?? featured[0];
   return (
-    <section className="relative overflow-hidden pt-24 sm:pt-28 lg:pt-30">
+    <section className="relative overflow-hidden pt-20 sm:pt-24">
       <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-cream/70 blur-2xl" />
       <div aria-hidden="true" className="pointer-events-none absolute right-[-10%] top-[20%] h-[28rem] w-[28rem] rounded-full bg-clay/30 blur-3xl anim-drift" />
       <div aria-hidden="true" className="pointer-events-none absolute bottom-[-6rem] left-[30%] h-64 w-64 rounded-full bg-burgundy/15 blur-3xl" />
@@ -42,11 +42,11 @@ function Hero({ settings, featured }: { settings: PublicSettings; featured: Publ
           <p className="eyebrow inline-flex items-center gap-2 rounded-full border border-burgundy/30 bg-cream/50 px-4 py-2 text-burgundy">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> five departments · one point of view
           </p>
-          <h1 className="mt-7 font-display text-[clamp(3.2rem,10vw,8.2rem)] font-medium leading-[.9] tracking-[-0.02em]">
+          <h1 className="mt-5 font-display text-[clamp(2.8rem,7vw,5.6rem)] font-medium leading-[.92] tracking-[-0.02em]">
             {settings.heroTitle}
           </h1>
-          <p className="mt-7 max-w-md text-lg leading-8 text-olive">{settings.heroSubtitle}</p>
-          <div className="mt-9 flex flex-wrap gap-3">
+          <p className="mt-4 max-w-md text-base leading-7 text-olive">{settings.heroSubtitle}</p>
+          <div className="mt-6 flex flex-wrap gap-3">
             <a href="#departments" className="btn-ink">
               Choose your ritual <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
@@ -54,7 +54,14 @@ function Hero({ settings, featured }: { settings: PublicSettings; featured: Publ
               Browse offers
             </Link>
           </div>
-          <dl className="mt-12 grid max-w-md grid-cols-3 gap-4 border-t border-ink/15 pt-6 text-sm">
+          <nav aria-label="Departments" className="mt-6 flex flex-wrap gap-2">
+            {DEPARTMENT_LIST.map(d => (
+              <Link key={d.slug} href={`/${d.slug}`} className="inline-flex min-h-10 items-center rounded-full border border-ink/15 bg-cream/70 px-4 text-sm font-semibold transition-colors hover:border-burgundy hover:text-burgundy">
+                {d.name}
+              </Link>
+            ))}
+          </nav>
+          <dl className="mt-8 grid max-w-md grid-cols-3 gap-4 border-t border-ink/15 pt-5 text-sm">
             {[
               ["Korean → Perfume", "Five departments"],
               ["Prices in EGP", "No surprises"],
@@ -131,17 +138,17 @@ function Manifesto() {
           ))}
         </div>
       </div>
-      <div className="container grid items-center gap-10 py-20 lg:grid-cols-[1.2fr_.8fr] lg:py-28">
+      <div className="container grid items-center gap-8 py-10 lg:grid-cols-[1.2fr_.8fr] lg:py-14">
         <div>
           <p className="eyebrow text-canvas/60">Manifesto</p>
-          <h2 className="mt-5 font-display text-[clamp(2.4rem,6vw,5.5rem)] font-medium leading-[.98] tracking-tight">
+          <h2 className="mt-4 font-display text-[clamp(2rem,4.5vw,3.6rem)] font-medium leading-[1] tracking-tight">
             Beauty that fits the <em className="not-italic" style={{ color: "#F4E382" }}>morning you already have.</em>
           </h2>
           <p className="mt-6 max-w-lg text-base leading-8 text-canvas/75">
             Reka Store is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.
           </p>
         </div>
-        <div className="relative mx-auto aspect-[4/5] w-full max-w-sm">
+        <div className="relative mx-auto aspect-[4/5] w-full max-w-[260px]">
           <div className="absolute inset-0 overflow-hidden rounded-[2rem] ring-1 ring-canvas/15" style={{ clipPath: `inset(${clip}% 0 0 0 round 2rem)`, transition: "clip-path 120ms linear" }}>
             <HandsArt title="Illustration of a hand holding a serum bottle in warm light" className="h-full w-full" />
           </div>
@@ -165,12 +172,12 @@ function Gateways({ products }: { products: PublicProduct[] }) {
     if (p.originalPrice) counts.set(p.department, (counts.get(p.department) ?? 0) + 1);
   }
   return (
-    <section id="departments" ref={ref} className="container scroll-mt-24 py-14 lg:py-20" aria-labelledby="departments-title">
+    <section id="departments" ref={ref} className="container scroll-mt-24 py-12 lg:py-16" aria-labelledby="departments-title">
       <div className="reveal flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <SectionHead eyebrow="Choose your ritual" title="Five departments, five moods" id="departments-title" />
         <p className="max-w-sm text-sm leading-7 text-olive">Each department is its own room — its own light, colour and pace. Step into the one closest to today.</p>
       </div>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         {DEPARTMENT_LIST.map((dept, i) => {
           const visual = DEPT_VISUALS[dept.slug];
           const Art = visual.hero;
@@ -180,11 +187,11 @@ function Gateways({ products }: { products: PublicProduct[] }) {
             <Link
               key={dept.slug}
               href={`/${dept.slug}`}
-              className={`reveal group relative block overflow-hidden rounded-[1.75rem] text-left ring-1 ring-ink/10 transition-transform duration-300 hover:-translate-y-1.5 focus-visible:-translate-y-1.5 ${span} ${i % 2 ? "lg:translate-y-6" : ""}`}
+              className={`reveal group relative block overflow-hidden rounded-[1.75rem] text-left ring-1 ring-ink/10 transition-transform duration-300 hover:-translate-y-1.5 focus-visible:-translate-y-1.5 ${span}`}
               style={{ transitionDelay: `${i * 70}ms` }}
               aria-label={`Enter ${dept.name}`}
             >
-              <div className="relative aspect-[4/5] sm:aspect-[5/4]" style={visual.heroStyle}>
+              <div className="relative aspect-[4/3] sm:aspect-[16/10]" style={visual.heroStyle}>
                 <div className="absolute inset-[8%] overflow-hidden rounded-[1.4rem] opacity-90 transition-transform duration-500 group-hover:scale-[1.03]">
                   <Art title={`${dept.name} — department illustration`} className="h-full w-full" />
                 </div>
@@ -258,7 +265,7 @@ function OffersTeaser({ offers }: { offers: PublicProduct[] }) {
         <div className="relative grid items-center gap-10 lg:grid-cols-[.9fr_1.1fr]">
           <div>
             <p className="eyebrow text-canvas/60">Honest offers</p>
-            <h2 id="offers-teaser-title" className="mt-3 font-display text-[clamp(2.2rem,5vw,4rem)] font-medium leading-[1.02] tracking-tight">
+            <h2 id="offers-teaser-title" className="mt-3 font-display text-[clamp(2rem,4vw,3.2rem)] font-medium leading-[1.02] tracking-tight">
               Real pieces, really reduced.
             </h2>
             <p className="mt-4 max-w-md text-sm leading-7 text-canvas/75">Every strikethrough is a genuine previous price. When an offer has an end date, it's a real one.</p>
@@ -339,7 +346,7 @@ function Closing({ settings }: { settings: PublicSettings }) {
         <div className="relative grid items-center gap-10 lg:grid-cols-[1fr_.6fr]">
           <div>
             <p className="eyebrow text-canvas/60">Say hello</p>
-            <h2 className="mt-4 font-display text-[clamp(2.6rem,6vw,5.5rem)] font-medium leading-[.95] tracking-tight">Tell us what you're looking for. We'll point you to the right room.</h2>
+            <h2 className="mt-4 font-display text-[clamp(2.2rem,4.5vw,3.8rem)] font-medium leading-[.98] tracking-tight">Tell us what you're looking for. We'll point you to the right room.</h2>
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={whatsappChatUrl(settings.whatsappNumber, `Hi ${settings.storeName}, I'd like some help choosing.`)} target="_blank" rel="noopener noreferrer" className="btn-wa">
                 <MessageCircle className="h-4 w-4" aria-hidden="true" /> Chat on WhatsApp

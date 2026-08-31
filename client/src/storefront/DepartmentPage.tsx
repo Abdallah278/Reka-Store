@@ -170,7 +170,7 @@ function DeptHero({ slug, settings, count }: { slug: DepartmentSlug; settings: P
             <p className={`eyebrow inline-flex items-center gap-2 rounded-full border px-4 py-2 ${dark ? "border-canvas/30 text-canvas/85" : "border-ink/25 text-ink/75"}`}>
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> {visual.eyebrow}
             </p>
-            <h1 id="dept-title" className="mt-6 font-display text-[clamp(2.8rem,8vw,6.5rem)] font-medium leading-[.92] tracking-[-0.02em]">
+            <h1 id="dept-title" className="mt-5 font-display text-[clamp(2.4rem,6vw,4.6rem)] font-medium leading-[.94] tracking-[-0.02em]">
               {dept.name}
             </h1>
             <p className={`mt-3 font-display text-2xl italic ${dark ? "text-canvas/80" : "text-ink/70"}`}>{dept.tagline}</p>

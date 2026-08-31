@@ -155,7 +155,7 @@ function ProductView({ product, settings, products }: { product: PublicProduct; 
               {dept.name} · {product.categoryName}
             </p>
           )}
-          <h1 className="mt-3 font-display text-[clamp(2.6rem,6vw,4.5rem)] font-semibold leading-[1] tracking-tight">{product.name}</h1>
+          <h1 className="mt-3 font-display text-[clamp(2.2rem,5vw,3.6rem)] font-semibold leading-[1] tracking-tight">{product.name}</h1>
           {product.brand && <p className="mt-2 text-sm font-semibold uppercase tracking-[.2em] text-olive">{product.brand}</p>}
           <p className="mt-5 text-base leading-8 text-olive">{product.description || "Details for this piece are coming soon. Ask us on WhatsApp for the full story."}</p>
 

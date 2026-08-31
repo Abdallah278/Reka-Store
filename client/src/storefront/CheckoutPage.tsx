@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link, useLocation } from "wouter";
 import { resolveCart, useCart } from "./cart";
+import { CheckoutSteps } from "./components";
 import type { PublicProduct, PublicSettings } from "./types";
 
 type Form = {
@@ -108,13 +109,13 @@ export default function CheckoutPage({ settings, products, loading }: { settings
 
   return (
     <div className="container pt-24 pb-14 sm:pt-26">
-      <p className="eyebrow text-burgundy">Almost there</p>
-      <h1 className="mt-2 font-display text-[clamp(2.6rem,6vw,4.5rem)] font-medium leading-none tracking-tight">Delivery details</h1>
+      <CheckoutSteps current={2} />
+      <h1 className="mt-4 font-display text-[clamp(2.2rem,5vw,3.4rem)] font-medium leading-none tracking-tight">Delivery details</h1>
       <p className="mt-3 max-w-lg text-sm leading-7 text-olive">
         This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat.
       </p>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[1.1fr_.9fr]">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
         <form className="grid gap-5" onSubmit={e => { e.preventDefault(); submit(); }} noValidate>
           <div className="grid gap-5 sm:grid-cols-2">
             <div className="grid gap-1.5">

@@ -104,6 +104,30 @@ export function ProductCard({ product, eager = false, showDepartment = false, to
 }
 
 /* ------------------------------------------------------------------ */
+/* Checkout steps indicator                                            */
+/* ------------------------------------------------------------------ */
+
+export function CheckoutSteps({ current }: { current: 1 | 2 | 3 }) {
+  const steps = ["Your order", "Delivery details", "Send on WhatsApp"];
+  return (
+    <ol className="flex flex-wrap items-center gap-2 text-xs font-semibold" aria-label="Order steps">
+      {steps.map((label, i) => {
+        const n = i + 1;
+        const state = n < current ? "done" : n === current ? "current" : "next";
+        return (
+          <li key={label} className="flex items-center gap-2">
+            <span aria-current={state === "current" ? "step" : undefined} className={`inline-flex min-h-8 items-center gap-1.5 rounded-full px-3 ${state === "current" ? "bg-ink text-canvas" : state === "done" ? "bg-olive/15 text-olive" : "bg-cream text-olive/70 ring-1 ring-ink/10"}`}>
+              {n}. {label}
+            </span>
+            {i < steps.length - 1 && <span aria-hidden="true" className="text-olive/50">→</span>}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Section heading                                                     */
 /* ------------------------------------------------------------------ */
 
@@ -112,8 +136,8 @@ export function SectionHead({ eyebrow, title, text, tone = "light", id }: { eyeb
   return (
     <div className="max-w-2xl">
       <p className={`eyebrow ${dark ? "text-canvas/60" : "text-burgundy"}`}>{eyebrow}</p>
-      <h2 id={id} className={`mt-3 font-display text-[clamp(2.2rem,5vw,4.2rem)] font-medium leading-[1.02] tracking-tight ${dark ? "text-canvas" : ""}`}>{title}</h2>
-      {text && <p className={`mt-4 text-base leading-8 ${dark ? "text-canvas/75" : "text-olive"}`}>{text}</p>}
+      <h2 id={id} className={`mt-2 font-display text-[clamp(2rem,4vw,3.4rem)] font-medium leading-[1.02] tracking-tight ${dark ? "text-canvas" : ""}`}>{title}</h2>
+      {text && <p className={`mt-3 text-sm leading-7 ${dark ? "text-canvas/75" : "text-olive"}`}>{text}</p>}
     </div>
   );
 }
@@ -121,7 +145,7 @@ export function SectionHead({ eyebrow, title, text, tone = "light", id }: { eyeb
 export function EmptyCollection({ note, tone = "light" }: { note: string; tone?: "light" | "dark" }) {
   const dark = tone === "dark";
   return (
-    <div className={`mt-10 rounded-[1.75rem] border border-dashed px-6 py-16 text-center ${dark ? "border-canvas/30 text-canvas" : "border-olive/40 bg-canvas/50"}`}>
+    <div className={`mt-8 rounded-[1.75rem] border border-dashed px-6 py-10 text-center ${dark ? "border-canvas/30 text-canvas" : "border-olive/40 bg-canvas/50"}`}>
       <p className="font-display text-3xl">Nothing here yet</p>
       <p className={`mx-auto mt-3 max-w-sm text-sm leading-7 ${dark ? "text-canvas/70" : "text-olive"}`}>{note}</p>
       <Link href="/" className={`mt-6 inline-flex min-h-11 items-center gap-2 rounded-full px-6 text-sm font-semibold ${dark ? "bg-canvas text-ink" : "bg-ink text-canvas"}`}>
