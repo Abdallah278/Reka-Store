@@ -15,9 +15,17 @@
       <a href="{{ routes.cart_url }}">Cart</a>
     </nav>
     <nav aria-label="Contact" class="rk-footer__contact">
-      <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'message-circle' %} WhatsApp</a>
+      {%- assign wa_link = settings.whatsapp_page_url | default: '' -%}
+      {%- if wa_link == blank -%}{%- assign wa_link = 'https://wa.me/' | append: wa -%}{%- endif -%}
+      <a href="{{ wa_link }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'message-circle' %} WhatsApp</a>
       {%- if settings.instagram_url != blank -%}
         <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'instagram' %} Instagram</a>
+      {%- endif -%}
+      {%- if settings.facebook_url != blank -%}
+        <a href="{{ settings.facebook_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'facebook' %} Facebook</a>
+      {%- endif -%}
+      {%- if settings.tiktok_url != blank -%}
+        <a href="{{ settings.tiktok_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'tiktok' %} TikTok</a>
       {%- endif -%}
     </nav>
   </div>

@@ -12,7 +12,10 @@
     "settings": [
       { "type": "text", "id": "store_name", "label": "Store display name", "default": "Reka Store" },
       { "type": "image_picker", "id": "logo_image", "label": "Logo (round, replaces the R mark)" },
-      { "type": "text", "id": "instagram_url", "label": "Instagram profile URL" }
+      { "type": "text", "id": "instagram_url", "label": "Instagram profile URL" },
+      { "type": "text", "id": "facebook_url", "label": "Facebook page URL" },
+      { "type": "text", "id": "tiktok_url", "label": "TikTok profile URL" },
+      { "type": "text", "id": "whatsapp_page_url", "label": "WhatsApp business/channel page URL (optional — falls back to the number)" }
     ]
   },
   {

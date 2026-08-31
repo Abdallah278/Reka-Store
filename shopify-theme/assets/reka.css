@@ -461,9 +461,9 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-cart-empty p { margin: 1rem auto 0; max-width: 24rem; font-size: .875rem; line-height: 1.75; color: var(--olive); }
 .rk-cart-empty .btn-ink { margin-top: 1.75rem; }
 
-/* Delivery details form (checkout step 2) */
-.rk-checkout { display: none; }
-.rk-checkout.is-open { display: block; }
+/* Delivery details form (checkout step 2) — visibility is controlled purely
+   by the [hidden] attribute toggled in reka.js */
+[hidden] { display: none !important; }
 .rk-form { display: grid; gap: 1.25rem; }
 .rk-form__row { display: grid; gap: 1.25rem; }
 @media (min-width: 640px) { .rk-form__row { grid-template-columns: repeat(2, 1fr); } }
