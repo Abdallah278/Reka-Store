@@ -34,10 +34,20 @@ export function useAuth() {
   useEffect(() => {
     const supabase = tryGetSupabase();
     if (!supabase) return;
+    let unmounted = false;
     const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      utils.auth.me.invalidate();
+      // supabase-js holds its internal auth lock while it runs this callback.
+      // Invalidating here refetches auth.me, whose transport awaits
+      // getSession() — which needs that same lock → deadlock, and the console
+      // hangs on "Checking your session…" forever. Defer past the callback.
+      setTimeout(() => {
+        if (!unmounted) utils.auth.me.invalidate();
+      }, 0);
     });
-    return () => subscription.unsubscribe();
+    return () => {
+      unmounted = true;
+      subscription.unsubscribe();
+    };
   }, [utils]);
 
   const logoutMutation = trpc.auth.logout.useMutation();

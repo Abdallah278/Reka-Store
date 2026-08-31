@@ -32,13 +32,21 @@ export function tryGetSupabase(): SupabaseClient | null {
   return supabaseConfigMissing() ? null : getSupabase();
 }
 
-/** Current access token for API calls, or null when signed out. */
+/**
+ * Current access token for API calls, or null when signed out.
+ * Bounded by a timeout: if getSession() ever blocks (e.g. on the supabase-js
+ * auth lock), API calls degrade to anonymous instead of hanging forever — the
+ * server then answers 401/isOwner:false and the UI shows a real state.
+ */
 export async function getAccessToken(): Promise<string | null> {
   const client = tryGetSupabase();
   if (!client) return null;
   try {
-    const { data } = await client.auth.getSession();
-    return data.session?.access_token ?? null;
+    const session = client.auth
+      .getSession()
+      .then(({ data }) => data.session?.access_token ?? null);
+    const timeout = new Promise<null>(resolve => setTimeout(() => resolve(null), 5000));
+    return await Promise.race([session, timeout]);
   } catch {
     return null;
   }

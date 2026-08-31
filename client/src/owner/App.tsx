@@ -11,7 +11,7 @@ import OrdersPage from "./OrdersPage";
 import ProductsPage from "./ProductsPage";
 import ReviewsPage from "./ReviewsPage";
 import SettingsPage from "./SettingsPage";
-import { ExpiredPanel, ForbiddenPanel, LoadingPanel, SignInPanel } from "./ui";
+import { ErrorPanel, ExpiredPanel, ForbiddenPanel, LoadingPanel, SignInPanel } from "./ui";
 
 /** Single-host mode serves the console under /manage; on its own hostname it lives at /. */
 const BASE = typeof window !== "undefined" && window.location.pathname.startsWith("/manage") ? "/manage" : "";
@@ -59,6 +59,7 @@ function Gate() {
   }, [queryClient, auth]);
 
   if (auth.loading) return <Shell minimal><LoadingPanel label="Checking your session…" /></Shell>;
+  if (auth.error && !auth.user) return <Shell minimal><ErrorPanel retry={auth.refresh} text="Could not check your session. Check your connection and try again." /></Shell>;
   if (auth.expired) return <Shell minimal><ExpiredPanel signIn={auth.signIn} /></Shell>;
   if (!auth.isAuthenticated) return <Shell minimal><SignInPanel signIn={auth.signIn} /></Shell>;
   if (!auth.isOwner) return <Shell minimal><ForbiddenPanel logout={auth.logout} name={auth.user?.name} /></Shell>;
