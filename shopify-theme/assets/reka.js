@@ -215,6 +215,50 @@
     });
   }
 
+  /* ---- department category filter (port of DepartmentPage chips) --- */
+  var chipsWrap = document.querySelector("[data-cat-filter]");
+  var grid = document.querySelector("[data-cat-grid]");
+  if (chipsWrap && grid) {
+    var buttons = chipsWrap.querySelectorAll("button[data-cat]");
+    if (buttons.length > 1) chipsWrap.hidden = false;
+    var noneEl = document.querySelector("[data-cat-none]");
+    chipsWrap.addEventListener("click", function (e) {
+      var btn = e.target.closest("button[data-cat]");
+      if (!btn) return;
+      var cat = btn.getAttribute("data-cat");
+      buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b === btn)); });
+      var visible = 0;
+      grid.querySelectorAll("[data-cat-item]").forEach(function (li) {
+        var show = cat === "All" || li.getAttribute("data-cat-item") === cat;
+        li.hidden = !show;
+        if (show) visible++;
+      });
+      grid.hidden = visible === 0;
+      if (noneEl) noneEl.hidden = visible !== 0;
+    });
+  }
+
+  /* ---- perfume scroll bottle (port of ScrollBottle) ----------------- */
+  var sb = document.querySelector("[data-scroll-bottle]");
+  if (sb) {
+    var bottle = sb.querySelector("[data-scroll-bottle-el]");
+    var notes = sb.querySelectorAll("[data-note-at]");
+    var onScrollBottle = function () {
+      var rect = sb.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+      var y = (progress - 0.5) * 260;
+      var rot = (progress - 0.5) * 40;
+      bottle.style.transform = "translate(-50%,-50%) translateY(" + y.toFixed(0) + "px) rotate(" + rot.toFixed(1) + "deg)";
+      notes.forEach(function (n) {
+        var at = Number(n.getAttribute("data-note-at"));
+        n.style.opacity = String(Math.max(0, 1 - Math.abs(progress - at) * 4));
+      });
+    };
+    onScrollBottle();
+    window.addEventListener("scroll", onScrollBottle, { passive: true });
+  }
+
   /* ---- reveal-on-scroll -------------------------------------------- */
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) {

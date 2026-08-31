@@ -269,6 +269,76 @@ button:disabled { opacity: .6; cursor: default; }
 @media (min-width: 640px) { .rk-inkpanel__art { height: 18rem; width: 18rem; } }
 .rk-inkpanel__art svg { height: 100%; width: 100%; }
 
+/* ---- Department page (exact port of DepartmentPage.tsx) ------------- */
+.rk-dhero { padding: 6rem .75rem 0; }
+@media (min-width: 640px) { .rk-dhero { padding: 7rem 1.25rem 0; } }
+.rk-dhero__panel { position: relative; margin-inline: auto; max-width: 1320px; overflow: hidden; border-radius: 2.5rem; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+.rk-dhero__ripple { pointer-events: none; position: absolute; left: -5rem; bottom: 0; height: 18rem; width: 18rem; border-radius: 9999px; background: color-mix(in srgb, var(--canvas) 10%, transparent); filter: blur(64px); }
+.rk-dhero__grid { position: relative; display: grid; align-items: center; gap: 2rem; padding: 3rem 1.5rem; }
+@media (min-width: 640px) { .rk-dhero__grid { padding-inline: 2.5rem; } }
+@media (min-width: 1024px) { .rk-dhero__grid { grid-template-columns: 1.05fr .95fr; padding: 5rem 4rem; } }
+.rk-dhero__eyebrow { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; border: 1px solid; padding: .5rem 1rem; }
+.rk-dhero__title { margin-top: 1.25rem; font-size: clamp(2.4rem, 6vw, 4.6rem); font-weight: 500; line-height: .94; letter-spacing: -.02em; }
+.rk-dhero__tagline { margin-top: .75rem; font-size: 1.5rem; font-style: italic; }
+.rk-dhero__intro { margin-top: 1.25rem; max-width: 28rem; font-size: 1rem; line-height: 2; }
+.rk-dhero__ctas { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: .75rem; }
+.rk-pillbtn { display: inline-flex; min-height: 3rem; flex-shrink: 0; align-items: center; gap: .5rem; border-radius: 9999px; padding-inline: 1.75rem; font-size: .875rem; font-weight: 600; transition: transform .2s, background-color .2s; }
+.rk-pillbtn:hover { transform: translateY(-2px); }
+.rk-pillbtn--canvas { background: var(--canvas); color: var(--ink); }
+.rk-pillbtn--ink { background: var(--ink); color: var(--canvas); }
+.rk-pillbtn--ghost { border: 1px solid; background: transparent; color: inherit; }
+.rk-pillbtn--ghost:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.rk-dhero__cats { margin-top: 2.25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+.rk-dhero__cats li { border-radius: 9999px; border: 1px solid; padding: .5rem 1rem; font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; }
+.rk-dhero__artcol { position: relative; margin-inline: auto; width: 100%; max-width: 440px; }
+.rk-dhero__artframe { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 2rem; box-shadow: 0 50px 90px -40px rgba(49,14,16,.7); outline: 1px solid var(--ring, color-mix(in srgb, var(--ink) 15%, transparent)); }
+.rk-dhero__artframe svg { height: 100%; width: 100%; }
+.rk-dhero__motif { position: absolute; bottom: -1.5rem; left: -1rem; display: none; width: 42%; overflow: hidden; border-radius: 1.4rem; padding: .375rem; box-shadow: 0 30px 50px -25px rgba(49,14,16,.7); outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+@media (min-width: 640px) { .rk-dhero__motif { display: block; } }
+.rk-dhero__motif-inner { aspect-ratio: 1; overflow: hidden; border-radius: 1.1rem; }
+.rk-dhero__motif-inner svg { height: 100%; width: 100%; }
+.rk-scrollbottle { pointer-events: none; position: relative; margin-inline: auto; display: none; height: 10rem; max-width: 1320px; }
+@media (min-width: 1024px) { .rk-scrollbottle { display: block; } }
+.rk-scrollbottle__bottle { position: absolute; left: 50%; top: 50%; width: 10rem; transform: translate(-50%, -50%); opacity: .9; filter: drop-shadow(0 30px 40px rgba(49,14,16,.4)); transition: transform 90ms linear; }
+.rk-scrollbottle__note { position: absolute; top: 50%; transform: translateY(-50%); font-size: .75rem; opacity: 0; transition: opacity 120ms linear; }
+.rk-catchips { display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .25rem; }
+.rk-catchips[hidden] { display: none; }
+.rk-catchips button { min-height: 2.75rem; flex-shrink: 0; border-radius: 9999px; padding-inline: 1.25rem; font-size: .875rem; font-weight: 600; border: 1px solid color-mix(in srgb, var(--olive) 30%, transparent); background: color-mix(in srgb, var(--canvas) 50%, transparent); transition: border-color .2s, background-color .2s, color .2s; }
+.rk-catchips button:hover { border-color: var(--burgundy); }
+.rk-catchips button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+.rk-catchips[data-dark] button { border-color: color-mix(in srgb, var(--canvas) 30%, transparent); background: transparent; color: color-mix(in srgb, var(--canvas) 85%, transparent); }
+.rk-catchips[data-dark] button:hover { border-color: var(--canvas); }
+.rk-catchips[data-dark] button[aria-pressed="true"] { background: var(--canvas); color: var(--ink); border-color: var(--canvas); }
+.rk-step__bignum { display: block; font-size: 3rem; line-height: 1; color: var(--dept, var(--clay)); }
+.rk-step .rk-step__bignum + h3 { margin-top: 1rem; }
+.rk-editorial { display: grid; gap: 1.25rem; }
+@media (min-width: 768px) { .rk-editorial { grid-template-columns: repeat(2, 1fr); } }
+.rk-edcard { position: relative; overflow: hidden; border-radius: 1.75rem; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+.rk-edcard__art { aspect-ratio: 16 / 10; }
+.rk-edcard__art svg { height: 100%; width: 100%; transition: transform .5s; }
+.rk-edcard:hover .rk-edcard__art svg { transform: scale(1.03); }
+.rk-edcard__meta { position: absolute; inset-inline: 0; bottom: 0; background: linear-gradient(to top, rgba(49,14,16,.9), rgba(49,14,16,.5), transparent); padding: 1.5rem; color: var(--canvas); }
+.rk-edcard__meta .eyebrow { color: color-mix(in srgb, var(--canvas) 70%, transparent); }
+.rk-edcard__meta h3 { margin-top: .25rem; font-size: 1.875rem; font-weight: 600; }
+.rk-edcard__meta p:last-child { margin-top: .25rem; max-width: 28rem; font-size: .875rem; line-height: 1.5; color: color-mix(in srgb, var(--canvas) 85%, transparent); }
+.rk-dcta { position: relative; overflow: hidden; border-radius: 2.5rem; padding: 3.5rem 1.5rem; }
+@media (min-width: 640px) { .rk-dcta { padding-inline: 3rem; } }
+.rk-dcta__blob { position: absolute; right: -3rem; top: -3rem; height: 14rem; width: 14rem; border-radius: 9999px; background: color-mix(in srgb, var(--canvas) 10%, transparent); filter: blur(40px); }
+.rk-dcta__row { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+@media (min-width: 768px) { .rk-dcta__row { flex-direction: row; align-items: center; justify-content: space-between; } }
+.rk-dcta__row h2 { margin-top: .5rem; font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 500; line-height: 1.15; letter-spacing: -.01em; }
+/* Dark product-card tone (offers grid) */
+.rk-card--dark .rk-card__title, .rk-card--dark .rk-price { color: var(--canvas); }
+.rk-card--dark .rk-card__cat { color: color-mix(in srgb, var(--canvas) 60%, transparent); }
+.rk-card--dark .rk-card__media { outline-color: color-mix(in srgb, var(--canvas) 15%, transparent); }
+.rk-card--dark .rk-card__soldnote { border-color: color-mix(in srgb, var(--canvas) 30%, transparent); color: color-mix(in srgb, var(--canvas) 70%, transparent); }
+.rk-card--dark .rk-price s { color: color-mix(in srgb, var(--canvas) 50%, transparent); }
+.anim-ripple { animation: reka-ripple 5s ease-in-out infinite; }
+@keyframes reka-ripple { 0%, 100% { transform: scale(1); opacity: .55; } 50% { transform: scale(1.12); opacity: .85; } }
+.anim-sheen { position: relative; overflow: hidden; }
+.anim-sheen::after { content: ""; position: absolute; inset: -40%; pointer-events: none; background: linear-gradient(115deg, transparent 42%, rgba(255,251,233,.5) 50%, transparent 58%); animation: reka-sheen 8s ease-in-out infinite; }
+@keyframes reka-sheen { 0%, 100% { transform: translateX(-35%); } 50% { transform: translateX(35%); } }
+
 /* ---- Collection (department) page ---------------------------------- */
 .rk-dept-hero { padding: 5rem .75rem 0; }
 @media (min-width: 640px) { .rk-dept-hero { padding: 6rem 1.25rem 0; } }

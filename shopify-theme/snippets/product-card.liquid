@@ -15,7 +15,7 @@
   {%- assign diff = product.compare_at_price | minus: product.price | times: 100.0 -%}
   {%- assign off = diff | divided_by: product.compare_at_price | round -%}
 {%- endif -%}
-<article class="rk-card {% if sold_out %}rk-card--soldout{% endif %}" aria-label="{{ product.title | escape }}{% if sold_out %} — sold out{% endif %}">
+<article class="rk-card {% if sold_out %}rk-card--soldout{% endif %} {% if tone_dark %}rk-card--dark{% endif %}" aria-label="{{ product.title | escape }}{% if sold_out %} — sold out{% endif %}">
   <a href="{{ product.url }}" class="rk-card__media" aria-label="Open {{ product.title | escape }}">
     <div class="rk-card__img brand-tone">
       {%- if product.featured_image -%}
