@@ -22,7 +22,16 @@
     "name": "WhatsApp ordering",
     "settings": [
       { "type": "text", "id": "whatsapp_number", "label": "Store WhatsApp number (digits only, e.g. 2010xxxxxxxx)", "default": "201094881552" },
-      { "type": "range", "id": "delivery_fee", "label": "Flat delivery fee (EGP, 0 = confirmed in chat)", "min": 0, "max": 500, "step": 5, "default": 0 }
+      { "type": "range", "id": "delivery_fee", "label": "Flat delivery fee (EGP, 0 = confirmed in chat) — used only when no shipping zones are set", "min": 0, "max": 500, "step": 5, "default": 0 }
+    ]
+  },
+  {
+    "name": "Shipping zones",
+    "settings": [
+      { "type": "paragraph", "content": "One zone per line, format: Governorate | fee in EGP | delivery time. Example: Cairo | 70 | 1–2 days. Leave empty to keep everything \"confirmed on WhatsApp\". Fee or time can be left blank inside a line (e.g. Aswan | | 3–5 days)." },
+      { "type": "textarea", "id": "shipping_zones", "label": "Zones (Governorate | fee | delivery time)" },
+      { "type": "text", "id": "free_shipping_threshold", "label": "Free delivery above (EGP) — empty = disabled" },
+      { "type": "textarea", "id": "shipping_extra_note", "label": "Extra note shown on the Shipping page (optional)" }
     ]
   }
 ]

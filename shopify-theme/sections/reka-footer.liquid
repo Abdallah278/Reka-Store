@@ -12,6 +12,7 @@
       <a href="{{ routes.collections_url }}/makeup">Makeup</a>
       <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
       <a href="{{ routes.collections_url }}/offers">Offers</a>
+      {%- if pages.shipping.url != blank -%}<a href="{{ pages.shipping.url }}">Shipping & delivery</a>{%- endif -%}
       <a href="{{ routes.cart_url }}">Cart</a>
     </nav>
     <nav aria-label="Contact" class="rk-footer__contact">

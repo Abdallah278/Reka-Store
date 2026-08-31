@@ -6,6 +6,9 @@
 {%- endcomment -%}
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
 {%- assign fee = settings.delivery_fee | default: 0 -%}
+{%- assign zones_raw = settings.shipping_zones | default: '' | strip -%}
+{%- assign free_above = settings.free_shipping_threshold | default: '' | strip -%}
+{%- assign has_zones = false -%}{%- if zones_raw != '' -%}{%- assign has_zones = true -%}{%- endif -%}
 
 {%- if cart.item_count == 0 -%}
 <div class="rk-cart-empty" data-cart-empty>
@@ -15,7 +18,8 @@
   <a href="{{ routes.root_url }}" class="btn-ink">Explore departments</a>
 </div>
 {%- else -%}
-<div class="container rk-cart" data-cart-root data-delivery-fee="{{ fee }}" data-wa="{{ wa }}">
+<div class="container rk-cart" data-cart-root data-delivery-fee="{{ fee }}" data-wa="{{ wa }}" data-free-above="{{ free_above | escape }}">
+  <script type="application/json" data-shipping-zones>{{ zones_raw | json }}</script>
 
   {%- comment -%} STEP 1 — the order {%- endcomment -%}
   <div data-step="1">
@@ -65,8 +69,8 @@
         <h2 class="font-display">Summary</h2>
         <dl>
           <div><dt>Subtotal</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} EGP</dd></div>
-          <div><dt>Delivery</dt><dd>{% if fee > 0 %}{{ fee }} EGP{% else %}Confirmed on WhatsApp{% endif %}</dd></div>
-          <div class="rk-summary__total"><dt>Total</dt><dd>{{ cart.total_price | divided_by: 100 | plus: fee | append: ' EGP' }}</dd></div>
+          <div><dt>Delivery</dt><dd>{% if has_zones %}By governorate — next step{% elsif fee > 0 %}{{ fee }} EGP{% else %}Confirmed on WhatsApp{% endif %}</dd></div>
+          <div class="rk-summary__total"><dt>Total</dt><dd>{% if has_zones %}{{ cart.total_price | money_without_currency | remove: '.00' }} EGP + delivery{% else %}{{ cart.total_price | divided_by: 100 | plus: fee }} EGP{% endif %}</dd></div>
         </dl>
         <button type="button" class="rk-summary__cta" data-goto-step2>Delivery details {% render 'icon', name: 'arrow-right' %}</button>
         <p class="rk-summary__note">No payment on this site — final confirmation and payment instructions happen on WhatsApp.</p>
@@ -102,21 +106,37 @@
             <input id="co-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="32">
             <p class="rk-field__err" role="alert"></p>
           </div>
+          <div class="rk-field" data-field="governorate">
+            <label for="co-gov">Governorate</label>
+            <select id="co-gov" name="governorate" data-gov-select class="rk-select">
+              <option value="">Choose your governorate…</option>
+              <option value="__other__">Other — confirmed on WhatsApp</option>
+            </select>
+            <p class="rk-field__hint" data-gov-hint></p>
+            <p class="rk-field__err" role="alert"></p>
+          </div>
+        </div>
+        <div class="rk-form__row">
           <div class="rk-field" data-field="city">
-            <label for="co-city">Governorate / city</label>
-            <input id="co-city" name="city" autocomplete="address-level1" maxlength="80" placeholder="Cairo, Giza, Alexandria…">
+            <label for="co-city">Area / city</label>
+            <input id="co-city" name="city" autocomplete="address-level2" maxlength="80" placeholder="Nasr City, Dokki, Smouha…">
+            <p class="rk-field__err" role="alert"></p>
+          </div>
+          <div class="rk-field" data-field="building">
+            <label for="co-building">Building / floor / apartment</label>
+            <input id="co-building" name="building" maxlength="160" placeholder="Bldg 12, 3rd floor, Apt 7">
             <p class="rk-field__err" role="alert"></p>
           </div>
         </div>
         <div class="rk-field" data-field="address">
-          <label for="co-address">Full delivery address</label>
-          <textarea id="co-address" name="address" autocomplete="street-address" rows="3" maxlength="1000" placeholder="Street, area, nearest landmark…"></textarea>
+          <label for="co-address">Street address in detail</label>
+          <textarea id="co-address" name="address" autocomplete="street-address" rows="3" maxlength="1000" placeholder="Street name and number, area…"></textarea>
           <p class="rk-field__err" role="alert"></p>
         </div>
         <div class="rk-form__row">
           <div class="rk-field">
-            <label for="co-building">Building / floor / apartment <small>(optional)</small></label>
-            <input id="co-building" name="building" maxlength="160">
+            <label for="co-landmark">Nearest landmark <small>(optional)</small></label>
+            <input id="co-landmark" name="landmark" maxlength="160" placeholder="Next to… / in front of…">
           </div>
           <div class="rk-field">
             <label for="co-notes">Delivery notes <small>(optional)</small></label>
@@ -128,11 +148,28 @@
           <span>I agree to be contacted on WhatsApp about this order. <span class="rk-field__err" role="alert"></span></span>
         </label>
 
+        {%- comment -%} Shipping summary — shown after the form validates, BEFORE WhatsApp opens {%- endcomment -%}
+        <div class="rk-shipsum" data-ship-summary hidden aria-live="polite">
+          <h2 class="font-display">Review your delivery</h2>
+          <dl data-ship-summary-fields></dl>
+          <dl class="rk-shipsum__money">
+            <div><dt>Subtotal</dt><dd data-sum-subtotal></dd></div>
+            <div><dt>Delivery</dt><dd data-sum-delivery></dd></div>
+            <div class="rk-shipsum__total"><dt>Total</dt><dd data-sum-total></dd></div>
+          </dl>
+          <p class="rk-shipsum__note" data-sum-note></p>
+        </div>
+
         <button type="submit" class="btn-wa btn-lg btn-block" data-submit-order>
-          {% render 'icon', name: 'message-circle' %} <span data-submit-label>Send order via WhatsApp</span>
+          {% render 'icon', name: 'message-circle' %} <span data-submit-label>Review delivery details</span>
         </button>
         <p class="rk-secure-note">{% render 'icon', name: 'lock', class: 'icon' %} No card numbers, no passwords — we only collect delivery details.</p>
-        <button type="button" class="rk-line__remove" data-back-step1 style="justify-self:start;">← Edit order</button>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button type="button" class="rk-line__remove" data-back-step1>← Edit order</button>
+          {%- if pages.shipping.url != blank -%}
+            <a href="{{ pages.shipping.url }}" class="rk-shiplink" target="_blank">Shipping & delivery details</a>
+          {%- endif -%}
+        </div>
       </form>
     </div>
   </div>

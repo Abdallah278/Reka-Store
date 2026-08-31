@@ -72,8 +72,64 @@
   /* ---- cart page --------------------------------------------------- */
   var root = document.querySelector("[data-cart-root]");
   if (root) {
-    var fee = Math.max(0, Number(root.getAttribute("data-delivery-fee")) || 0);
+    var flatFee = Math.max(0, Number(root.getAttribute("data-delivery-fee")) || 0);
     var waNumber = normalizePhone(root.getAttribute("data-wa"));
+    var freeAbove = Number((root.getAttribute("data-free-above") || "").replace(/[^\d.]/g, "")) || 0;
+
+    /* Shipping zones from Theme settings: "Governorate | fee | delivery time" per line. */
+    var zones = [];
+    try {
+      var zonesRaw = JSON.parse(document.querySelector("[data-shipping-zones]").textContent || '""');
+      zones = String(zonesRaw).split("\n").map(function (line) {
+        var parts = line.split("|").map(function (s) { return s.trim(); });
+        if (!parts[0]) return null;
+        var feeNum = parts[1] !== undefined && parts[1] !== "" ? Number(parts[1].replace(/[^\d.]/g, "")) : null;
+        return { name: parts[0], fee: feeNum !== null && !isNaN(feeNum) ? feeNum : null, time: parts[2] || "" };
+      }).filter(Boolean);
+    } catch (e0) { zones = []; }
+
+    var govSelect = root.querySelector("[data-gov-select]");
+    var govHint = root.querySelector("[data-gov-hint]");
+    if (govSelect && zones.length) {
+      zones.forEach(function (z, i) {
+        var opt = document.createElement("option");
+        opt.value = String(i);
+        opt.textContent = z.name + (z.fee !== null ? " — " + formatPrice(z.fee) : "");
+        govSelect.insertBefore(opt, govSelect.lastElementChild);
+      });
+    }
+    function selectedZone() {
+      if (!govSelect || govSelect.value === "" || govSelect.value === "__other__") return null;
+      return zones[Number(govSelect.value)] || null;
+    }
+    function govName() {
+      if (!govSelect || govSelect.value === "") return "";
+      if (govSelect.value === "__other__") return root.querySelector('[name="city"]').value.trim() || "Other";
+      var z = selectedZone();
+      return z ? z.name : "";
+    }
+    /* fee for current selection; null = confirmed on WhatsApp */
+    function currentFee(subtotal) {
+      if (freeAbove > 0 && subtotal >= freeAbove) return 0;
+      var z = selectedZone();
+      if (z) return z.fee; // may be null → confirmed in chat
+      if (govSelect && govSelect.value === "__other__") return null;
+      if (!zones.length) return flatFee > 0 ? flatFee : null;
+      return null;
+    }
+    if (govSelect && govHint) {
+      govSelect.addEventListener("change", function () {
+        var z = selectedZone();
+        if (z) {
+          var bits = [];
+          if (z.fee !== null) bits.push("Delivery " + formatPrice(z.fee)); else bits.push("Delivery fee confirmed on WhatsApp");
+          if (z.time) bits.push("est. " + z.time);
+          govHint.textContent = bits.join(" · ");
+        } else if (govSelect.value === "__other__") {
+          govHint.textContent = "Delivery fee & timing for your governorate are confirmed on WhatsApp.";
+        } else { govHint.textContent = ""; }
+      });
+    }
 
     function changeLine(line, qty) {
       fetch("/cart/change.js", {
@@ -119,43 +175,95 @@
         var err = field.querySelector(".rk-field__err");
         if (err) err.textContent = msg || "";
       };
+      var phase = 1;
+      form.addEventListener("input", function () {
+        if (phase === 2) {
+          phase = 1;
+          var lbl = form.querySelector("[data-submit-label]");
+          if (lbl) lbl.textContent = "Review delivery details";
+        }
+      });
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var v = function (name) { return (form.elements[name] && form.elements[name].value || "").trim(); };
         var phoneRe = /^\+?[0-9 ()-]{8,32}$/;
         var ok = true;
-        var name = v("name"), phone = v("phone"), whats = v("whatsapp"), city = v("city"), address = v("address");
+        var name = v("name"), phone = v("phone"), whats = v("whatsapp"), city = v("city"), address = v("address"), building = v("building"), landmark = v("landmark");
+        var gov = govName();
         setErr("name", name.length < 2 ? (ok = false, "Please enter your full name.") : "");
         setErr("phone", !phoneRe.test(phone) ? (ok = false, "Enter a valid mobile number (digits, e.g. 010xxxxxxxx).") : "");
         setErr("whatsapp", whats && !phoneRe.test(whats) ? (ok = false, "Enter a valid WhatsApp number, or leave empty.") : "");
-        setErr("city", city.length < 2 ? (ok = false, "Please enter your city or governorate.") : "");
-        setErr("address", address.length < 8 ? (ok = false, "Please enter the full delivery address.") : "");
+        if (govSelect) setErr("governorate", govSelect.value === "" ? (ok = false, "Please choose your governorate.") : "");
+        setErr("city", city.length < 2 ? (ok = false, "Please enter your area or city.") : "");
+        setErr("building", building.length < 1 ? (ok = false, "Building / floor / apartment helps the courier find you.") : "");
+        setErr("address", address.length < 8 ? (ok = false, "Please enter the street address in detail.") : "");
         setErr("consent", !form.elements.consent.checked ? (ok = false, "We need your OK to contact you on WhatsApp about this order.") : "");
-        if (!ok) { toast("Please fix the highlighted fields.", true); return; }
+        if (!ok) { toast("Please fix the highlighted fields.", true); phase = 1; return; }
 
         var btn = form.querySelector("[data-submit-order]");
         var label = form.querySelector("[data-submit-label]");
-        btn.disabled = true; label.textContent = "Saving your order…";
+        btn.disabled = true; label.textContent = phase === 1 ? "Preparing summary…" : "Saving your order…";
 
         fetch("/cart.js")
           .then(function (r) { return r.json(); })
           .then(function (cart) {
             if (!cart.items.length) { window.location.reload(); return; }
-            // Order reference — generated at order time (RKS-XXXXXX).
-            var ref = "RKS-" + String(Date.now() % 1000000).padStart(6, "0");
             var subtotal = Math.round(cart.total_price / 100);
-            var total = subtotal + fee;
-            // Exact port of shared/whatsapp.ts buildOrderMessage().
+            var zone = selectedZone();
+            var feeNow = currentFee(subtotal); // number or null (= confirmed on WhatsApp)
+            var freeApplied = freeAbove > 0 && subtotal >= freeAbove;
+            var deliveryText = freeApplied ? "Free (order above " + formatPrice(freeAbove) + ")" : feeNow !== null ? formatPrice(feeNow) : "Confirmed on WhatsApp";
+            var etaText = zone && zone.time ? zone.time : "";
+            var total = subtotal + (feeNow || 0);
+            var totalText = feeNow !== null ? formatPrice(total) : formatPrice(subtotal) + " + delivery";
+
+            /* ---- phase 1: show the shipping summary, wait for confirm ---- */
+            if (phase === 1) {
+              var box = root.querySelector("[data-ship-summary]");
+              var flds = root.querySelector("[data-ship-summary-fields]");
+              var rows = [["Name", name], ["Phone", phone]];
+              if (whats && normalizePhone(whats) !== normalizePhone(phone)) rows.push(["WhatsApp", whats]);
+              rows.push(["Governorate", gov || "—"], ["Area / city", city], ["Address", address], ["Building / apt", building]);
+              if (landmark) rows.push(["Landmark", landmark]);
+              if (v("notes")) rows.push(["Notes", v("notes")]);
+              if (etaText) rows.push(["Estimated delivery", etaText]);
+              flds.innerHTML = "";
+              rows.forEach(function (r2) {
+                var d = document.createElement("div");
+                var dt = document.createElement("dt"); dt.textContent = r2[0];
+                var dd = document.createElement("dd"); dd.textContent = r2[1];
+                d.appendChild(dt); d.appendChild(dd); flds.appendChild(d);
+              });
+              root.querySelector("[data-sum-subtotal]").textContent = formatPrice(subtotal);
+              root.querySelector("[data-sum-delivery]").textContent = deliveryText + (etaText ? " · " + etaText : "");
+              root.querySelector("[data-sum-total]").textContent = totalText;
+              root.querySelector("[data-sum-note]").textContent = feeNow === null || !etaText
+                ? "Final delivery cost and timing are confirmed with you on WhatsApp before anything ships."
+                : "We confirm availability on WhatsApp before anything ships.";
+              box.hidden = false;
+              box.scrollIntoView({ behavior: "smooth", block: "center" });
+              label.textContent = "Confirm — send via WhatsApp";
+              btn.disabled = false;
+              phase = 2;
+              return;
+            }
+
+            /* ---- phase 2: build the full WhatsApp message and hand off ---- */
+            var ref = "RKS-" + String(Date.now() % 1000000).padStart(6, "0");
             var lines = ["Hello " + (window.REKA.storeName || "Reka Store") + ", I would like to place an order.", "", "Order reference: " + ref, "Name: " + name, "Phone: " + phone];
             if (whats && normalizePhone(whats) !== normalizePhone(phone)) lines.push("WhatsApp: " + whats);
-            lines.push("City: " + city, "Address: " + address);
-            if (v("building")) lines.push("Building/Floor/Apt: " + v("building"));
+            if (gov) lines.push("Governorate: " + gov);
+            lines.push("Area/City: " + city, "Address: " + address, "Building/Floor/Apt: " + building);
+            if (landmark) lines.push("Landmark: " + landmark);
             if (v("notes")) lines.push("Notes: " + v("notes"));
             lines.push("", "Items:");
             cart.items.forEach(function (item) {
               lines.push("- " + item.product_title + " x " + item.quantity + " — " + formatPrice(Math.round(item.price / 100)));
             });
-            lines.push("", "Subtotal: " + formatPrice(subtotal), "Delivery: " + (fee > 0 ? formatPrice(fee) : "to be confirmed"), "Total: " + formatPrice(total), "", "Please confirm availability and send me the transfer instructions. I understand payment is confirmed manually by the store.");
+            lines.push("", "Subtotal: " + formatPrice(subtotal));
+            lines.push("Delivery: " + (freeApplied ? "Free (order above " + formatPrice(freeAbove) + ")" : feeNow !== null ? formatPrice(feeNow) : "to be confirmed on WhatsApp") + (etaText ? " (est. " + etaText + ")" : ""));
+            lines.push("Total: " + (feeNow !== null ? formatPrice(total) : formatPrice(subtotal) + " + delivery"));
+            lines.push("", "Please confirm availability" + (feeNow === null || !etaText ? ", the delivery cost/timing" : "") + " and send me the transfer instructions. I understand payment is confirmed manually by the store.");
             var url = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(lines.join("\n"));
 
             // Save the order request as a Shopify cart note before handoff so

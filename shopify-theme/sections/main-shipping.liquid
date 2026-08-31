@@ -1,0 +1,67 @@
+{%- comment -%}
+  Shipping & delivery page. Everything shown comes from Theme settings —
+  nothing is invented: zones without a fee/time say "confirmed on WhatsApp",
+  and with no zones at all the page says so plainly.
+{%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+{%- assign zones_raw = settings.shipping_zones | default: '' | strip -%}
+{%- assign free_above = settings.free_shipping_threshold | default: '' | strip -%}
+<div class="container" style="padding-top:7rem; padding-bottom:4rem; max-width:56rem;">
+  <p class="eyebrow text-burgundy">Delivery</p>
+  <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:500;">Shipping & delivery</h1>
+  <p style="margin-top:1rem; max-width:36rem; font-size:.9375rem; line-height:1.9; color:var(--olive);">
+    Orders are placed as WhatsApp requests — we confirm availability, delivery cost and timing with you in chat before anything ships. Payment instructions are sent manually; nothing is charged on this site.
+  </p>
+
+  {%- if free_above != '' -%}
+    <p style="margin-top:1.25rem; display:inline-flex; min-height:2.75rem; align-items:center; border-radius:9999px; background:var(--ink); color:var(--canvas); padding-inline:1.25rem; font-size:.875rem; font-weight:700;">
+      Free delivery on orders above {{ free_above }} EGP
+    </p>
+  {%- endif -%}
+
+  {%- if zones_raw != '' -%}
+    <table class="rk-shiptable">
+      <thead><tr><th>Governorate</th><th>Delivery fee</th><th>Estimated time</th></tr></thead>
+      <tbody>
+        {%- assign lines = zones_raw | newline_to_br | split: '<br />' -%}
+        {%- for line in lines -%}
+          {%- assign parts = line | strip | split: '|' -%}
+          {%- assign zname = parts[0] | strip -%}
+          {%- if zname != '' -%}
+            {%- assign zfee = parts[1] | strip -%}
+            {%- assign ztime = parts[2] | strip -%}
+            <tr>
+              <td style="font-weight:600;">{{ zname }}</td>
+              <td>{% if zfee != '' and zfee != blank %}{{ zfee }} EGP{% else %}Confirmed on WhatsApp{% endif %}</td>
+              <td>{% if ztime != '' and ztime != blank %}{{ ztime }}{% else %}Confirmed on WhatsApp{% endif %}</td>
+            </tr>
+          {%- endif -%}
+        {%- endfor -%}
+        <tr><td style="font-weight:600;">Other governorates</td><td>Confirmed on WhatsApp</td><td>Confirmed on WhatsApp</td></tr>
+      </tbody>
+    </table>
+  {%- else -%}
+    <div class="rk-empty" style="margin-top:2rem; text-align:left; padding:1.5rem;">
+      <p style="margin:0; font-size:.9375rem; line-height:1.9; color:var(--olive);">
+        Delivery fees and timing are confirmed per order on WhatsApp — message us with your governorate and we'll tell you exactly what to expect.
+      </p>
+    </div>
+  {%- endif -%}
+
+  {%- if settings.shipping_extra_note != blank -%}
+    <p style="margin-top:1.5rem; max-width:36rem; font-size:.875rem; line-height:1.9; color:var(--olive); white-space:pre-line;">{{ settings.shipping_extra_note }}</p>
+  {%- endif -%}
+
+  {%- if page.content != blank -%}
+    <div style="margin-top:1.5rem; max-width:40rem; font-size:.9375rem; line-height:2; color:var(--olive);">{{ page.content }}</div>
+  {%- endif -%}
+
+  <div style="margin-top:2.5rem; display:flex; flex-wrap:wrap; gap:.75rem;">
+    <a href="https://wa.me/{{ wa }}?text={{ 'Hi, I have a question about delivery.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">{% render 'icon', name: 'message-circle' %} Ask about delivery</a>
+    <a href="{{ routes.root_url }}" class="btn-outline">Back to the store</a>
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Shipping page", "settings": [] }
+{% endschema %}

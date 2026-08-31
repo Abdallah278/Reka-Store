@@ -479,6 +479,29 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-field.has-error input, .rk-field.has-error textarea { border-color: var(--burgundy); }
 .rk-field__err { font-size: .75rem; font-weight: 600; color: var(--burgundy); }
 .rk-field__err:empty { display: none; }
+.rk-select { min-height: 3rem; width: 100%; border-radius: .75rem; border: 1px solid color-mix(in srgb, var(--olive) 30%, transparent); background: var(--cream); padding-inline: 1rem; font-size: .875rem; outline: none; }
+.rk-select:focus { box-shadow: 0 0 0 2px var(--burgundy); }
+.rk-field__hint { font-size: .75rem; font-weight: 600; color: var(--olive); }
+.rk-field__hint:empty { display: none; }
+.rk-shipsum { border-radius: 1.5rem; background: var(--cream); padding: 1.5rem; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+.rk-shipsum h2 { font-size: 1.5rem; font-weight: 600; }
+.rk-shipsum [data-ship-summary-fields] { margin-top: 1rem; display: grid; gap: .375rem; font-size: .875rem; }
+.rk-shipsum [data-ship-summary-fields] div { display: grid; grid-template-columns: 9rem 1fr; gap: .75rem; }
+.rk-shipsum [data-ship-summary-fields] dt { color: var(--olive); font-weight: 600; }
+.rk-shipsum [data-ship-summary-fields] dd { margin: 0; overflow-wrap: anywhere; }
+.rk-shipsum__money { margin-top: 1rem; display: grid; gap: .5rem; border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); padding-top: .75rem; font-size: .875rem; }
+.rk-shipsum__money div { display: flex; justify-content: space-between; }
+.rk-shipsum__money dt { color: var(--olive); }
+.rk-shipsum__money dd { margin: 0; font-weight: 600; }
+.rk-shipsum__total { font-size: 1rem; }
+.rk-shipsum__total dd { font-family: var(--font-display); font-size: 1.5rem; }
+.rk-shipsum__note { margin-top: .75rem; font-size: .75rem; line-height: 1.6; color: var(--olive); }
+.rk-shiplink { font-size: .75rem; font-weight: 600; color: var(--burgundy); }
+.rk-shiplink:hover { text-decoration: underline; text-underline-offset: 2px; }
+.rk-shiptable { margin-top: 1.5rem; width: 100%; border-collapse: collapse; font-size: .875rem; }
+.rk-shiptable th, .rk-shiptable td { padding: .75rem 1rem; text-align: left; border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+.rk-shiptable th { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--olive); }
+.rk-shiptable tr:nth-child(even) td { background: color-mix(in srgb, var(--cream) 60%, transparent); }
 .rk-consent { display: flex; align-items: flex-start; gap: .75rem; border-radius: 1rem; background: var(--cream); padding: 1rem; font-size: .875rem; line-height: 1.6; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
 .rk-consent.has-error { background: color-mix(in srgb, var(--burgundy) 10%, transparent); outline-color: color-mix(in srgb, var(--burgundy) 40%, transparent); }
 .rk-consent input { margin-top: .25rem; height: 1.25rem; width: 1.25rem; accent-color: #74070e; }
