@@ -13,13 +13,12 @@
 1. لو Shopify Payments أو أي بوابة إلكترونية مفعّلة → عطّلها (Manage → Deactivate).
 2. تحت **Manual payment methods** → **Create custom payment method**:
    - **Custom payment method name:** `Vodafone Cash / InstaPay`
-   - **Payment instructions** (بتظهر للعميل في صفحة الشكر مباشرة):
+   - **Payment instructions** (بتظهر للعميل في صفحة الشكر مباشرة) — من غير أي أرقام تحويل،
+     تعليمات التحويل بتتبعت يدويًا على واتساب:
 
      ```
-     حوّل قيمة الأوردر على:
-     Vodafone Cash: 01094881552
-     InstaPay: 01094881552
-     ثم أكّد طلبك على واتساب: https://wa.me/201094881552
+     لإتمام الدفع، كلّمنا على واتساب برقم طلبك وهنبعتلك تعليمات التحويل:
+     https://wa.me/201094881552
      الأوردر بيتشحن بعد تأكيد التحويل.
      ```
 3. متضيفش Cash on Delivery.
@@ -35,19 +34,15 @@
 
 **Settings → Checkout → Order status page → Additional scripts** — الصق:
 
+الرسالة فيها **رقم الطلب فقط** — من غير منتجات أو مبالغ أو أرقام تحويل
+(تعليمات التحويل بتبعتها انت يدويًا في الشات):
+
 ```liquid
 <div style="text-align:center;margin:24px 0;">
-  {% capture wa_msg %}Order {{ order.name }}
-{% for line in order.line_items %}- {{ line.title }} x {{ line.quantity }}
-{% endfor %}Total: {{ order.total_price | money }}
-Name: {{ order.shipping_address.name }}
-Phone: {{ order.shipping_address.phone }}
-Governorate: {{ order.shipping_address.province }}
-Address: {{ order.shipping_address.address1 }}{% if order.shipping_address.address2 != blank %}, {{ order.shipping_address.address2 }}{% endif %}, {{ order.shipping_address.city }}
-تم التحويل / سأحوّل عبر Vodafone Cash أو InstaPay — برجاء تأكيد الطلب.{% endcapture %}
+  {% capture wa_msg %}Hello Reka Store, I want to complete payment for order {{ order.name }}.{% endcapture %}
   <a href="https://wa.me/201094881552?text={{ wa_msg | url_encode }}"
      style="display:inline-block;background:#25D366;color:#fff;padding:14px 28px;border-radius:999px;font-weight:bold;font-size:16px;text-decoration:none;">
-    ✅ تأكيد الطلب على WhatsApp
+    ✅ Continue on WhatsApp — تأكيد الدفع
   </a>
 </div>
 ```
@@ -63,10 +58,10 @@ Address: {{ order.shipping_address.address1 }}{% if order.shipping_address.addre
 
 ```liquid
 <p style="text-align:center;margin:24px 0;">
-  {% capture wa_msg %}Order {{ order.name }} — {{ order.total_price | money }} — برجاء تأكيد طلبي بعد التحويل.{% endcapture %}
+  {% capture wa_msg %}Hello Reka Store, I want to complete payment for order {{ order.name }}.{% endcapture %}
   <a href="https://wa.me/201094881552?text={{ wa_msg | url_encode }}"
      style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:999px;font-weight:bold;text-decoration:none;">
-    تأكيد الطلب على WhatsApp
+    Continue on WhatsApp — تأكيد الدفع
   </a>
 </p>
 ```
