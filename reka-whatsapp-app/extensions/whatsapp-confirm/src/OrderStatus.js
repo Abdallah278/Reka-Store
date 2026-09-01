@@ -18,10 +18,10 @@ export default extension("customer-account.order-status.block.render", (root, ap
     for (const child of root.children) root.removeChild(child);
     root.appendChild(
       root.createComponent(Banner, { status: "warning", title: s.title || DEFAULT_TITLE }, [
-        root.createComponent(BlockStack, { spacing: "base" }, [
-          root.createComponent(Text, { size: "base" }, s.note || DEFAULT_NOTE),
+        root.createComponent(BlockStack, { spacing: "loose" }, [
+          root.createComponent(Text, { size: "medium", emphasis: "bold" }, s.note || DEFAULT_NOTE),
           root.createComponent(Button, { to: url, external: true }, [
-            root.createComponent(Text, { size: "medium", emphasis: "bold" }, s.label || "Continue on WhatsApp — تأكيد الدفع"),
+            root.createComponent(Text, { size: "large", emphasis: "bold" }, s.label || "Continue on WhatsApp — تأكيد الدفع"),
           ]),
         ]),
       ])
