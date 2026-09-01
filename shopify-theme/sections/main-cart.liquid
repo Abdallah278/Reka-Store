@@ -1,14 +1,12 @@
 {%- comment -%}
-  Cart + delivery details + WhatsApp handoff — port of CartPage.tsx and
-  CheckoutPage.tsx. Same two screens, served from /cart: step 1 (order),
-  step 2 (delivery details form), then the ready WhatsApp message opens and a
-  confirmation panel shows the order reference. No online payment, by design.
+  Cart → official Shopify checkout. The customer reviews the order here and
+  hits Checkout; address + governorate are collected by Shopify checkout, the
+  order is completed with the store's manual payment method (Vodafone Cash /
+  InstaPay transfer) and lands in Shopify admin as Payment pending. WhatsApp
+  is for questions and for confirming the transfer after checkout.
 {%- endcomment -%}
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
-{%- assign fee = settings.delivery_fee | default: 0 -%}
-{%- assign zones_raw = settings.shipping_zones | default: '' | strip -%}
 {%- assign free_above = settings.free_shipping_threshold | default: '' | strip -%}
-{%- assign has_zones = false -%}{%- if zones_raw != '' -%}{%- assign has_zones = true -%}{%- endif -%}
 
 {%- if cart.item_count == 0 -%}
 <div class="rk-cart-empty" data-cart-empty>
@@ -18,224 +16,99 @@
   <a href="{{ routes.root_url }}" class="btn-ink">{{ section.settings.empty_button | default: 'Explore departments' }}</a>
 </div>
 {%- else -%}
-<div class="container rk-cart" data-cart-root data-delivery-fee="{{ fee }}" data-wa="{{ wa }}" data-free-above="{{ free_above | escape }}">
-  <script type="application/json" data-shipping-zones>{{ zones_raw | json }}</script>
+<div class="container rk-cart" data-cart-root>
+  <h1 class="font-display">{{ section.settings.step1_title | default: 'Your order' }}</h1>
+  <p class="rk-cart__lede">{{ section.settings.step1_lede | default: 'Review your pieces, then check out — delivery details are collected at checkout and payment is by transfer (Vodafone Cash / InstaPay), confirmed with you on WhatsApp.' }}</p>
 
-  {%- comment -%} STEP 1 — the order {%- endcomment -%}
-  <div data-step="1">
-    <ol class="rk-steps-nav" aria-label="Order steps">
-      <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">1. Your order</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
-      <li><span class="rk-step-chip">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
-      <li><span class="rk-step-chip">3. Send on WhatsApp</span></li>
-    </ol>
-    <h1 class="font-display">{{ section.settings.step1_title | default: 'Your order' }}</h1>
-    <p class="rk-cart__lede">{{ section.settings.step1_lede | default: "Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat." }}</p>
-
-    <div class="rk-cart__grid">
-      <ul class="rk-lines" aria-label="Order items">
-        {%- for item in cart.items -%}
-        <li class="rk-line" data-line="{{ forloop.index }}">
-          <a href="{{ item.url }}" class="rk-line__img" aria-label="Open {{ item.product.title | escape }}">
-            {%- if item.image -%}
-              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title | escape }}" width="{{ item.image.width }}" height="{{ item.image.height }}">
-            {%- else -%}
-              {% render 'product-art', product: item.product %}
-            {%- endif -%}
-          </a>
-          <div class="rk-line__body">
-            <div class="rk-line__top">
-              <div style="min-width:0;">
-                <h2 class="rk-line__name"><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
-                <p class="rk-line__each">{{ item.price | money_without_currency | remove: '.00' }} EGP each</p>
-              </div>
-              <p class="rk-line__total">{{ item.line_price | money_without_currency | remove: '.00' }} EGP</p>
-            </div>
-            <div class="rk-line__controls">
-              <div class="rk-qty" role="group" aria-label="Quantity for {{ item.product.title | escape }}">
-                <button type="button" aria-label="Decrease quantity" data-qty-minus data-line-index="{{ forloop.index }}">{% render 'icon', name: 'minus' %}</button>
-                <span aria-live="polite">{{ item.quantity }}</span>
-                <button type="button" aria-label="Increase quantity" data-qty-plus data-line-index="{{ forloop.index }}" {% if item.quantity >= 20 %}disabled{% endif %}>{% render 'icon', name: 'plus' %}</button>
-              </div>
-              <button type="button" class="rk-line__remove" aria-label="Remove {{ item.product.title | escape }}" data-remove data-line-index="{{ forloop.index }}">
-                {% render 'icon', name: 'trash' %} Remove
-              </button>
-            </div>
-          </div>
-        </li>
-        {%- endfor -%}
-      </ul>
-
-      <aside class="rk-summary" aria-label="Order summary">
-        <h2 class="font-display">Summary</h2>
-        <dl>
-          <div><dt>Subtotal</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} EGP</dd></div>
-          <div><dt>Delivery</dt><dd>{% if has_zones %}By governorate — next step{% elsif fee > 0 %}{{ fee }} EGP{% else %}Confirmed on WhatsApp{% endif %}</dd></div>
-          <div class="rk-summary__total"><dt>Total</dt><dd>{% if has_zones %}{{ cart.total_price | money_without_currency | remove: '.00' }} EGP + delivery{% else %}{{ cart.total_price | divided_by: 100 | plus: fee }} EGP{% endif %}</dd></div>
-        </dl>
-        <button type="button" class="rk-summary__cta" data-goto-step2>Delivery details {% render 'icon', name: 'arrow-right' %}</button>
-        <p class="rk-summary__note">{{ section.settings.summary_note | default: 'No payment on this site — final confirmation and payment instructions happen on WhatsApp.' }}</p>
-      </aside>
-    </div>
-  </div>
-
-  {%- comment -%} STEP 2 — delivery details (port of CheckoutPage form) {%- endcomment -%}
-  <div class="rk-checkout" data-step="2" hidden>
-    <ol class="rk-steps-nav" aria-label="Order steps">
-      <li><span class="rk-step-chip rk-step-chip--done">1. Your order</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
-      <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
-      <li><span class="rk-step-chip">3. Send on WhatsApp</span></li>
-    </ol>
-    <h1 class="font-display">{{ section.settings.step2_title | default: 'Delivery details' }}</h1>
-    <p class="rk-cart__lede">{{ section.settings.step2_lede | default: 'This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat.' }}</p>
-
-    <div class="rk-cart__grid" style="grid-template-columns:1fr;">
-      <form class="rk-form" data-checkout-form novalidate style="max-width:44rem;">
-        <div class="rk-form__row">
-          <div class="rk-field" data-field="name">
-            <label for="co-name">Full name</label>
-            <input id="co-name" name="name" autocomplete="name" maxlength="120">
-            <p class="rk-field__err" role="alert"></p>
-          </div>
-          <div class="rk-field" data-field="phone">
-            <label for="co-phone">Mobile number</label>
-            <input id="co-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="32" placeholder="010xxxxxxxx">
-            <p class="rk-field__err" role="alert"></p>
-          </div>
-          <div class="rk-field" data-field="whatsapp">
-            <label for="co-wa">WhatsApp number <small>(if different)</small></label>
-            <input id="co-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="32">
-            <p class="rk-field__err" role="alert"></p>
-          </div>
-          <div class="rk-field" data-field="governorate">
-            <label for="co-gov">Governorate</label>
-            <select id="co-gov" name="governorate" data-gov-select class="rk-select">
-              <option value="">Choose your governorate…</option>
-              <option value="__other__">Other — confirmed on WhatsApp</option>
-            </select>
-            <p class="rk-field__hint" data-gov-hint></p>
-            <p class="rk-field__err" role="alert"></p>
-          </div>
-        </div>
-        <div class="rk-form__row">
-          <div class="rk-field" data-field="city">
-            <label for="co-city">Area / city</label>
-            <input id="co-city" name="city" autocomplete="address-level2" maxlength="80" placeholder="Nasr City, Dokki, Smouha…">
-            <p class="rk-field__err" role="alert"></p>
-          </div>
-          <div class="rk-field" data-field="building">
-            <label for="co-building">Building / floor / apartment</label>
-            <input id="co-building" name="building" maxlength="160" placeholder="Bldg 12, 3rd floor, Apt 7">
-            <p class="rk-field__err" role="alert"></p>
-          </div>
-        </div>
-        <div class="rk-field" data-field="address">
-          <label for="co-address">Street address in detail</label>
-          <textarea id="co-address" name="address" autocomplete="street-address" rows="3" maxlength="1000" placeholder="Street name and number, area…"></textarea>
-          <p class="rk-field__err" role="alert"></p>
-        </div>
-        <div class="rk-form__row">
-          <div class="rk-field">
-            <label for="co-landmark">Nearest landmark <small>(optional)</small></label>
-            <input id="co-landmark" name="landmark" maxlength="160" placeholder="Next to… / in front of…">
-          </div>
-          <div class="rk-field">
-            <label for="co-notes">Delivery notes <small>(optional)</small></label>
-            <input id="co-notes" name="notes" maxlength="1000" placeholder="Call before arriving…">
-          </div>
-        </div>
-        <label class="rk-consent" data-field="consent">
-          <input type="checkbox" name="consent">
-          <span>I agree to be contacted on WhatsApp about this order. <span class="rk-field__err" role="alert"></span></span>
-        </label>
-
-        {%- comment -%} Shipping summary — shown after the form validates, BEFORE WhatsApp opens {%- endcomment -%}
-        <div class="rk-shipsum" data-ship-summary hidden aria-live="polite">
-          <h2 class="font-display">Review your delivery</h2>
-          <dl data-ship-summary-fields></dl>
-          <dl class="rk-shipsum__money">
-            <div><dt>Subtotal</dt><dd data-sum-subtotal></dd></div>
-            <div><dt>Delivery</dt><dd data-sum-delivery></dd></div>
-            <div class="rk-shipsum__total"><dt>Total</dt><dd data-sum-total></dd></div>
-          </dl>
-          <p class="rk-shipsum__note" data-sum-note></p>
-        </div>
-
-        <button type="submit" class="btn-wa btn-lg btn-block" data-submit-order>
-          {% render 'icon', name: 'message-circle' %} <span data-submit-label>Review delivery details</span>
-        </button>
-        <p class="rk-secure-note">{% render 'icon', name: 'lock', class: 'icon' %} {{ section.settings.secure_note | default: 'No card numbers, no passwords — we only collect delivery details.' }}</p>
-        {%- if settings.vodafone_cash != blank or settings.instapay != blank or settings.payment_note != blank -%}
-          <div class="rk-paynote" style="margin-top:.75rem; border-radius:1rem; background: color-mix(in srgb, var(--cream) 70%, transparent); padding:.875rem 1rem; font-size:.8125rem; line-height:1.8; color:var(--olive); outline:1px solid color-mix(in srgb, var(--ink) 8%, transparent);">
-            <strong style="color:var(--ink);">{{ section.settings.payment_title | default: 'Transfer options' }}</strong><br>
-            {%- if settings.vodafone_cash != blank -%}Vodafone Cash: <strong>{{ settings.vodafone_cash }}</strong><br>{%- endif -%}
-            {%- if settings.instapay != blank -%}InstaPay: <strong>{{ settings.instapay }}</strong><br>{%- endif -%}
-            {%- if settings.payment_note != blank -%}{{ settings.payment_note }}{%- endif -%}
-          </div>
-        {%- endif -%}
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <button type="button" class="rk-line__remove" data-back-step1>← Edit order</button>
-          {%- if pages.shipping.url != blank -%}
-            <a href="{{ pages.shipping.url }}" class="rk-shiplink" target="_blank">Shipping & delivery details</a>
+  <div class="rk-cart__grid">
+    <ul class="rk-lines" aria-label="Order items">
+      {%- for item in cart.items -%}
+      <li class="rk-line" data-line="{{ forloop.index }}">
+        <a href="{{ item.url }}" class="rk-line__img" aria-label="Open {{ item.product.title | escape }}">
+          {%- if item.image -%}
+            <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title | escape }}" width="{{ item.image.width }}" height="{{ item.image.height }}">
+          {%- else -%}
+            {% render 'product-art', product: item.product %}
           {%- endif -%}
+        </a>
+        <div class="rk-line__body">
+          <div class="rk-line__top">
+            <div style="min-width:0;">
+              <h2 class="rk-line__name"><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
+              <p class="rk-line__each">{{ item.price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} each</p>
+            </div>
+            <p class="rk-line__total">{{ item.line_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }}</p>
+          </div>
+          <div class="rk-line__controls">
+            <div class="rk-qty" role="group" aria-label="Quantity for {{ item.product.title | escape }}">
+              <button type="button" aria-label="Decrease quantity" data-qty-minus data-line-index="{{ forloop.index }}">{% render 'icon', name: 'minus' %}</button>
+              <span aria-live="polite">{{ item.quantity }}</span>
+              <button type="button" aria-label="Increase quantity" data-qty-plus data-line-index="{{ forloop.index }}" {% if item.quantity >= 20 %}disabled{% endif %}>{% render 'icon', name: 'plus' %}</button>
+            </div>
+            <button type="button" class="rk-line__remove" aria-label="Remove {{ item.product.title | escape }}" data-remove data-line-index="{{ forloop.index }}">
+              {% render 'icon', name: 'trash' %} Remove
+            </button>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
+      </li>
+      {%- endfor -%}
+    </ul>
 
-  {%- comment -%} STEP 3 — confirmation with the order reference {%- endcomment -%}
-  <div class="rk-checkout" data-step="3" hidden>
-    <ol class="rk-steps-nav" aria-label="Order steps">
-      <li><span class="rk-step-chip rk-step-chip--done">1. Your order</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
-      <li><span class="rk-step-chip rk-step-chip--done">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
-      <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">3. Send on WhatsApp</span></li>
-    </ol>
-    {%- comment -%} Port of OrderStatusPage.tsx — reference + WhatsApp handoff fallback {%- endcomment -%}
-    <div style="margin-inline:auto; max-width:48rem; padding-top:1.5rem;">
-      <div style="text-align:center;">
-        <span style="margin-inline:auto; display:grid; height:4rem; width:4rem; place-items:center; border-radius:9999px; background: color-mix(in srgb, var(--olive) 10%, transparent); color: var(--olive);">
-          {% render 'icon', name: 'shield-check', class: 'icon-lg icon' %}
-        </span>
-        <p class="eyebrow text-burgundy" style="margin-top:1.25rem;">Order request</p>
-        <h2 class="font-display" style="margin-top:.5rem; font-size:clamp(2.4rem,6vw,4rem); font-weight:500; letter-spacing:-.01em;" data-order-ref></h2>
-        <div style="margin-top:1.5rem;" aria-live="polite">
-          <span style="display:inline-flex; border-radius:9999px; background:var(--ink); padding:.625rem 1.25rem; font-size:.875rem; font-weight:700; text-transform:uppercase; letter-spacing:.16em; color:var(--canvas);">Pending contact</span>
-          <p style="margin:1rem auto 0; max-width:28rem; font-size:.875rem; line-height:1.75; color:var(--olive);">We're waiting for your WhatsApp message to start the conversation.</p>
+    <aside class="rk-summary" aria-label="Order summary">
+      <h2 class="font-display">{{ section.settings.summary_title | default: 'Summary' }}</h2>
+      <dl>
+        <div><dt>Subtotal</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
+        <div><dt>Delivery</dt><dd>{{ section.settings.delivery_line | default: 'Calculated at checkout' }}</dd></div>
+        {%- if free_above != '' -%}
+          <div><dt></dt><dd style="font-size:.75rem;">Free delivery above {{ free_above }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
+        {%- endif -%}
+        <div class="rk-summary__total"><dt>Total</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} + delivery</dd></div>
+      </dl>
+
+      <form action="{{ routes.cart_url }}" method="post">
+        <button type="submit" name="checkout" class="rk-summary__cta">
+          {{ section.settings.checkout_label | default: 'Checkout — pay by transfer' }} {% render 'icon', name: 'arrow-right' %}
+        </button>
+      </form>
+
+      {%- if settings.vodafone_cash != blank or settings.instapay != blank or settings.payment_note != blank -%}
+        <div class="rk-paynote" style="margin-top:.875rem; border-radius:1rem; background: color-mix(in srgb, var(--cream) 70%, transparent); padding:.875rem 1rem; font-size:.8125rem; line-height:1.8; color:var(--olive); outline:1px solid color-mix(in srgb, var(--ink) 8%, transparent);">
+          <strong style="color:var(--ink);">{{ section.settings.payment_title | default: 'Transfer options' }}</strong><br>
+          {%- if settings.vodafone_cash != blank -%}Vodafone Cash: <strong>{{ settings.vodafone_cash }}</strong><br>{%- endif -%}
+          {%- if settings.instapay != blank -%}InstaPay: <strong>{{ settings.instapay }}</strong><br>{%- endif -%}
+          {%- if settings.payment_note != blank -%}{{ settings.payment_note }}{%- endif -%}
         </div>
-      </div>
-      <section class="rk-order-done" style="margin-top:2.5rem; text-align:left;" aria-labelledby="handoff-title">
-        <h3 id="handoff-title" class="font-display" style="font-size:1.5rem; font-weight:600;">Haven't sent it yet?</h3>
-        <p style="margin-top:.25rem; text-align:left;">Your order is saved either way — but we only see it once you send the WhatsApp message. If WhatsApp didn't open, use the buttons below.</p>
-        <div style="margin-top:1.25rem; display:flex; flex-wrap:wrap; gap:.75rem;">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-wa" data-wa-resend>{% render 'icon', name: 'message-circle' %} Open WhatsApp again</a>
-          <button type="button" class="btn-outline" data-copy-message>{% render 'icon', name: 'copy', class: 'icon' %} Copy order message</button>
-        </div>
-        <details style="margin-top:1.25rem;">
-          <summary style="cursor:pointer; font-size:.875rem; font-weight:600; color:var(--burgundy);">Show the message</summary>
-          <pre style="margin-top:.75rem; overflow-x:auto; white-space:pre-wrap; border-radius:1rem; background: color-mix(in srgb, var(--canvas) 70%, transparent); padding:1rem; font-size:.75rem; line-height:1.5; outline:1px solid color-mix(in srgb, var(--ink) 10%, transparent); text-align:left;" data-order-message></pre>
-        </details>
-      </section>
-    </div>
+      {%- endif -%}
+
+      <p class="rk-summary__note">{{ section.settings.summary_note | default: 'No online payment — you complete checkout, then confirm the transfer with us on WhatsApp before anything ships.' }}</p>
+
+      {%- assign wa_prefill = section.settings.wa_prefill | default: 'Hi {store}, I have a question about my order.' | replace: '{store}', settings.store_name -%}
+      <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-outline btn-block" style="margin-top:.75rem;">
+        {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Ask on WhatsApp' }}
+      </a>
+    </aside>
   </div>
 </div>
 {%- endif -%}
 
 {% schema %}
 {
-  "name": "Cart & WhatsApp checkout",
+  "name": "Cart & checkout",
   "settings": [
     { "type": "header", "content": "Empty cart" },
     { "type": "text", "id": "empty_title", "label": "Heading", "default": "Your order is empty" },
     { "type": "textarea", "id": "empty_text", "label": "Text", "default": "Wander through the departments and add the pieces you'd like — then we'll confirm everything on WhatsApp." },
     { "type": "text", "id": "empty_button", "label": "Button label", "default": "Explore departments" },
-    { "type": "header", "content": "Step 1 — the order" },
+    { "type": "header", "content": "Cart" },
     { "type": "text", "id": "step1_title", "label": "Heading", "default": "Your order" },
-    { "type": "textarea", "id": "step1_lede", "label": "Intro text", "default": "Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat." },
-    { "type": "textarea", "id": "summary_note", "label": "Summary note", "default": "No payment on this site — final confirmation and payment instructions happen on WhatsApp." },
-    { "type": "header", "content": "Step 2 — delivery details" },
-    { "type": "text", "id": "step2_title", "label": "Heading", "default": "Delivery details" },
-    { "type": "textarea", "id": "step2_lede", "label": "Intro text", "default": "This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat." },
-    { "type": "text", "id": "secure_note", "label": "Security note under the button", "default": "No card numbers, no passwords — we only collect delivery details." },
-    { "type": "text", "id": "payment_title", "label": "Transfer box title (numbers: Theme settings → Payment)", "default": "Transfer options" }
+    { "type": "textarea", "id": "step1_lede", "label": "Intro text", "default": "Review your pieces, then check out — delivery details are collected at checkout and payment is by transfer (Vodafone Cash / InstaPay), confirmed with you on WhatsApp." },
+    { "type": "text", "id": "summary_title", "label": "Summary heading", "default": "Summary" },
+    { "type": "text", "id": "delivery_line", "label": "Delivery line in summary", "default": "Calculated at checkout" },
+    { "type": "text", "id": "checkout_label", "label": "Checkout button label", "default": "Checkout — pay by transfer" },
+    { "type": "text", "id": "payment_title", "label": "Transfer box title (numbers: Theme settings → Payment)", "default": "Transfer options" },
+    { "type": "textarea", "id": "summary_note", "label": "Note under the button", "default": "No online payment — you complete checkout, then confirm the transfer with us on WhatsApp before anything ships." },
+    { "type": "text", "id": "wa_label", "label": "WhatsApp button label", "default": "Ask on WhatsApp" },
+    { "type": "text", "id": "wa_prefill", "label": "Pre-filled WhatsApp message ({store} = store name)", "default": "Hi {store}, I have a question about my order." }
   ]
 }
 {% endschema %}
