@@ -37,6 +37,11 @@
     {%- if sold_out -%}
       <span aria-hidden="true" class="rk-card__unavailable">Currently unavailable</span>
     {%- endif -%}
+    {%- if idx -%}
+      {%- assign n2 = idx -%}
+      {%- if idx < 10 -%}{%- assign n2 = idx | prepend: '0' -%}{%- endif -%}
+      <span class="rk-card__num" aria-hidden="true">{{ n2 }}</span>
+    {%- endif -%}
   </a>
   <div class="rk-card__row">
     <div style="min-width:0;">

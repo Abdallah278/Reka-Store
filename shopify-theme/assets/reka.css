@@ -221,6 +221,16 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-grid-products { margin-top: 2.5rem; display: grid; column-gap: 1.25rem; row-gap: 2.5rem; }
 @media (min-width: 640px) { .rk-grid-products { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .rk-grid-products { grid-template-columns: repeat(4, 1fr); } }
+/* Department pages: curated-edit layout — first product is a 2x2 hero card,
+   numbered like an editorial lookbook, hover ring takes the department color. */
+@media (min-width: 1024px) {
+  .rk-collection .rk-grid-products > li:first-child { grid-column: span 2; grid-row: span 2; }
+  .rk-collection .rk-grid-products > li:first-child .rk-card__title { font-size: 1.375rem; white-space: normal; }
+  .rk-collection .rk-grid-products > li:first-child .rk-card__cat { font-size: .875rem; }
+  .rk-collection .rk-grid-products > li:first-child .rk-price .rk-price__now { font-size: 1.375rem; }
+}
+.rk-card__num { position: absolute; right: .875rem; bottom: .75rem; z-index: 1; font-family: var(--font-display); font-style: italic; font-size: 1.625rem; line-height: 1; color: var(--canvas); text-shadow: 0 2px 14px rgba(29,7,8,.55); pointer-events: none; }
+.rk-card:hover { outline: 2px solid var(--dept, var(--burgundy)); }
 .rk-grid-products--3 { grid-template-columns: repeat(1, 1fr); }
 @media (min-width: 640px) { .rk-grid-products--3 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .rk-grid-products--3 { grid-template-columns: repeat(3, 1fr); } }
@@ -340,7 +350,8 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-step .rk-step__bignum + h3 { margin-top: 1rem; }
 .rk-editorial { display: grid; gap: 1.25rem; }
 @media (min-width: 768px) { .rk-editorial { grid-template-columns: repeat(2, 1fr); } }
-.rk-edcard { position: relative; overflow: hidden; border-radius: 1.75rem; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+.rk-edcard { position: relative; overflow: hidden; border-radius: 1.75rem; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); box-shadow: 0 20px 44px -30px rgba(29,7,8,.4); transition: transform .3s, box-shadow .3s; }
+.rk-edcard:hover { transform: translateY(-6px); box-shadow: 0 30px 56px -30px rgba(29,7,8,.5); }
 .rk-edcard__art { aspect-ratio: 16 / 10; }
 .rk-edcard__art svg { height: 100%; width: 100%; transition: transform .5s; }
 .rk-edcard:hover .rk-edcard__art svg { transform: scale(1.03); }
@@ -389,6 +400,7 @@ button:disabled { opacity: .6; cursor: default; }
 @media (min-width: 640px) { .rk-collection--dark { margin-inline: 1.25rem; } }
 @media (max-width: 479px) { .rk-collection--dark { margin-top: 1.75rem; border-radius: 1.75rem; } }
 .rk-ritual { padding-block: 3rem; }
+.rk-ritual + .rk-section .rk-step, section[aria-labelledby="ritual-title"] .rk-step { border-top: 4px solid var(--dept, var(--clay)); }
 .rk-empty { margin-top: 2rem; border-radius: 1.75rem; border: 1px dashed color-mix(in srgb, var(--olive) 40%, transparent); background: color-mix(in srgb, var(--canvas) 50%, transparent); padding: 2.5rem 1.5rem; text-align: center; }
 .rk-empty--dark { border-color: color-mix(in srgb, var(--canvas) 30%, transparent); background: transparent; color: var(--canvas); }
 .rk-empty p.rk-empty__title, .rk-empty__title { font-family: var(--font-display); font-size: 1.875rem; margin-top: 0; max-width: none; color: inherit; }

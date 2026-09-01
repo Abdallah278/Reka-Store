@@ -226,7 +226,7 @@
           {%- for product in collection.products -%}
             {%- assign d = forloop.index0 | at_most: 8 | times: 70 -%}
             <li class="anim-rise" style="animation-delay: {{ d }}ms;" data-cat-item="{{ product.type | default: 'Uncategorised' | escape }}">
-              {% render 'product-card', product: product, tone_dark: is_offers, show_department: is_offers %}
+              {% render 'product-card', product: product, tone_dark: is_offers, show_department: is_offers, idx: forloop.index %}
             </li>
           {%- endfor -%}
         </ul>
