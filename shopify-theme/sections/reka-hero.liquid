@@ -1,6 +1,8 @@
 {%- comment -%} Hero — port of Home.tsx Hero (compact layout + department chips) {%- endcomment -%}
-{%- assign hero_title = section.settings.hero_title | default: 'Beauty, your way' -%}
-{%- assign hero_subtitle = section.settings.hero_subtitle | default: 'A considered edit of colour, skin and ritual — chosen for the way you actually live.' -%}
+{%- assign d_title = 'home.hero_title' | t -%}
+{%- assign d_sub = 'home.hero_sub' | t -%}
+{%- assign hero_title = section.settings.hero_title | default: d_title -%}
+{%- assign hero_subtitle = section.settings.hero_subtitle | default: d_sub -%}
 {%- assign feature = nil -%}
 {%- assign fc = collections[section.settings.featured_collection] -%}
 {%- if fc != blank -%}
@@ -16,7 +18,8 @@
 
   <div class="container rk-hero__grid">
     <div class="rk-hero__copy">
-      <p class="eyebrow rk-hero__eyebrow">{% render 'icon', name: 'sparkles' %} {{ section.settings.eyebrow | default: 'five departments · one point of view' }}</p>
+      {%- assign d_eyebrow = 'home.hero_eyebrow' | t -%}
+      <p class="eyebrow rk-hero__eyebrow">{% render 'icon', name: 'sparkles' %} {{ section.settings.eyebrow | default: d_eyebrow }}</p>
       {%- assign t_words = hero_title | split: ' ' -%}
       <h1 class="rk-hero__title">
         {%- if t_words.size > 1 -%}
@@ -27,10 +30,11 @@
       </h1>
       <p class="rk-hero__sub">{{ hero_subtitle }}</p>
       <div class="rk-hero__ctas">
-        <a href="{{ section.settings.cta1_link | default: '#departments' }}" class="btn-ink">{{ section.settings.cta1_label | default: 'Choose your ritual' }} {% render 'icon', name: 'arrow-right' %}</a>
+        {%- assign d_cta1 = 'home.cta1' | t -%}{%- assign d_cta2 = 'home.cta2' | t -%}
+        <a href="{{ section.settings.cta1_link | default: '#departments' }}" class="btn-ink">{{ section.settings.cta1_label | default: d_cta1 }} {% render 'icon', name: 'arrow-right' %}</a>
         {%- assign cta2_link = section.settings.cta2_link -%}
         {%- if cta2_link == blank -%}{%- assign cta2_link = routes.collections_url | append: '/offers' -%}{%- endif -%}
-        <a href="{{ cta2_link }}" class="btn-outline">{{ section.settings.cta2_label | default: 'Browse offers' }}</a>
+        <a href="{{ cta2_link }}" class="btn-outline">{{ section.settings.cta2_label | default: d_cta2 }}</a>
       </div>
       <nav aria-label="Departments" class="rk-hero__chips">
         {%- assign chips_menu = linklists[section.settings.chips_menu] -%}
@@ -46,10 +50,13 @@
           <a href="{{ routes.collections_url }}/offers">{{ 'depts.offers.name' | t }}</a>
         {%- endif -%}
       </nav>
+      {%- assign f1t = 'home.fact1t' | t -%}{%- assign f1x = 'home.fact1x' | t -%}
+      {%- assign f2t = 'home.fact2t' | t -%}{%- assign f2x = 'home.fact2x' | t -%}
+      {%- assign f3t = 'home.fact3t' | t -%}{%- assign f3x = 'home.fact3x' | t -%}
       <dl class="rk-hero__facts">
-        <div><dt>{{ section.settings.fact1_title | default: 'Korean → Perfume' }}</dt><dd>{{ section.settings.fact1_text | default: 'Five departments' }}</dd></div>
-        <div><dt>{{ section.settings.fact2_title | default: 'Prices in EGP' }}</dt><dd>{{ section.settings.fact2_text | default: 'No surprises' }}</dd></div>
-        <div><dt>{{ section.settings.fact3_title | default: 'Order on WhatsApp' }}</dt><dd>{{ section.settings.fact3_text | default: 'Confirmed in chat' }}</dd></div>
+        <div><dt>{{ section.settings.fact1_title | default: f1t }}</dt><dd>{{ section.settings.fact1_text | default: f1x }}</dd></div>
+        <div><dt>{{ section.settings.fact2_title | default: f2t }}</dt><dd>{{ section.settings.fact2_text | default: f2x }}</dd></div>
+        <div><dt>{{ section.settings.fact3_title | default: f3t }}</dt><dd>{{ section.settings.fact3_text | default: f3x }}</dd></div>
       </dl>
       {%- if section.settings.show_social -%}
         {%- assign wa_link = settings.whatsapp_page_url | default: '' -%}
@@ -95,7 +102,8 @@
             <img src="{{ 'hero-card.jpg' | asset_url }}" alt="" loading="lazy" width="600" height="750" style="height:100%; width:100%; object-fit:cover;">
           {%- endif -%}
         </div>
-        <figcaption>{{ section.settings.card_caption | default: 'Perfume edit' }}</figcaption>
+        {%- assign d_cap = 'home.card_caption' | t -%}
+        <figcaption>{{ section.settings.card_caption | default: d_cap }}</figcaption>
       </figure>
       <div class="rk-hero__bubble"><img src="{{ 'hero-bubble.jpg' | asset_url }}" alt="" loading="lazy" width="600" height="600" style="height:100%; width:100%; object-fit:cover;"></div>
       {%- assign stamp_text = section.settings.stamp_text | default: 'Reka Store • Beauty your way •' -%}
@@ -123,8 +131,9 @@
         </a>
       {%- else -%}
         <div class="panel rk-hero__feature" style="display:block;">
-          <p class="eyebrow text-burgundy" style="letter-spacing:.2em;">{{ section.settings.soon_eyebrow | default: 'New edit' }}</p>
-          <p class="font-display" style="font-size:1.25rem;">{{ section.settings.soon_text | default: 'Arriving soon' }}</p>
+          {%- assign d_se = 'home.soon_eyebrow' | t -%}{%- assign d_st = 'home.soon_text' | t -%}
+          <p class="eyebrow text-burgundy" style="letter-spacing:.2em;">{{ section.settings.soon_eyebrow | default: d_se }}</p>
+          <p class="font-display" style="font-size:1.25rem;">{{ section.settings.soon_text | default: d_st }}</p>
         </div>
       {%- endif -%}
     </div>

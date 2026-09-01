@@ -1,10 +1,6 @@
 {%- comment -%} Manifesto marquee — port of Home.tsx Manifesto (compact) {%- endcomment -%}
-{%- assign marquee_raw = section.settings.marquee_items | default: 'Korean skincare
-French skincare
-Makeup
-Perfumes
-Honest offers
-Real prices' -%}
+{%- assign d_marquee = 'home.marquee' | t -%}
+{%- assign marquee_raw = section.settings.marquee_items | default: d_marquee -%}
 {%- assign marquee_items = marquee_raw | newline_to_br | split: '<br />' -%}
 <section class="rk-manifesto">
   <div class="rk-marquee-band" aria-hidden="true">
@@ -19,9 +15,11 @@ Real prices' -%}
   </div>
   <div class="container rk-manifesto__grid">
     <div>
-      <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: 'Manifesto' }}</p>
-      <h2 class="font-display">{{ section.settings.title_start | default: 'Beauty that fits the' }} <em>{{ section.settings.title_em | default: 'morning you already have.' }}</em></h2>
-      {%- assign default_text = settings.store_name | default: 'Reka Store' | append: ' is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.' -%}
+      {%- assign d_e = 'home.man_eyebrow' | t -%}{%- assign d_t1 = 'home.man_t1' | t -%}{%- assign d_em = 'home.man_em' | t -%}
+      {%- assign shop_n = settings.store_name | default: 'Reka Store' -%}
+      {%- assign default_text = 'home.man_text' | t: shop: shop_n -%}
+      <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: d_e }}</p>
+      <h2 class="font-display">{{ section.settings.title_start | default: d_t1 }} <em>{{ section.settings.title_em | default: d_em }}</em></h2>
       <p class="rk-manifesto__text">{{ section.settings.text | default: default_text }}</p>
     </div>
     <div class="rk-manifesto__art">

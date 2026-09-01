@@ -4,13 +4,14 @@
 <section class="rk-section" style="background: color-mix(in srgb, var(--cream) 60%, transparent);" aria-labelledby="featured-title">
   <div class="container">
     <div class="rk-split">
+      {%- assign d_e = 'home.feat_eyebrow' | t -%}{%- assign d_t = 'home.feat_title' | t -%}{%- assign d_b = 'home.feat_btn' | t -%}
       <div class="rk-section-head">
-        <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'This week' }}</p>
-        <h2 id="featured-title" class="font-display">{{ section.settings.title | default: 'The featured edit' }}</h2>
+        <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: d_e }}</p>
+        <h2 id="featured-title" class="font-display">{{ section.settings.title | default: d_t }}</h2>
       </div>
       {%- assign btn_link = section.settings.button_link -%}
       {%- if btn_link == blank -%}{%- assign btn_link = routes.collections_url | append: '/makeup' -%}{%- endif -%}
-      <a href="{{ btn_link }}" class="btn-outline">{{ section.settings.button_label | default: 'Browse departments' }}</a>
+      <a href="{{ btn_link }}" class="btn-outline">{{ section.settings.button_label | default: d_b }}</a>
     </div>
     <ul class="rk-grid-products">
       {%- for product in fc.products limit: section.settings.limit -%}

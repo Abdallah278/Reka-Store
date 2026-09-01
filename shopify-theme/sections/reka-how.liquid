@@ -1,10 +1,11 @@
 {%- comment -%} How ordering works — port of Home.tsx HowItWorks {%- endcomment -%}
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
 <section class="container rk-section" aria-labelledby="how-title">
+  {%- assign d_e = 'home.how_eyebrow' | t -%}{%- assign d_t = 'home.how_title' | t -%}{%- assign d_i = 'home.how_intro' | t -%}
   <div class="rk-section-head">
-    <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'How it works' }}</p>
-    <h2 id="how-title" class="font-display">{{ section.settings.title | default: 'Ordering is a conversation' }}</h2>
-    <p>{{ section.settings.intro | default: 'There is no online payment here — by design. Every order is confirmed personally on WhatsApp.' }}</p>
+    <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: d_e }}</p>
+    <h2 id="how-title" class="font-display">{{ section.settings.title | default: d_t }}</h2>
+    <p>{{ section.settings.intro | default: d_i }}</p>
   </div>
   <ol class="rk-steps">
     {%- if section.blocks.size > 0 -%}
@@ -18,23 +19,24 @@
     {%- else -%}
       <li class="rk-step">
         <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'shield-check', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">01</span></div>
-        <h3 class="font-display">Build your order</h3>
-        <p>Add pieces to your cart and share your delivery details. Nothing is charged on this site.</p>
+        <h3 class="font-display">{{ 'home.s1t' | t }}</h3>
+        <p>{{ 'home.s1x' | t }}</p>
       </li>
       <li class="rk-step">
         <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">02</span></div>
-        <h3 class="font-display">Confirm on WhatsApp</h3>
-        <p>Your order opens as a ready message — press send and we confirm availability in chat.</p>
+        <h3 class="font-display">{{ 'home.s2t' | t }}</h3>
+        <p>{{ 'home.s2x' | t }}</p>
       </li>
       <li class="rk-step">
         <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'truck', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">03</span></div>
-        <h3 class="font-display">Transfer, then delivery</h3>
-        <p>We send payment-transfer instructions manually. Once received, your order ships.</p>
+        <h3 class="font-display">{{ 'home.s3t' | t }}</h3>
+        <p>{{ 'home.s3x' | t }}</p>
       </li>
     {%- endif -%}
   </ol>
   {%- assign question_prefill = section.settings.question_prefill | default: 'Hi {store}, I have a question before ordering.' | replace: '{store}', settings.store_name -%}
-  <p class="rk-how__note">{{ section.settings.note_prefix | default: 'Questions first?' }} <a href="https://wa.me/{{ wa }}?text={{ question_prefill | url_encode }}" target="_blank" rel="noopener noreferrer">{{ section.settings.note_link_label | default: 'Message us on WhatsApp' }}</a>.</p>
+  {%- assign d_n = 'home.how_note' | t -%}{%- assign d_l = 'home.how_link' | t -%}
+  <p class="rk-how__note">{{ section.settings.note_prefix | default: d_n }} <a href="https://wa.me/{{ wa }}?text={{ question_prefill | url_encode }}" target="_blank" rel="noopener noreferrer">{{ section.settings.note_link_label | default: d_l }}</a>.</p>
 </section>
 
 {% schema %}

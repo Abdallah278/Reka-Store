@@ -7,13 +7,14 @@
     <div class="rk-inkpanel__blob" aria-hidden="true" style="bottom:-4rem; left:33%; height:14rem; width:14rem; background: color-mix(in srgb, var(--clay) 40%, transparent);"></div>
     <div class="rk-inkpanel__grid">
       <div>
-        <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: 'Say hello' }}</p>
-        <h2 class="font-display">{{ section.settings.title | default: "Tell us what you're looking for. We'll point you to the right room." }}</h2>
+        {%- assign d_e = 'home.close_eyebrow' | t -%}{%- assign d_t = 'home.close_title' | t -%}{%- assign d_w = 'home.close_wa' | t -%}{%- assign d_b = 'home.close_back' | t -%}
+        <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: d_e }}</p>
+        <h2 class="font-display">{{ section.settings.title | default: d_t }}</h2>
         <div class="rk-inkpanel__ctas">
           <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
-            {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Chat on WhatsApp' }}
+            {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: d_w }}
           </a>
-          <a href="{{ section.settings.secondary_link | default: '#departments' }}" class="btn-outline btn-outline--light">{{ section.settings.secondary_label | default: 'Back to departments' }}</a>
+          <a href="{{ section.settings.secondary_link | default: '#departments' }}" class="btn-outline btn-outline--light">{{ section.settings.secondary_label | default: d_b }}</a>
         </div>
       </div>
       <div class="rk-inkpanel__art">

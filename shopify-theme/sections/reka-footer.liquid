@@ -4,7 +4,8 @@
   <div class="container rk-footer__grid">
     <div>
       <p class="rk-footer__name font-display">{{ settings.store_name | default: 'Reka Store' }}</p>
-      <p class="rk-footer__about">{{ section.settings.about | default: "A women's beauty edit across five departments. Prices in EGP. Orders are confirmed on WhatsApp and payment instructions are sent manually — no online payment happens on this site." }}</p>
+      {%- assign d_about = 'home.foot_about' | t -%}
+      <p class="rk-footer__about">{{ section.settings.about | default: d_about }}</p>
     </div>
     <nav aria-label="Departments" class="rk-footer__nav">
       {%- assign menu = linklists[section.settings.menu] -%}
@@ -19,8 +20,9 @@
         <a href="{{ routes.collections_url }}/perfumes">{{ 'depts.perfumes.name' | t }}</a>
         <a href="{{ routes.collections_url }}/offers">{{ 'depts.offers.name' | t }}</a>
       {%- endif -%}
-      {%- if pages.shipping.url != blank -%}<a href="{{ pages.shipping.url }}">{{ section.settings.shipping_label | default: 'Shipping & delivery' }}</a>{%- endif -%}
-      <a href="{{ routes.cart_url }}">{{ section.settings.cart_label | default: 'Cart' }}</a>
+      {%- assign d_ship = 'home.foot_ship' | t -%}{%- assign d_cart = 'shared.cart' | t -%}
+      {%- if pages.shipping.url != blank -%}<a href="{{ pages.shipping.url }}">{{ section.settings.shipping_label | default: d_ship }}</a>{%- endif -%}
+      <a href="{{ routes.cart_url }}">{{ section.settings.cart_label | default: d_cart }}</a>
     </nav>
     <nav aria-label="Contact" class="rk-footer__contact">
       {%- assign wa_link = settings.whatsapp_page_url | default: '' -%}
@@ -50,7 +52,8 @@
     </nav>
   </div>
   <div class="container rk-footer__legal" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem;">
-    <span>© {{ 'now' | date: '%Y' }} {{ settings.store_name | default: 'Reka Store' }}. {{ section.settings.legal | default: 'Illustrations are original brand artwork.' }}</span>
+    {%- assign d_legal = 'home.foot_legal' | t -%}
+    <span>© {{ 'now' | date: '%Y' }} {{ settings.store_name | default: 'Reka Store' }}. {{ section.settings.legal | default: d_legal }}</span>
     {%- if localization.available_languages.size > 1 -%}
       {%- form 'localization' -%}
         <select name="locale_code" onchange="this.form.submit()" aria-label="Language" style="min-height:2.5rem; border-radius:9999px; border:1px solid color-mix(in srgb, var(--ink) 20%, transparent); background:var(--cream); padding-inline:1rem; font-size:.8125rem; font-weight:600; color:var(--ink);">

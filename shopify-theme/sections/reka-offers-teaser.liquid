@@ -7,10 +7,11 @@
     <div class="rk-inkpanel__grid" style="grid-template-columns:1fr;">
       <div style="display:grid; gap:2.5rem; align-items:center;" class="rk-offers-grid">
         <div>
-          <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: 'Honest offers' }}</p>
-          <h2 id="offers-teaser-title" class="font-display">{{ section.settings.title | default: 'Real pieces, really reduced.' }}</h2>
-          <p style="margin-top:1rem; max-width:28rem; font-size:.875rem; line-height:1.75; color: color-mix(in srgb, var(--canvas) 75%, transparent);">{{ section.settings.text | default: "Every strikethrough is a genuine previous price. When an offer has an end date, it's a real one." }}</p>
-          <a href="{{ routes.collections_url }}/offers" class="rk-summary__cta" style="width:auto; margin-top:1.75rem;">{{ section.settings.cta_label | default: 'Enter the offers room' }} {% render 'icon', name: 'arrow-right' %}</a>
+          {%- assign d_e = 'home.off_eyebrow' | t -%}{%- assign d_t = 'home.off_title' | t -%}{%- assign d_x = 'home.off_text' | t -%}{%- assign d_c = 'home.off_cta' | t -%}
+          <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: d_e }}</p>
+          <h2 id="offers-teaser-title" class="font-display">{{ section.settings.title | default: d_t }}</h2>
+          <p style="margin-top:1rem; max-width:28rem; font-size:.875rem; line-height:1.75; color: color-mix(in srgb, var(--canvas) 75%, transparent);">{{ section.settings.text | default: d_x }}</p>
+          <a href="{{ routes.collections_url }}/offers" class="rk-summary__cta" style="width:auto; margin-top:1.75rem;">{{ section.settings.cta_label | default: d_c }} {% render 'icon', name: 'arrow-right' %}</a>
         </div>
         <ul style="display:grid; gap:.75rem; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));" aria-label="Current offers">
           {%- for product in offers_col.products limit: 3 -%}

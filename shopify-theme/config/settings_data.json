@@ -14,6 +14,6 @@
     "facebook_url": "https://www.facebook.com",
     "tiktok_url": "https://www.tiktok.com",
     "delivery_fee": 0,
-    "shipping_zones": "Cairo | |\nGiza | |\nAlexandria | |\nQalyubia | |\nSharqia | |\nDakahlia | |\nBeheira | |\nGharbia | |\nMonufia | |\nKafr El Sheikh | |\nDamietta | |\nPort Said | |\nIsmailia | |\nSuez | |\nNorth Sinai | |\nSouth Sinai | |\nFaiyum | |\nBeni Suef | |\nMinya | |\nAssiut | |\nSohag | |\nQena | |\nLuxor | |\nAswan | |\nRed Sea | |\nNew Valley | |\nMatrouh | |"
+    "shipping_zones": "Cairo | 90 |\nGiza | 90 |\nAlexandria | 90 |\nQalyubia | 90 |\nSharqia | 90 |\nDakahlia | 90 |\nBeheira | 90 |\nGharbia | 90 |\nMonufia | 90 |\nKafr El Sheikh | 90 |\nDamietta | 90 |\nPort Said | 90 |\nIsmailia | 90 |\nSuez | 90 |\nNorth Sinai | 150 |\nSouth Sinai | 150 |\nFaiyum | 90 |\nBeni Suef | 90 |\nMinya | 90 |\nAssiut | 90 |\nSohag | 90 |\nQena | 90 |\nLuxor | 90 |\nAswan | 90 |\nRed Sea | 150 |\nNew Valley | 90 |\nMatrouh | 90 |"
   }
 }

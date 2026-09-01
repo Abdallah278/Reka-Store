@@ -18,7 +18,7 @@
 <div class="rk-product">
   <nav aria-label="Breadcrumb" class="container rk-breadcrumb">
     <ol>
-      <li><a href="{{ routes.root_url }}">Home</a></li>
+      <li><a href="{{ routes.root_url }}">{{ 'shared.home' | t }}</a></li>
       {%- if dept -%}<li aria-hidden="true">/</li><li><a href="{{ dept.url }}">{{ dept.title }}</a></li>{%- endif -%}
       <li aria-hidden="true">/</li>
       <li aria-current="page">{{ product.title }}</li>
@@ -64,7 +64,8 @@
       {%- if dept -%}<p class="eyebrow text-burgundy">{{ dept.title }}{% if product.type != blank %} · {{ product.type }}{% endif %}</p>{%- endif -%}
       <h1 class="font-display">{{ product.title }}</h1>
       {%- if product.vendor != blank and product.vendor != shop.name -%}<p class="rk-pdetails__brand">{{ product.vendor }}</p>{%- endif -%}
-      <p class="rk-pdetails__desc">{{ product.description | strip_html | default: 'Details for this piece are coming soon. Ask us on WhatsApp for the full story.' }}</p>
+      {%- assign d_soon = 'prodx.desc_soon' | t -%}
+      <p class="rk-pdetails__desc">{{ product.description | strip_html | default: d_soon }}</p>
       {%- if v.title != 'Default Title' -%}
         <p class="rk-pdetails__variant">{{ v.title }}</p>
       {%- endif -%}
@@ -74,31 +75,35 @@
           {% render 'price', product: product, big: true %}
         </div>
         <p class="rk-status-chip {% if sold_out %}rk-status-chip--soldout{% elsif stock_left %}rk-status-chip--low{% endif %}" aria-live="polite">
-          {%- if sold_out -%}Sold out{%- elsif stock_left -%}Only {{ stock_left }} left{%- else -%}Available{%- endif -%}
+          {%- if sold_out -%}{{ 'products.sold_out' | t }}{%- elsif stock_left -%}{{ 'products.only_left' | t: count: stock_left }}{%- else -%}{{ 'products.available' | t }}{%- endif -%}
         </p>
       </div>
 
       <div class="rk-pdetails__actions">
         {%- if sold_out -%}
           <div role="status" class="rk-soldout-note">
-            <strong>This piece is currently sold out.</strong>
-            It can't be added to an order right now. Message us and we'll tell you when it returns.
+            <strong>{{ 'prodx.sold_strong' | t }}</strong>
+            {{ 'prodx.sold_rest' | t }}
           </div>
         {%- else -%}
           <button type="button" class="btn-ink btn-block" data-add-to-cart="{{ v.id }}" data-product-title="{{ product.title | escape }}">
-            {% render 'icon', name: 'shopping-bag' %} {{ section.settings.add_label | default: 'Add to order' }} — {{ price_txt }}
+            {%- assign d_add = 'prodx.add' | t -%}
+            {% render 'icon', name: 'shopping-bag' %} {{ section.settings.add_label | default: d_add }} — {{ price_txt }}
           </button>
         {%- endif -%}
         <a href="https://wa.me/{{ wa }}?text={{ ask | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa btn-block">
-          {% render 'icon', name: 'message-circle' %} {{ section.settings.ask_label | default: 'Ask about this on WhatsApp' }}
+          {%- assign d_ask = 'prodx.ask' | t -%}
+          {% render 'icon', name: 'message-circle' %} {{ section.settings.ask_label | default: d_ask }}
         </a>
-        <p class="rk-pdetails__nopay">{{ section.settings.nopay_note | default: 'No online payment — your order is confirmed on WhatsApp and payment instructions are sent manually.' }}</p>
+        {%- assign d_nopay = 'prodx.nopay' | t -%}
+        <p class="rk-pdetails__nopay">{{ section.settings.nopay_note | default: d_nopay }}</p>
       </div>
 
       {%- assign notes = product.metafields.reka.notes.value | default: product.metafields.custom.notes.value -%}
       {%- if notes != blank -%}
         <div class="rk-pdetails__notes">
-          <h2>{{ section.settings.notes_title | default: 'Notes & details' }}</h2>
+          {%- assign d_notes = 'prodx.notes' | t -%}
+          <h2>{{ section.settings.notes_title | default: d_notes }}</h2>
           <p>{{ notes }}</p>
         </div>
       {%- endif -%}
@@ -118,8 +123,9 @@
   {%- if related contains '<li' -%}
   <section class="container rk-related" aria-labelledby="related-title">
     <div class="rk-section-head">
-      <p class="eyebrow text-burgundy">{{ section.settings.related_eyebrow | default: 'Same department' }}</p>
-      <h2 id="related-title" class="font-display">{{ section.settings.related_title | default: 'You might also like' }}</h2>
+      {%- assign d_re = 'prodx.rel_eyebrow' | t -%}{%- assign d_rt = 'prodx.rel_title' | t -%}
+      <p class="eyebrow text-burgundy">{{ section.settings.related_eyebrow | default: d_re }}</p>
+      <h2 id="related-title" class="font-display">{{ section.settings.related_title | default: d_rt }}</h2>
     </div>
     <ul class="rk-grid-products">{{ related }}</ul>
   </section>

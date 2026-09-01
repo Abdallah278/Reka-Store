@@ -179,12 +179,13 @@
   <div class="container">
     <div class="rk-split">
       <div class="rk-section-head {% if is_offers %}rk-section-head--dark{% endif %}">
-        <p class="eyebrow {% unless is_offers %}text-burgundy{% endunless %}">{% if is_offers %}{{ section.settings.offers_eyebrow | default: 'Active offers' }}{% else %}{{ section.settings.grid_eyebrow | default: 'The collection' }}{% endif %}</p>
-        <h2 id="collection-title" class="font-display">{% if is_offers %}{{ section.settings.offers_title | default: 'On offer right now' }}{% else %}{{ 'shared.edit_title' | t: name: dept_short }}{% endif %}</h2>
+        {%- assign d_oe = 'colx.offers_eyebrow' | t -%}{%- assign d_ge = 'colx.grid_eyebrow' | t -%}{%- assign d_ot = 'colx.offers_title' | t -%}
+        <p class="eyebrow {% unless is_offers %}text-burgundy{% endunless %}">{% if is_offers %}{{ section.settings.offers_eyebrow | default: d_oe }}{% else %}{{ section.settings.grid_eyebrow | default: d_ge }}{% endif %}</p>
+        <h2 id="collection-title" class="font-display">{% if is_offers %}{{ section.settings.offers_title | default: d_ot }}{% else %}{{ 'shared.edit_title' | t: name: dept_short }}{% endif %}</h2>
       </div>
       {%- comment -%} Category filter chips — categories = Shopify product types present {%- endcomment -%}
       <div role="group" aria-label="Filter by category" class="rk-catchips no-scrollbar" data-cat-filter {% if is_offers %}data-dark{% endif %} hidden>
-        <button type="button" aria-pressed="true" data-cat="All">All</button>
+        <button type="button" aria-pressed="true" data-cat="All">{{ 'colx.all' | t }}</button>
         {%- assign present = collection.products | map: 'type' | uniq -%}
         {%- for c in cats -%}{%- if present contains c -%}<button type="button" aria-pressed="false" data-cat="{{ c | escape }}">{{ c }}</button>{%- endif -%}{%- endfor -%}
         {%- for p in present -%}
@@ -197,15 +198,15 @@
 
     {%- if count == 0 -%}
       <div class="rk-empty {% if is_offers %}rk-empty--dark{% endif %}">
-        <p class="rk-empty__title font-display">Nothing here yet</p>
+        <p class="rk-empty__title font-display">{{ 'colx.empty_title' | t }}</p>
         <p>
           {%- if is_offers -%}
-            No offers are running at the moment — and we won't invent one. Check back soon or browse the departments at full price.
+            {{ 'colx.empty_offers' | t }}
           {%- else -%}
-            The {{ dept_name }} edit is being curated. Ask us on WhatsApp and we'll tell you what's coming.
+            {{ 'colx.empty_dept' | t: name: dept_name }}
           {%- endif -%}
         </p>
-        <a href="{{ routes.root_url }}" class="{% if is_offers %}rk-pillbtn rk-pillbtn--canvas{% else %}btn-ink{% endif %}">Back to the homepage {% render 'icon', name: 'arrow-up-right' %}</a>
+        <a href="{{ routes.root_url }}" class="{% if is_offers %}rk-pillbtn rk-pillbtn--canvas{% else %}btn-ink{% endif %}">{{ 'colx.back_home' | t }} {% render 'icon', name: 'arrow-up-right' %}</a>
       </div>
     {%- else -%}
       {%- paginate collection.products by 24 -%}
@@ -218,12 +219,12 @@
           {%- endfor -%}
         </ul>
         <p class="rk-catchips__none" data-cat-none hidden>
-          <span class="rk-empty {% if is_offers %}rk-empty--dark{% endif %}" style="display:block;">Nothing in this category yet. Try another chip.</span>
+          <span class="rk-empty {% if is_offers %}rk-empty--dark{% endif %}" style="display:block;">{{ 'colx.none' | t }}</span>
         </p>
         {%- if paginate.pages > 1 -%}
           <nav style="margin-top:2.5rem; display:flex; justify-content:center; gap:.75rem;" aria-label="Pagination">
-            {%- if paginate.previous -%}<a class="btn-outline {% if is_offers %}btn-outline--light{% endif %}" href="{{ paginate.previous.url }}">← Previous</a>{%- endif -%}
-            {%- if paginate.next -%}<a class="btn-outline {% if is_offers %}btn-outline--light{% endif %}" href="{{ paginate.next.url }}">Next →</a>{%- endif -%}
+            {%- if paginate.previous -%}<a class="btn-outline {% if is_offers %}btn-outline--light{% endif %}" href="{{ paginate.previous.url }}">← {{ 'colx.prev' | t }}</a>{%- endif -%}
+            {%- if paginate.next -%}<a class="btn-outline {% if is_offers %}btn-outline--light{% endif %}" href="{{ paginate.next.url }}">{{ 'colx.next' | t }} →</a>{%- endif -%}
           </nav>
         {%- endif -%}
       {%- endpaginate -%}
@@ -242,7 +243,7 @@
     <li class="rk-step"><span class="rk-step__bignum font-display">02</span><h3 class="font-display">{{ r2t }}</h3><p>{{ r2x }}</p></li>
     <li class="rk-step"><span class="rk-step__bignum font-display">03</span><h3 class="font-display">{{ r3t }}</h3><p>{{ r3x }}</p></li>
   </ol>
-  <p style="margin-top:1rem; font-size:.75rem; color:var(--olive);">General care notes only — not medical advice.</p>
+  <p style="margin-top:1rem; font-size:.75rem; color:var(--olive);">{{ 'colx.care_note' | t }}</p>
 </section>
 
 {%- comment -%} ---- Editorial (exact port) ---- {%- endcomment -%}
@@ -274,10 +275,12 @@
     <div class="rk-dcta__row" style="color: {{ fg }};">
       <div>
         <p class="eyebrow" style="color: {% if dark %}color-mix(in srgb, var(--canvas) 70%, transparent){% else %}color-mix(in srgb, var(--ink) 60%, transparent){% endif %};">{{ dept_name }}</p>
-        <h2 class="font-display">{{ section.settings.cta_title | default: 'Not sure where to start? Just ask.' }}</h2>
+        {%- assign d_ct = 'colx.cta_title' | t -%}
+        <h2 class="font-display">{{ section.settings.cta_title | default: d_ct }}</h2>
       </div>
       <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: store_name | append: ', I would love a ' | append: dept_name | append: ' recommendation.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="rk-pillbtn {% if dark %}rk-pillbtn--canvas{% else %}rk-pillbtn--ink{% endif %}">
-        {% render 'icon', name: 'message-circle' %} {{ section.settings.cta_label | default: 'Ask on WhatsApp' }}
+        {%- assign d_cl = 'colx.cta_label' | t -%}
+        {% render 'icon', name: 'message-circle' %} {{ section.settings.cta_label | default: d_cl }}
       </a>
     </div>
   </div>

@@ -11,14 +11,16 @@
 {%- if cart.item_count == 0 -%}
 <div class="rk-cart-empty" data-cart-empty>
   <span class="rk-cart-empty__icon">{% render 'icon', name: 'shopping-bag', class: 'icon-lg icon' %}</span>
-  <h1 class="font-display">{{ section.settings.empty_title | default: 'Your order is empty' }}</h1>
-  <p>{{ section.settings.empty_text | default: "Wander through the departments and add the pieces you'd like — then we'll confirm everything on WhatsApp." }}</p>
-  <a href="{{ routes.root_url }}" class="btn-ink">{{ section.settings.empty_button | default: 'Explore departments' }}</a>
+  {%- assign d_et = 'cartx.empty_title' | t -%}{%- assign d_ex = 'cartx.empty_text' | t -%}{%- assign d_eb = 'cartx.empty_btn' | t -%}
+  <h1 class="font-display">{{ section.settings.empty_title | default: d_et }}</h1>
+  <p>{{ section.settings.empty_text | default: d_ex }}</p>
+  <a href="{{ routes.root_url }}" class="btn-ink">{{ section.settings.empty_button | default: d_eb }}</a>
 </div>
 {%- else -%}
 <div class="container rk-cart" data-cart-root>
-  <h1 class="font-display">{{ section.settings.step1_title | default: 'Your order' }}</h1>
-  <p class="rk-cart__lede">{{ section.settings.step1_lede | default: 'Review your pieces, then check out — delivery details are collected at checkout and payment is by transfer (Vodafone Cash / InstaPay), confirmed with you on WhatsApp.' }}</p>
+  {%- assign d_t = 'cartx.title' | t -%}{%- assign d_l = 'cartx.lede' | t -%}
+  <h1 class="font-display">{{ section.settings.step1_title | default: d_t }}</h1>
+  <p class="rk-cart__lede">{{ section.settings.step1_lede | default: d_l }}</p>
 
   <div class="rk-cart__grid">
     <ul class="rk-lines" aria-label="Order items">
@@ -55,36 +57,43 @@
     </ul>
 
     <aside class="rk-summary" aria-label="Order summary">
-      <h2 class="font-display">{{ section.settings.summary_title | default: 'Summary' }}</h2>
+      {%- assign d_s = 'cartx.summary' | t -%}
+      <h2 class="font-display">{{ section.settings.summary_title | default: d_s }}</h2>
       <dl>
         <div><dt>{{ 'shared.subtotal' | t }}</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
-        <div><dt>{{ 'shared.delivery' | t }}</dt><dd>{{ section.settings.delivery_line | default: 'Calculated at checkout' }}</dd></div>
+        {%- assign d_dl = 'cartx.delivery_line' | t -%}
+        <div><dt>{{ 'shared.delivery' | t }}</dt><dd>{{ section.settings.delivery_line | default: d_dl }}</dd></div>
         {%- if free_above != '' -%}
-          <div><dt></dt><dd style="font-size:.75rem;">Free delivery above {{ free_above }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
+          {%- assign curx = settings.currency_label | default: 'EGP' -%}
+          <div><dt></dt><dd style="font-size:.75rem;">{{ 'cartx.free_above' | t: amount: free_above, cur: curx }}</dd></div>
         {%- endif -%}
         <div class="rk-summary__total"><dt>{{ 'shared.total' | t }}</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} + {{ 'shared.delivery' | t }}</dd></div>
       </dl>
 
       <form action="{{ routes.cart_url }}" method="post">
+        {%- assign d_co = 'cartx.checkout' | t -%}
         <button type="submit" name="checkout" class="rk-summary__cta">
-          {{ section.settings.checkout_label | default: 'Checkout — pay by transfer' }} {% render 'icon', name: 'arrow-right' %}
+          {{ section.settings.checkout_label | default: d_co }} {% render 'icon', name: 'arrow-right' %}
         </button>
       </form>
 
       {%- if settings.vodafone_cash != blank or settings.instapay != blank or settings.payment_note != blank -%}
         <div class="rk-paynote" style="margin-top:.875rem; border-radius:1rem; background: color-mix(in srgb, var(--cream) 70%, transparent); padding:.875rem 1rem; font-size:.8125rem; line-height:1.8; color:var(--olive); outline:1px solid color-mix(in srgb, var(--ink) 8%, transparent);">
-          <strong style="color:var(--ink);">{{ section.settings.payment_title | default: 'Transfer options' }}</strong><br>
+          {%- assign d_pt = 'cartx.pay_title' | t -%}
+          <strong style="color:var(--ink);">{{ section.settings.payment_title | default: d_pt }}</strong><br>
           {%- if settings.vodafone_cash != blank -%}Vodafone Cash: <strong>{{ settings.vodafone_cash }}</strong><br>{%- endif -%}
           {%- if settings.instapay != blank -%}InstaPay: <strong>{{ settings.instapay }}</strong><br>{%- endif -%}
           {%- if settings.payment_note != blank -%}{{ settings.payment_note }}{%- endif -%}
         </div>
       {%- endif -%}
 
-      <p class="rk-summary__note">{{ section.settings.summary_note | default: 'No online payment — you complete checkout, then confirm the transfer with us on WhatsApp before anything ships.' }}</p>
+      {%- assign d_note = 'cartx.note' | t -%}
+      <p class="rk-summary__note">{{ section.settings.summary_note | default: d_note }}</p>
 
       {%- assign wa_prefill = section.settings.wa_prefill | default: 'Hi {store}, I have a question about my order.' | replace: '{store}', settings.store_name -%}
       <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-outline btn-block" style="margin-top:.75rem;">
-        {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Ask on WhatsApp' }}
+        {%- assign d_wa = 'cartx.wa' | t -%}
+        {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: d_wa }}
       </a>
     </aside>
   </div>

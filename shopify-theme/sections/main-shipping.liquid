@@ -7,21 +7,22 @@
 {%- assign zones_raw = settings.shipping_zones | default: '' | strip -%}
 {%- assign free_above = settings.free_shipping_threshold | default: '' | strip -%}
 <div class="container" style="padding-top:7rem; padding-bottom:4rem; max-width:56rem;">
-  <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'Delivery' }}</p>
-  <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:500;">{{ section.settings.title | default: 'Shipping & delivery' }}</h1>
+  {%- assign d_e = 'shipx.eyebrow' | t -%}{%- assign d_t = 'shipx.title' | t -%}{%- assign d_i = 'shipx.intro' | t -%}
+  <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: d_e }}</p>
+  <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:500;">{{ section.settings.title | default: d_t }}</h1>
   <p style="margin-top:1rem; max-width:36rem; font-size:.9375rem; line-height:1.9; color:var(--olive);">
-    {{ section.settings.intro | default: 'Orders are placed as WhatsApp requests — we confirm availability, delivery cost and timing with you in chat before anything ships. Payment instructions are sent manually; nothing is charged on this site.' }}
+    {{ section.settings.intro | default: d_i }}
   </p>
 
   {%- if free_above != '' -%}
     <p style="margin-top:1.25rem; display:inline-flex; min-height:2.75rem; align-items:center; border-radius:9999px; background:var(--ink); color:var(--canvas); padding-inline:1.25rem; font-size:.875rem; font-weight:700;">
-      Free delivery on orders above {{ free_above }} EGP
+      {{ 'shipx.free' | t: amount: free_above }}
     </p>
   {%- endif -%}
 
   {%- if zones_raw != '' -%}
     <table class="rk-shiptable">
-      <thead><tr><th>Governorate</th><th>Delivery fee</th><th>Estimated time</th></tr></thead>
+      <thead><tr><th>{{ 'shipx.gov' | t }}</th><th>{{ 'shipx.fee' | t }}</th><th>{{ 'shipx.time' | t }}</th></tr></thead>
       <tbody>
         {%- assign lines = zones_raw | newline_to_br | split: '<br />' -%}
         {%- for line in lines -%}
@@ -32,25 +33,26 @@
             {%- assign ztime = parts[2] | strip -%}
             <tr>
               <td style="font-weight:600;">{{ zname }}</td>
-              <td>{% if zfee != '' and zfee != blank %}{{ zfee }} EGP{% else %}Confirmed on WhatsApp{% endif %}</td>
-              <td>{% if ztime != '' and ztime != blank %}{{ ztime }}{% else %}Confirmed on WhatsApp{% endif %}</td>
+              <td>{% if zfee != '' and zfee != blank %}{{ zfee }} {{ settings.currency_label | default: 'EGP' }}{% else %}{{ 'shipx.confirmed' | t }}{% endif %}</td>
+              <td>{% if ztime != '' and ztime != blank %}{{ ztime }}{% else %}{{ 'shipx.confirmed' | t }}{% endif %}</td>
             </tr>
           {%- endif -%}
         {%- endfor -%}
-        <tr><td style="font-weight:600;">Other governorates</td><td>Confirmed on WhatsApp</td><td>Confirmed on WhatsApp</td></tr>
+        <tr><td style="font-weight:600;">{{ 'shipx.other_govs' | t }}</td><td>{{ 'shipx.confirmed' | t }}</td><td>{{ 'shipx.confirmed' | t }}</td></tr>
       </tbody>
     </table>
   {%- else -%}
     <div class="rk-empty" style="margin-top:2rem; text-align:left; padding:1.5rem;">
       <p style="margin:0; font-size:.9375rem; line-height:1.9; color:var(--olive);">
-        Delivery fees and timing are confirmed per order on WhatsApp — message us with your governorate and we'll tell you exactly what to expect.
+        {{ 'shipx.no_zones' | t }}
       </p>
     </div>
   {%- endif -%}
 
   {%- if settings.vodafone_cash != blank or settings.instapay != blank or settings.payment_note != blank -%}
     <div style="margin-top:1.5rem; border-radius:1rem; background: color-mix(in srgb, var(--cream) 70%, transparent); padding:1rem 1.25rem; font-size:.875rem; line-height:1.9; color:var(--olive); outline:1px solid color-mix(in srgb, var(--ink) 8%, transparent); max-width:36rem;">
-      <strong style="color:var(--ink);">{{ section.settings.payment_title | default: 'Payment by transfer' }}</strong><br>
+      {%- assign d_pt = 'shipx.pay_title' | t -%}
+      <strong style="color:var(--ink);">{{ section.settings.payment_title | default: d_pt }}</strong><br>
       {%- if settings.vodafone_cash != blank -%}Vodafone Cash: <strong>{{ settings.vodafone_cash }}</strong><br>{%- endif -%}
       {%- if settings.instapay != blank -%}InstaPay: <strong>{{ settings.instapay }}</strong><br>{%- endif -%}
       {%- if settings.payment_note != blank -%}{{ settings.payment_note }}{%- endif -%}
@@ -66,8 +68,9 @@
   {%- endif -%}
 
   <div style="margin-top:2.5rem; display:flex; flex-wrap:wrap; gap:.75rem;">
-    <a href="https://wa.me/{{ wa }}?text={{ section.settings.wa_prefill | default: 'Hi, I have a question about delivery.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">{% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Ask about delivery' }}</a>
-    <a href="{{ routes.root_url }}" class="btn-outline">{{ section.settings.back_label | default: 'Back to the store' }}</a>
+    {%- assign d_wa = 'shipx.wa' | t -%}{%- assign d_back = 'shipx.back' | t -%}
+    <a href="https://wa.me/{{ wa }}?text={{ section.settings.wa_prefill | default: 'Hi, I have a question about delivery.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">{% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: d_wa }}</a>
+    <a href="{{ routes.root_url }}" class="btn-outline">{{ section.settings.back_label | default: d_back }}</a>
   </div>
 </div>
 
