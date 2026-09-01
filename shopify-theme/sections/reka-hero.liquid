@@ -144,33 +144,139 @@
 {
   "name": "Reka hero",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow line", "default": "five departments · one point of view" },
-    { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Beauty, your way" },
-    { "type": "textarea", "id": "hero_subtitle", "label": "Hero subtitle", "default": "A considered edit of colour, skin and ritual — chosen for the way you actually live." },
-    { "type": "image_picker", "id": "hero_image", "label": "Hero image (replaces the brand portrait)" },
-    { "type": "text", "id": "stamp_text", "label": "Rotating stamp text", "default": "Reka Store • Beauty your way •" },
-    { "type": "header", "content": "Buttons" },
-    { "type": "text", "id": "cta1_label", "label": "Primary button label", "default": "Choose your ritual" },
-    { "type": "url", "id": "cta1_link", "label": "Primary button link (empty = #departments)" },
-    { "type": "text", "id": "cta2_label", "label": "Secondary button label", "default": "Browse offers" },
-    { "type": "url", "id": "cta2_link", "label": "Secondary button link (empty = offers collection)" },
-    { "type": "header", "content": "Department chips" },
-    { "type": "link_list", "id": "chips_menu", "label": "Chips menu (empty = built-in five departments)" },
-    { "type": "header", "content": "Facts row" },
-    { "type": "text", "id": "fact1_title", "label": "Fact 1 — title", "default": "Korean → Perfume" },
-    { "type": "text", "id": "fact1_text", "label": "Fact 1 — text", "default": "Five departments" },
-    { "type": "text", "id": "fact2_title", "label": "Fact 2 — title", "default": "Prices in EGP" },
-    { "type": "text", "id": "fact2_text", "label": "Fact 2 — text", "default": "No surprises" },
-    { "type": "text", "id": "fact3_title", "label": "Fact 3 — title", "default": "Order on WhatsApp" },
-    { "type": "text", "id": "fact3_text", "label": "Fact 3 — text", "default": "Confirmed in chat" },
-    { "type": "checkbox", "id": "show_social", "label": "Show social icons under the facts", "default": true },
-    { "type": "header", "content": "Floating cards" },
-    { "type": "image_picker", "id": "card_image", "label": "Small card image (replaces the perfume art)" },
-    { "type": "text", "id": "card_caption", "label": "Small card caption", "default": "Perfume edit" },
-    { "type": "collection", "id": "featured_collection", "label": "Collection for the floating featured card" },
-    { "type": "text", "id": "soon_eyebrow", "label": "Fallback card eyebrow (no products)", "default": "New edit" },
-    { "type": "text", "id": "soon_text", "label": "Fallback card text (no products)", "default": "Arriving soon" }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow line"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero subtitle"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image (replaces the brand portrait)"
+    },
+    {
+      "type": "text",
+      "id": "stamp_text",
+      "label": "Rotating stamp text",
+      "default": "Reka Store • Beauty your way •"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "cta1_label",
+      "label": "Primary button label"
+    },
+    {
+      "type": "url",
+      "id": "cta1_link",
+      "label": "Primary button link (empty = #departments)"
+    },
+    {
+      "type": "text",
+      "id": "cta2_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "cta2_link",
+      "label": "Secondary button link (empty = offers collection)"
+    },
+    {
+      "type": "header",
+      "content": "Department chips"
+    },
+    {
+      "type": "link_list",
+      "id": "chips_menu",
+      "label": "Chips menu (empty = built-in five departments)"
+    },
+    {
+      "type": "header",
+      "content": "Facts row"
+    },
+    {
+      "type": "text",
+      "id": "fact1_title",
+      "label": "Fact 1 — title"
+    },
+    {
+      "type": "text",
+      "id": "fact1_text",
+      "label": "Fact 1 — text"
+    },
+    {
+      "type": "text",
+      "id": "fact2_title",
+      "label": "Fact 2 — title"
+    },
+    {
+      "type": "text",
+      "id": "fact2_text",
+      "label": "Fact 2 — text"
+    },
+    {
+      "type": "text",
+      "id": "fact3_title",
+      "label": "Fact 3 — title"
+    },
+    {
+      "type": "text",
+      "id": "fact3_text",
+      "label": "Fact 3 — text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social icons under the facts",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Floating cards"
+    },
+    {
+      "type": "image_picker",
+      "id": "card_image",
+      "label": "Small card image (replaces the perfume art)"
+    },
+    {
+      "type": "text",
+      "id": "card_caption",
+      "label": "Small card caption"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Collection for the floating featured card"
+    },
+    {
+      "type": "text",
+      "id": "soon_eyebrow",
+      "label": "Fallback card eyebrow (no products)"
+    },
+    {
+      "type": "text",
+      "id": "soon_text",
+      "label": "Fallback card text (no products)"
+    }
   ],
-  "presets": [{ "name": "Reka hero" }]
+  "presets": [
+    {
+      "name": "Reka hero"
+    }
+  ]
 }
 {% endschema %}

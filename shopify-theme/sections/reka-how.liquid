@@ -43,12 +43,37 @@
 {
   "name": "Reka how it works",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it works" },
-    { "type": "text", "id": "title", "label": "Heading", "default": "Ordering is a conversation" },
-    { "type": "textarea", "id": "intro", "label": "Intro text", "default": "There is no online payment here — by design. Every order is confirmed personally on WhatsApp." },
-    { "type": "text", "id": "note_prefix", "label": "Bottom note text", "default": "Questions first?" },
-    { "type": "text", "id": "note_link_label", "label": "Bottom note link label", "default": "Message us on WhatsApp" },
-    { "type": "text", "id": "question_prefill", "label": "Pre-filled WhatsApp question ({store} = store name)", "default": "Hi {store}, I have a question before ordering." }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro text"
+    },
+    {
+      "type": "text",
+      "id": "note_prefix",
+      "label": "Bottom note text"
+    },
+    {
+      "type": "text",
+      "id": "note_link_label",
+      "label": "Bottom note link label"
+    },
+    {
+      "type": "text",
+      "id": "question_prefill",
+      "label": "Pre-filled WhatsApp question ({store} = store name)",
+      "default": "Hi {store}, I have a question before ordering."
+    }
   ],
   "blocks": [
     {
@@ -61,15 +86,39 @@
           "label": "Icon",
           "default": "shield-check",
           "options": [
-            { "value": "shield-check", "label": "Shield" },
-            { "value": "message-circle", "label": "Chat bubble" },
-            { "value": "truck", "label": "Truck" },
-            { "value": "sparkles", "label": "Sparkles" },
-            { "value": "shopping-bag", "label": "Shopping bag" }
+            {
+              "value": "shield-check",
+              "label": "Shield"
+            },
+            {
+              "value": "message-circle",
+              "label": "Chat bubble"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "sparkles",
+              "label": "Sparkles"
+            },
+            {
+              "value": "shopping-bag",
+              "label": "Shopping bag"
+            }
           ]
         },
-        { "type": "text", "id": "title", "label": "Step title", "default": "Build your order" },
-        { "type": "textarea", "id": "text", "label": "Step text", "default": "Add pieces to your cart and share your delivery details." }
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Step text",
+          "default": "Add pieces to your cart and share your delivery details."
+        }
       ]
     }
   ],
@@ -78,9 +127,30 @@
     {
       "name": "Reka how it works",
       "blocks": [
-        { "type": "step", "settings": { "icon": "shield-check", "title": "Build your order", "text": "Add pieces to your cart and share your delivery details. Nothing is charged on this site." } },
-        { "type": "step", "settings": { "icon": "message-circle", "title": "Confirm on WhatsApp", "text": "Your order opens as a ready message — press send and we confirm availability in chat." } },
-        { "type": "step", "settings": { "icon": "truck", "title": "Transfer, then delivery", "text": "We send payment-transfer instructions manually. Once received, your order ships." } }
+        {
+          "type": "step",
+          "settings": {
+            "icon": "shield-check",
+            "title": "Build your order",
+            "text": "Add pieces to your cart and share your delivery details. Nothing is charged on this site."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "message-circle",
+            "title": "Confirm on WhatsApp",
+            "text": "Your order opens as a ready message — press send and we confirm availability in chat."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "icon": "truck",
+            "title": "Transfer, then delivery",
+            "text": "We send payment-transfer instructions manually. Once received, your order ships."
+          }
+        }
       ]
     }
   ]

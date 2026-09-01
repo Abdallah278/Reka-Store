@@ -87,40 +87,104 @@
 {
   "name": "Reka departments",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Choose your ritual" },
-    { "type": "text", "id": "title", "label": "Heading", "default": "Five departments, five moods" },
-    { "type": "textarea", "id": "intro", "label": "Intro text", "default": "Each department is its own room — its own light, colour and pace. Step into the one closest to today." },
-    { "type": "paragraph", "content": "Add \"Department\" blocks to control the cards. With no blocks, the built-in five departments are shown." }
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro text"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add \"Department\" blocks to control the cards. With no blocks, the built-in five departments are shown."
+    }
   ],
   "blocks": [
     {
       "type": "department",
       "name": "Department",
       "settings": [
-        { "type": "collection", "id": "collection", "label": "Collection" },
-        { "type": "text", "id": "name", "label": "Display name (empty = collection title)" },
-        { "type": "text", "id": "tagline", "label": "Tagline (shown when the collection is empty)" },
-        { "type": "url", "id": "link", "label": "Link (empty = the collection)" },
-        { "type": "image_picker", "id": "image", "label": "Card image (replaces the illustration)" },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Display name (empty = collection title)"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline (shown when the collection is empty)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (empty = the collection)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image (replaces the illustration)"
+        },
         {
           "type": "select",
           "id": "art",
           "label": "Illustration (used when no image)",
           "default": "serum-bottle",
           "options": [
-            { "value": "serum-bottle", "label": "Serum bottle" },
-            { "value": "cream-jar", "label": "Cream jar" },
-            { "value": "lipstick-bullet", "label": "Lipstick" },
-            { "value": "perfume-bottle", "label": "Perfume bottle" },
-            { "value": "offer-mark", "label": "Offer mark" }
+            {
+              "value": "serum-bottle",
+              "label": "Serum bottle"
+            },
+            {
+              "value": "cream-jar",
+              "label": "Cream jar"
+            },
+            {
+              "value": "lipstick-bullet",
+              "label": "Lipstick"
+            },
+            {
+              "value": "perfume-bottle",
+              "label": "Perfume bottle"
+            },
+            {
+              "value": "offer-mark",
+              "label": "Offer mark"
+            }
           ]
         },
-        { "type": "color", "id": "grad_start", "label": "Card gradient — start", "default": "#74070E" },
-        { "type": "color", "id": "grad_end", "label": "Card gradient — end", "default": "#310E10" }
+        {
+          "type": "color",
+          "id": "grad_start",
+          "label": "Card gradient — start",
+          "default": "#74070E"
+        },
+        {
+          "type": "color",
+          "id": "grad_end",
+          "label": "Card gradient — end",
+          "default": "#310E10"
+        }
       ]
     }
   ],
   "max_blocks": 8,
-  "presets": [{ "name": "Reka departments" }]
+  "presets": [
+    {
+      "name": "Reka departments"
+    }
+  ]
 }
 {% endschema %}
