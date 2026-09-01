@@ -17,3 +17,7 @@ temp/
 
 reka-whatsapp-app/node_modules/
 reka-whatsapp-app/.shopify/
+reka-whatsapp-app/extensions/*/node_modules/
+reka-whatsapp-app/extensions/*/dist/
+reka-whatsapp-app/.shopify*
+
