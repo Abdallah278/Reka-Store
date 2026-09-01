@@ -45,9 +45,11 @@
       {%- endfor -%}
     {%- else -%}
       {%- assign handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
-      {%- assign names = 'Korean Skincare,French Skincare,Makeup,Perfumes,Offers' | split: ',' -%}
-      {%- assign taglines = 'Glass skin: layer by layer,Quiet luxury for everyday skin,Colour with a point of view,Worn close: remembered longer,Real prices: honestly reduced' | split: ',' -%}
-      {%- assign arts = 'serum-bottle,cream-jar,lipstick-bullet,perfume-bottle,offer-mark' | split: ',' -%}
+      {%- assign dept_keys = 'korean,french,makeup,perfumes,offers' | split: ',' -%}
+      {%- capture names_c -%}{%- for dk in dept_keys -%}{%- assign nk = 'depts.' | append: dk | append: '.name' -%}{{ nk | t }}{%- unless forloop.last -%}||{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+      {%- assign names = names_c | split: '||' -%}
+      {%- capture tags_c -%}{%- for dk in dept_keys -%}{%- assign nk = 'depts.' | append: dk | append: '.tagline' -%}{{ nk | t }}{%- unless forloop.last -%}||{%- endunless -%}{%- endfor -%}{%- endcapture -%}
+      {%- assign taglines = tags_c | split: '||' -%}
       {%- assign grads = 'linear-gradient(160deg. #74070E 0%. #310E10 78%)|linear-gradient(160deg. #F4E3B2 0%. #fbf4d6 70%)|linear-gradient(160deg. #45462A 0%. #310E10 80%)|linear-gradient(160deg. #947268 0%. #310E10 85%)|linear-gradient(165deg. #310E10 0%. #74070E 130%)' | split: '|' -%}
       {%- for h in handles -%}
         {%- assign i = forloop.index0 -%}
@@ -66,9 +68,9 @@
               <p class="rk-dept__name font-display">{{ names[i] }}</p>
               <p class="rk-dept__count">
                 {%- if col != blank and col.products_count > 0 -%}
-                  {{ col.products_count }} piece{% if col.products_count != 1 %}s{% endif %}
+                  {%- if col.products_count == 1 -%}{{ 'shared.piece' | t: count: col.products_count }}{%- else -%}{{ 'shared.pieces' | t: count: col.products_count }}{%- endif -%}
                 {%- else -%}
-                  {{ taglines[i] | replace: ':', ',' }}
+                  {{ taglines[i] }}
                 {%- endif -%}
               </p>
             </div>

@@ -39,11 +39,11 @@
             <a href="{{ link.url }}">{{ link.title }}</a>
           {%- endfor -%}
         {%- else -%}
-          <a href="{{ routes.collections_url }}/korean-skincare">Korean Skincare</a>
-          <a href="{{ routes.collections_url }}/french-skincare">French Skincare</a>
-          <a href="{{ routes.collections_url }}/makeup">Makeup</a>
-          <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
-          <a href="{{ routes.collections_url }}/offers">Offers</a>
+          <a href="{{ routes.collections_url }}/korean-skincare">{{ 'depts.korean.name' | t }}</a>
+          <a href="{{ routes.collections_url }}/french-skincare">{{ 'depts.french.name' | t }}</a>
+          <a href="{{ routes.collections_url }}/makeup">{{ 'depts.makeup.name' | t }}</a>
+          <a href="{{ routes.collections_url }}/perfumes">{{ 'depts.perfumes.name' | t }}</a>
+          <a href="{{ routes.collections_url }}/offers">{{ 'depts.offers.name' | t }}</a>
         {%- endif -%}
       </nav>
       <dl class="rk-hero__facts">
@@ -92,12 +92,12 @@
           {%- if section.settings.card_image -%}
             <img src="{{ section.settings.card_image | image_url: width: 400 }}" alt="" loading="lazy" width="{{ section.settings.card_image.width }}" height="{{ section.settings.card_image.height }}" style="height:100%; width:100%; object-fit:cover;">
           {%- else -%}
-            {% render 'art', key: 'perfume-bottle', title: "Illustration of a woman's perfume bottle in amber glass" %}
+            <img src="{{ 'hero-card.jpg' | asset_url }}" alt="" loading="lazy" width="600" height="750" style="height:100%; width:100%; object-fit:cover;">
           {%- endif -%}
         </div>
         <figcaption>{{ section.settings.card_caption | default: 'Perfume edit' }}</figcaption>
       </figure>
-      <div class="rk-hero__bubble">{% render 'art', key: 'hands', title: 'Illustration of a hand applying a skincare serum' %}</div>
+      <div class="rk-hero__bubble"><img src="{{ 'hero-bubble.jpg' | asset_url }}" alt="" loading="lazy" width="600" height="600" style="height:100%; width:100%; object-fit:cover;"></div>
       {%- assign stamp_text = section.settings.stamp_text | default: 'Reka Store • Beauty your way •' -%}
       <div class="rk-hero__stamp" aria-hidden="true">
         <svg viewBox="0 0 120 120">

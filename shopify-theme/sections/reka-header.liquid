@@ -13,7 +13,8 @@
     </a>
 
     <nav class="rk-nav" aria-label="Departments">
-      <a href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>{{ section.settings.home_label | default: 'Home' }}</a>
+      {%- assign home_default = 'shared.home' | t -%}
+      <a href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>{{ section.settings.home_label | default: home_default }}</a>
       {%- assign menu = linklists[section.settings.menu] -%}
       {%- if menu != blank and menu.links.size > 0 -%}
         {%- for link in menu.links -%}
@@ -21,10 +22,11 @@
         {%- endfor -%}
       {%- else -%}
         {%- assign dept_handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
-        {%- assign dept_names = 'Korean,French,Makeup,Perfumes,Offers' | split: ',' -%}
+        {%- assign dept_keys = 'korean,french,makeup,perfumes,offers' | split: ',' -%}
         {%- for h in dept_handles -%}
           {%- assign i = forloop.index0 -%}
-          <a href="{{ routes.collections_url }}/{{ h }}" {% if collection.handle == h %}aria-current="page"{% endif %}>{{ dept_names[i] }}</a>
+          {%- assign nk = 'depts.' | append: dept_keys[i] | append: '.short' -%}
+          <a href="{{ routes.collections_url }}/{{ h }}" {% if collection.handle == h %}aria-current="page"{% endif %}>{{ nk | t | capitalize }}</a>
         {%- endfor -%}
       {%- endif -%}
     </nav>
@@ -60,7 +62,7 @@
 
   <div id="mobile-menu" class="rk-mobile-menu" hidden>
     <nav aria-label="Mobile">
-      <a href="{{ routes.root_url }}">{{ section.settings.home_label | default: 'Home' }}</a>
+      <a href="{{ routes.root_url }}">{{ section.settings.home_label | default: home_default }}</a>
       {%- if menu != blank and menu.links.size > 0 -%}
         {%- for link in menu.links -%}
           <a href="{{ link.url }}">{{ link.title }}</a>
@@ -68,10 +70,12 @@
       {%- else -%}
         {%- for h in dept_handles -%}
           {%- assign i = forloop.index0 -%}
-          <a href="{{ routes.collections_url }}/{{ h }}">{{ dept_names[i] }}</a>
+          {%- assign nk = 'depts.' | append: dept_keys[i] | append: '.short' -%}
+          <a href="{{ routes.collections_url }}/{{ h }}">{{ nk | t | capitalize }}</a>
         {%- endfor -%}
       {%- endif -%}
-      <a href="{{ routes.cart_url }}">{{ section.settings.cart_label | default: 'Cart' }} {% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</a>
+      {%- assign cart_default = 'shared.cart' | t -%}
+      <a href="{{ routes.cart_url }}">{{ section.settings.cart_label | default: cart_default }} {% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</a>
       <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
         {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_mobile_label | default: 'Ask on WhatsApp' }}
       </a>

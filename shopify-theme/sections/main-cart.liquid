@@ -35,7 +35,7 @@
           <div class="rk-line__top">
             <div style="min-width:0;">
               <h2 class="rk-line__name"><a href="{{ item.url }}">{{ item.product.title }}</a></h2>
-              <p class="rk-line__each">{{ item.price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} each</p>
+              <p class="rk-line__each">{{ item.price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} {{ 'shared.each' | t }}</p>
             </div>
             <p class="rk-line__total">{{ item.line_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }}</p>
           </div>
@@ -46,7 +46,7 @@
               <button type="button" aria-label="Increase quantity" data-qty-plus data-line-index="{{ forloop.index }}" {% if item.quantity >= 20 %}disabled{% endif %}>{% render 'icon', name: 'plus' %}</button>
             </div>
             <button type="button" class="rk-line__remove" aria-label="Remove {{ item.product.title | escape }}" data-remove data-line-index="{{ forloop.index }}">
-              {% render 'icon', name: 'trash' %} Remove
+              {% render 'icon', name: 'trash' %} {{ 'shared.remove' | t }}
             </button>
           </div>
         </div>
@@ -57,12 +57,12 @@
     <aside class="rk-summary" aria-label="Order summary">
       <h2 class="font-display">{{ section.settings.summary_title | default: 'Summary' }}</h2>
       <dl>
-        <div><dt>Subtotal</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
-        <div><dt>Delivery</dt><dd>{{ section.settings.delivery_line | default: 'Calculated at checkout' }}</dd></div>
+        <div><dt>{{ 'shared.subtotal' | t }}</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
+        <div><dt>{{ 'shared.delivery' | t }}</dt><dd>{{ section.settings.delivery_line | default: 'Calculated at checkout' }}</dd></div>
         {%- if free_above != '' -%}
           <div><dt></dt><dd style="font-size:.75rem;">Free delivery above {{ free_above }} {{ settings.currency_label | default: 'EGP' }}</dd></div>
         {%- endif -%}
-        <div class="rk-summary__total"><dt>Total</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} + delivery</dd></div>
+        <div class="rk-summary__total"><dt>{{ 'shared.total' | t }}</dt><dd>{{ cart.total_price | money_without_currency | remove: '.00' }} {{ settings.currency_label | default: 'EGP' }} + {{ 'shared.delivery' | t }}</dd></div>
       </dl>
 
       <form action="{{ routes.cart_url }}" method="post">

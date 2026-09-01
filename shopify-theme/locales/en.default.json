@@ -34,5 +34,73 @@
     "err_building": "Building / floor / apartment helps the courier find you.",
     "err_address": "Please enter the street address in detail.",
     "err_consent": "We need your OK to contact you on WhatsApp about this order."
+  },
+  "shared": {
+    "home": "Home",
+    "cart": "Cart",
+    "whatsapp": "WhatsApp",
+    "browse": "Browse",
+    "the_edit": "the edit",
+    "piece": "{{ count }} piece",
+    "pieces": "{{ count }} pieces",
+    "edit_title": "The {{ name }} edit",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery",
+    "total": "Total",
+    "remove": "Remove",
+    "each": "each",
+    "ask_whatsapp": "Ask on WhatsApp"
+  },
+  "depts": {
+    "korean": {
+      "name": "Korean Skincare", "short": "korean", "eyebrow": "Department 01 · Seoul routine", "tagline": "Glass skin, layer by layer",
+      "intro": "Dewy textures, honest formulas and the quiet discipline of a real routine — cleansers to creams, chosen one layer at a time.",
+      "ritual_title": "The layering ritual",
+      "r1t": "Cleanse, twice", "r1x": "An oil first, a gel after. Skin that starts clean holds everything else better.",
+      "r2t": "Tone & essence", "r2x": "Light watery layers, pressed in with palms — this is where the dew comes from.",
+      "r3t": "Serum, then seal", "r3x": "Targeted actives, then a moisturizer to keep the whole layer story in place.",
+      "e1e": "Texture", "e1t": "Glass, not gloss", "e1x": "The look is hydration, layered patiently — not shine painted on top.",
+      "e2e": "Ritual", "e2t": "Ten minutes, honestly", "e2x": "A real routine you'll keep beats a ten-step one you won't."
+    },
+    "french": {
+      "name": "French Skincare", "short": "french", "eyebrow": "Department 02 · Paris apothecary", "tagline": "Quiet luxury for everyday skin",
+      "intro": "Parisian minimalism: linen light, milk cleansers and creams that do their work without announcing themselves.",
+      "ritual_title": "La belle routine",
+      "r1t": "Milk, not foam", "r1x": "Gentle cleansing that respects the skin you already have.",
+      "r2t": "One good cream", "r2x": "Chosen well, used daily — quiet luxury is mostly consistency.",
+      "r3t": "Body included", "r3x": "The French never stop at the jawline. Neither should the ritual.",
+      "e1e": "Mood", "e1t": "Linen light", "e1x": "Soft mornings, marble counters, one shelf of things that earn their place.",
+      "e2e": "Portrait", "e2t": "Skin, comfortable", "e2x": "The goal isn't new skin. It's yours, at ease."
+    },
+    "makeup": {
+      "name": "Makeup", "short": "makeup", "eyebrow": "Department 03 · The studio", "tagline": "Colour with a point of view",
+      "intro": "An editorial edit of lips, face and eyes — pigment that stays true, tools worth keeping, nothing you won't use.",
+      "ritual_title": "Build your look",
+      "r1t": "Face first", "r1x": "Cream where skin should look like skin. Powder only where it must stay.",
+      "r2t": "One colour story", "r2x": "Let cheeks and lips share a family — olive, nude, burgundy.",
+      "r3t": "Eyes, last", "r3x": "Finish with definition once the rest of the face has settled.",
+      "e1e": "Pigment", "e1t": "Colour that stays true", "e1x": "Swatched in warm light, chosen for real skin tones.",
+      "e2e": "Tools", "e2t": "Fewer, better brushes", "e2x": "A dense rounded brush does three jobs. Keep the good one."
+    },
+    "perfumes": {
+      "name": "Perfumes", "short": "perfumes", "eyebrow": "Department 04 · The fragrance room", "tagline": "Worn close, remembered longer",
+      "intro": "Warm clay, amber and glass. Fragrance chosen the way you'd choose jewellery — slowly, and for yourself.",
+      "ritual_title": "How to wear it",
+      "r1t": "Warm points", "r1x": "Wrists, neck, behind the ears — where skin warms the notes open.",
+      "r2t": "Don't rub", "r2x": "Let it dry. Rubbing breaks the top notes before they've spoken.",
+      "r3t": "Layer lightly", "r3x": "An unscented cream underneath makes any fragrance last longer.",
+      "e1e": "Notes", "e1t": "Top, heart, base", "e1x": "The first hour is the introduction. The base is who it really is.",
+      "e2e": "Still life", "e2t": "Amber & glass", "e2x": "Bottles that look right on the shelf you already own."
+    },
+    "offers": {
+      "name": "Offers", "short": "offers", "eyebrow": "Department 05 · The honest sale", "tagline": "Real prices, honestly reduced",
+      "intro": "Every offer here shows the true original price next to the new one. When it's gone, it's gone — no invented urgency.",
+      "ritual_title": "How offers work here",
+      "r1t": "Real original prices", "r1x": "Every strikethrough is the price the piece actually sold for.",
+      "r2t": "Real end dates", "r2x": "A countdown only appears when an offer truly expires.",
+      "r3t": "Same WhatsApp flow", "r3x": "Order request first, confirmation and transfer details in chat.",
+      "e1e": "Promise", "e1t": "No invented urgency", "e1x": "If nothing is on offer, this page says so — plainly.",
+      "e2e": "Edit", "e2t": "Good pieces, better prices", "e2x": "Offers rotate through every department, not just leftovers."
+    }
   }
 }

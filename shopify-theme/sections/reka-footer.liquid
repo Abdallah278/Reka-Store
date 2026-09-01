@@ -13,11 +13,11 @@
           <a href="{{ link.url }}">{{ link.title }}</a>
         {%- endfor -%}
       {%- else -%}
-        <a href="{{ routes.collections_url }}/korean-skincare">Korean Skincare</a>
-        <a href="{{ routes.collections_url }}/french-skincare">French Skincare</a>
-        <a href="{{ routes.collections_url }}/makeup">Makeup</a>
-        <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
-        <a href="{{ routes.collections_url }}/offers">Offers</a>
+        <a href="{{ routes.collections_url }}/korean-skincare">{{ 'depts.korean.name' | t }}</a>
+        <a href="{{ routes.collections_url }}/french-skincare">{{ 'depts.french.name' | t }}</a>
+        <a href="{{ routes.collections_url }}/makeup">{{ 'depts.makeup.name' | t }}</a>
+        <a href="{{ routes.collections_url }}/perfumes">{{ 'depts.perfumes.name' | t }}</a>
+        <a href="{{ routes.collections_url }}/offers">{{ 'depts.offers.name' | t }}</a>
       {%- endif -%}
       {%- if pages.shipping.url != blank -%}<a href="{{ pages.shipping.url }}">{{ section.settings.shipping_label | default: 'Shipping & delivery' }}</a>{%- endif -%}
       <a href="{{ routes.cart_url }}">{{ section.settings.cart_label | default: 'Cart' }}</a>
