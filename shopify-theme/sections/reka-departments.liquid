@@ -56,7 +56,9 @@
         {%- assign grad = grads[i] | replace: '.', ',' -%}
         <a href="{{ routes.collections_url }}/{{ h }}" class="rk-dept {% if i < 2 %}rk-dept--wide{% else %}rk-dept--narrow{% endif %}" aria-label="Enter {{ names[i] }}">
           <div class="rk-dept__art" style="background: {{ grad }};">
-            <div class="rk-dept__art-inner">{% render 'art', key: arts[i], title: names[i] %}</div>
+            <div class="rk-dept__art-inner">
+              <img src="{{ 'dept-' | append: h | append: '.jpg' | asset_url }}" alt="{{ names[i] }}" loading="lazy" width="900" height="700" style="height:100%; width:100%; object-fit:cover;">
+            </div>
           </div>
           <div class="rk-dept__meta">
             <div>

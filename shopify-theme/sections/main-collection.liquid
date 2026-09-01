@@ -155,8 +155,11 @@
       <div class="rk-dhero__artcol">
         <div class="rk-dhero__artframe {% if h == 'french-skincare' %}anim-sheen{% endif %}" style="--ring: color-mix(in srgb, {{ fg }} 18%, transparent);">
           <div class="{{ motif_anim }}" style="height:100%; width:100%;">
+            {%- assign known_depts = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
             {%- if collection.image -%}
               <img src="{{ collection.image | image_url: width: 900 }}" alt="{{ dept_name | escape }}" loading="lazy" width="{{ collection.image.width }}" height="{{ collection.image.height }}" style="height:100%; width:100%; object-fit:cover; border-radius:inherit;">
+            {%- elsif known_depts contains h -%}
+              <img src="{{ 'dept-' | append: h | append: '.jpg' | asset_url }}" alt="{{ dept_name | escape }}" loading="eager" width="900" height="700" style="height:100%; width:100%; object-fit:cover; border-radius:inherit;">
             {%- else -%}
               {% render 'art', key: hero_art, title: dept_name %}
             {%- endif -%}
