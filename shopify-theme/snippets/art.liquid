@@ -5,6 +5,15 @@
   ink #310E10 · cream #FBF4D6 · claySoft #D9C5B6 · skin #C9A08C · skinDeep #A97B67
 {%- endcomment -%}
 {%- assign t = title | default: 'Reka brand illustration' -%}
+{%- comment -%}
+  Photo mode: every art key now ships a real photo (assets/art-<key>.jpg,
+  Pexels free commercial license). The original SVG illustrations below stay
+  as a fallback for any unknown key.
+{%- endcomment -%}
+{%- assign photo_keys = 'portrait,perfume-bottle,hands,serum-bottle,cream-jar,lipstick-bullet,offer-mark,droplets,silk,mist,botanical,texture,brush,eye,vanity,palette-quad' | split: ',' -%}
+{%- if photo_keys contains key -%}
+<img src="{{ 'art-' | append: key | append: '.jpg' | asset_url }}" alt="{{ t | escape }}" loading="lazy" width="900" height="1125" style="height:100%; width:100%; object-fit:cover;">
+{%- else -%}
 {%- case key -%}
 
 {%- when 'portrait' -%}
@@ -308,3 +317,4 @@
 </svg>
 
 {%- endcase -%}
+{%- endif -%}
