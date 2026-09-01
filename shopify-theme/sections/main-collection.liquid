@@ -151,7 +151,7 @@
         </div>
         <div class="rk-dhero__motif" style="background: {% if dark %}var(--canvas){% else %}var(--ink){% endif %};">
           <div class="rk-dhero__motif-inner">
-            {%- assign motif_handles = 'korean-skincare,french-skincare,makeup,perfumes' | split: ',' -%}
+            {%- assign motif_handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
             {%- if motif_handles contains h -%}
               <img src="{{ 'dept-' | append: h | append: '-2.jpg' | asset_url }}" alt="" loading="lazy" width="600" height="600" style="height:100%; width:100%; object-fit:cover;">
             {%- else -%}
