@@ -1,0 +1,7 @@
+{
+  "name": "whatsapp-order-confirm",
+  "private": true,
+  "dependencies": {
+    "@shopify/ui-extensions": "latest"
+  }
+}

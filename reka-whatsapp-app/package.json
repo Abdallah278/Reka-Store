@@ -1,0 +1,5 @@
+{
+  "name": "reka-whatsapp-app",
+  "private": true,
+  "workspaces": ["extensions/*"]
+}

@@ -1,0 +1,36 @@
+api_version = "2025-07"
+
+[[extensions]]
+type = "ui_extension"
+name = "WhatsApp order confirm"
+handle = "whatsapp-order-confirm"
+
+  # زرار في صفحة الشكر (بعد Complete order مباشرة)
+  [[extensions.targeting]]
+  target = "purchase.thank-you.block.render"
+  module = "./src/ThankYou.js"
+
+  # نفس الزرار في صفحة حالة الطلب (لو العميل رجع للأوردر بعدين)
+  [[extensions.targeting]]
+  target = "customer-account.order-status.block.render"
+  module = "./src/OrderStatus.js"
+
+  # إعدادات بيظبطها صاحب المتجر من الـ checkout editor — من غير كود
+  [extensions.settings]
+    [[extensions.settings.fields]]
+    key = "phone"
+    type = "single_line_text_field"
+    name = "WhatsApp number (digits only)"
+    description = "e.g. 201094881552"
+
+    [[extensions.settings.fields]]
+    key = "label"
+    type = "single_line_text_field"
+    name = "Button label"
+    description = "Default: Continue on WhatsApp"
+
+    [[extensions.settings.fields]]
+    key = "message"
+    type = "single_line_text_field"
+    name = "Message template ({order} = order number)"
+    description = "Default: Hello Reka Store, I want to complete payment for order {order}."

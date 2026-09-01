@@ -14,3 +14,6 @@ temp/
 # Local env (never commit secrets)
 .env
 .env.*
+
+reka-whatsapp-app/node_modules/
+reka-whatsapp-app/.shopify/
