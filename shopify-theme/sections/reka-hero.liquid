@@ -17,7 +17,14 @@
   <div class="container rk-hero__grid">
     <div class="rk-hero__copy">
       <p class="eyebrow rk-hero__eyebrow">{% render 'icon', name: 'sparkles' %} {{ section.settings.eyebrow | default: 'five departments · one point of view' }}</p>
-      <h1 class="rk-hero__title">{{ hero_title }}</h1>
+      {%- assign t_words = hero_title | split: ' ' -%}
+      <h1 class="rk-hero__title">
+        {%- if t_words.size > 1 -%}
+          {%- for w in t_words -%}
+            {%- if forloop.last -%}<em>{{ w }}</em>{%- else -%}{{ w }} {% endif -%}
+          {%- endfor -%}
+        {%- else -%}{{ hero_title }}{%- endif -%}
+      </h1>
       <p class="rk-hero__sub">{{ hero_subtitle }}</p>
       <div class="rk-hero__ctas">
         <a href="{{ section.settings.cta1_link | default: '#departments' }}" class="btn-ink">{{ section.settings.cta1_label | default: 'Choose your ritual' }} {% render 'icon', name: 'arrow-right' %}</a>

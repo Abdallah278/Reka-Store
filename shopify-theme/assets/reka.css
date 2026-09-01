@@ -136,8 +136,8 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-mobile-menu .btn-wa { margin-top: .5rem; }
 
 /* ---- Hero --------------------------------------------------------- */
-.rk-hero { position: relative; overflow: hidden; padding-top: 5.75rem; }
-@media (min-width: 640px) { .rk-hero { padding-top: 6.75rem; } }
+.rk-hero { position: relative; overflow: hidden; padding-top: 6.5rem; }
+@media (min-width: 640px) { .rk-hero { padding-top: 7.5rem; } }
 .rk-hero__blob { position: absolute; pointer-events: none; border-radius: 9999px; }
 .rk-hero__blob--1 { left: -6rem; top: 6rem; height: 18rem; width: 18rem; background: color-mix(in srgb, var(--cream) 70%, transparent); filter: blur(40px); }
 .rk-hero__blob--2 { right: -10%; top: 20%; height: 28rem; width: 28rem; background: color-mix(in srgb, var(--clay) 30%, transparent); filter: blur(64px); animation: reka-drift 14s ease-in-out infinite; }
@@ -145,13 +145,14 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-hero__grid { display: grid; align-items: center; gap: 2rem; padding-bottom: 2.5rem; position: relative; }
 @media (min-width: 1024px) { .rk-hero__grid { grid-template-columns: 1.08fr 1fr; gap: 1.5rem; padding-bottom: 3rem; } }
 .rk-hero__copy { position: relative; z-index: 10; max-width: 42rem; }
-.rk-hero__eyebrow { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--burgundy) 30%, transparent); background: color-mix(in srgb, var(--cream) 50%, transparent); padding: .5rem 1rem; color: var(--burgundy); }
-.rk-hero__title { margin-top: 1.25rem; font-family: var(--font-display); font-size: clamp(3.4rem, 8.5vw, 7.5rem); font-weight: 500; line-height: .9; letter-spacing: -.02em; }
+.rk-hero__eyebrow { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; border: 0; background: var(--burgundy); padding: .625rem 1.125rem; color: var(--cream); box-shadow: 0 10px 24px -14px rgba(49,14,16,.5); }
+.rk-hero__title { margin-top: 1.25rem; font-family: var(--font-display); font-size: clamp(3.6rem, 9vw, 8rem); font-weight: 600; line-height: .92; letter-spacing: -.02em; color: var(--ink); }
+.rk-hero__title em { font-style: italic; font-weight: 500; color: var(--burgundy); }
 .rk-hero__sub { margin-top: 1.25rem; max-width: 30rem; font-size: 1.0625rem; line-height: 1.8rem; color: var(--olive); }
 .rk-hero__ctas { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .75rem; }
 .rk-hero__chips { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .5rem; }
-.rk-hero__chips a { display: inline-flex; min-height: 2.5rem; align-items: center; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); background: color-mix(in srgb, var(--cream) 70%, transparent); padding-inline: 1rem; font-size: .875rem; font-weight: 600; transition: color .2s, border-color .2s; }
-.rk-hero__chips a:hover { border-color: var(--burgundy); color: var(--burgundy); }
+.rk-hero__chips a { display: inline-flex; min-height: 2.5rem; align-items: center; border-radius: 9999px; border: 0; background: var(--burgundy); color: var(--cream); padding-inline: 1.125rem; font-size: .875rem; font-weight: 600; transition: background .2s, transform .2s; }
+.rk-hero__chips a:hover { background: var(--ink); transform: translateY(-2px); }
 .rk-hero__facts { margin-top: 2rem; display: grid; max-width: 28rem; grid-template-columns: repeat(3, 1fr); gap: 1rem; border-top: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); padding-top: 1.25rem; font-size: .875rem; }
 .rk-hero__facts dt { font-weight: 600; }
 .rk-hero__facts dd { color: var(--olive); margin: 0; }
@@ -240,7 +241,7 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-price--big s { font-size: 1.125rem; }
 
 /* ---- Marquee + Manifesto ------------------------------------------ */
-.rk-manifesto { position: relative; overflow: hidden; background: var(--ink); color: var(--canvas); margin-top: 1.5rem; }
+.rk-manifesto { position: relative; overflow: hidden; background: var(--ink); color: var(--canvas); margin-top: 3rem; }
 .rk-marquee-band { border-block: 1px solid color-mix(in srgb, var(--canvas) 10%, transparent); padding-block: .75rem; overflow: hidden; }
 .marquee { display: flex; width: max-content; gap: 2.5rem; animation: marquee 38s linear infinite; font-size: .875rem; font-weight: 600; text-transform: uppercase; letter-spacing: .3em; color: color-mix(in srgb, var(--canvas) 70%, transparent); }
 .marquee span { display: flex; align-items: center; gap: 2.5rem; }
