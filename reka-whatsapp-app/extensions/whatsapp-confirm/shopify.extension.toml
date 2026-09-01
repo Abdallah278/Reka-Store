@@ -43,6 +43,12 @@ uid = "5a9afcd6-adcf-4143-b9aa-91012093e7b6eb8ced5f"
     description = "Default: ⏳ طلبك بانتظار تأكيد الدفع"
 
     [[extensions.settings.fields]]
+    key = "headline"
+    type = "single_line_text_field"
+    name = "Big headline (largest text inside the banner)"
+    description = "Default: 🚫 الطلب لن يُشحن قبل تأكيد الدفع"
+
+    [[extensions.settings.fields]]
     key = "note"
     type = "multi_line_text_field"
     name = "Note text (inside the banner, above the button)"
