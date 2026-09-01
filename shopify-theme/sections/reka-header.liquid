@@ -30,6 +30,19 @@
     </nav>
 
     <div class="rk-header__actions">
+      {%- if localization.available_languages.size > 1 -%}
+        {%- for language in localization.available_languages -%}
+          {%- unless language.iso_code == localization.language.iso_code -%}
+            {%- form 'localization' -%}
+              <input type="hidden" name="locale_code" value="{{ language.iso_code }}">
+              <button type="submit" class="rk-iconbtn rk-langbtn" aria-label="{{ language.endonym_name }}" title="{{ language.endonym_name }}">
+                {%- if language.iso_code == 'ar' -%}ع{%- else -%}EN{%- endif -%}
+              </button>
+            {%- endform -%}
+            {%- break -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      {%- endif -%}
       <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="rk-iconbtn rk-iconbtn--hide-sm">
         {% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}
       </a>
