@@ -62,6 +62,15 @@
       <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
         {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_mobile_label | default: 'Ask on WhatsApp' }}
       </a>
+      {%- if localization.available_languages.size > 1 -%}
+        {%- form 'localization' -%}
+          <select name="locale_code" onchange="this.form.submit()" aria-label="Language" style="margin-top:.5rem; width:100%; min-height:2.75rem; border-radius:1rem; border:1px solid color-mix(in srgb, var(--ink) 15%, transparent); background:var(--canvas); padding-inline:1rem; font-size:.875rem; font-weight:600;">
+            {%- for language in localization.available_languages -%}
+              <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+            {%- endfor -%}
+          </select>
+        {%- endform -%}
+      {%- endif -%}
     </nav>
   </div>
 </header>
