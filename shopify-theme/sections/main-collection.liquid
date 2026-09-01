@@ -129,7 +129,7 @@
     <div class="rk-dhero__ripple anim-ripple" aria-hidden="true"></div>
     <div class="rk-dhero__grid" style="color: {{ fg }};">
       <div>
-        <p class="eyebrow rk-dhero__eyebrow" style="border-color: color-mix(in srgb, {{ fg }} 30%, transparent); color: {{ fg80 }};">
+        <p class="eyebrow rk-dhero__eyebrow" style="border-color: color-mix(in srgb, {{ fg }} 25%, transparent); background: color-mix(in srgb, {{ fg }} 16%, transparent); color: {{ fg }};">
           {% render 'icon', name: 'sparkles' %} {{ eyebrow }}
         </p>
         <h1 id="dept-title" class="rk-dhero__title font-display">{{ dept_name }}</h1>
@@ -147,7 +147,7 @@
         {%- if cats.size > 0 -%}
         <ul class="rk-dhero__cats" aria-label="{{ dept_name }} categories">
           {%- for c in cats -%}
-            <li style="border-color: color-mix(in srgb, {{ fg }} 25%, transparent); color: {{ fg80 }};">{{ c }}</li>
+            <li style="border-color: color-mix(in srgb, {{ fg }} 35%, transparent); background: color-mix(in srgb, {{ fg }} 8%, transparent); color: {{ fg }};">{{ c }}</li>
           {%- endfor -%}
         </ul>
         {%- endif -%}

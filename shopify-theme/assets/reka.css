@@ -293,10 +293,10 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-dhero__grid { position: relative; display: grid; align-items: center; gap: 2rem; padding: 3rem 1.5rem; }
 @media (min-width: 640px) { .rk-dhero__grid { padding-inline: 2.5rem; } }
 @media (min-width: 1024px) { .rk-dhero__grid { grid-template-columns: 1.05fr .95fr; padding: 5rem 4rem; } }
-.rk-dhero__eyebrow { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; border: 1px solid; padding: .5rem 1rem; }
-.rk-dhero__title { margin-top: 1.25rem; font-size: clamp(2.4rem, 6vw, 4.6rem); font-weight: 500; line-height: .94; letter-spacing: -.02em; }
-.rk-dhero__tagline { margin-top: .75rem; font-size: 1.5rem; font-style: italic; }
-.rk-dhero__intro { margin-top: 1.25rem; max-width: 28rem; font-size: 1rem; line-height: 2; }
+.rk-dhero__eyebrow { display: inline-flex; align-items: center; gap: .5rem; border-radius: 9999px; border: 1px solid; padding: .625rem 1.25rem; backdrop-filter: blur(8px); }
+.rk-dhero__title { margin-top: 1.25rem; font-size: clamp(2.8rem, 7vw, 5.4rem); font-weight: 600; line-height: .94; letter-spacing: -.02em; }
+.rk-dhero__tagline { margin-top: 1rem; font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2.3rem); font-style: italic; line-height: 1.15; }
+.rk-dhero__intro { margin-top: 1.5rem; max-width: 28rem; font-size: 1.0625rem; line-height: 2; border-inline-start: 3px solid color-mix(in srgb, currentColor 45%, transparent); padding-inline-start: 1.1rem; }
 .rk-dhero__ctas { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: .75rem; }
 .rk-pillbtn { display: inline-flex; min-height: 3rem; flex-shrink: 0; align-items: center; gap: .5rem; border-radius: 9999px; padding-inline: 1.75rem; font-size: .875rem; font-weight: 600; transition: transform .2s, background-color .2s; }
 .rk-pillbtn:hover { transform: translateY(-2px); }
