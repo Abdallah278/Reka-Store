@@ -25,15 +25,27 @@
     <nav aria-label="Contact" class="rk-footer__contact">
       {%- assign wa_link = settings.whatsapp_page_url | default: '' -%}
       {%- if wa_link == blank -%}{%- assign wa_link = 'https://wa.me/' | append: wa -%}{%- endif -%}
-      <a href="{{ wa_link }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'message-circle' %} WhatsApp</a>
+      <a class="rk-social" href="{{ wa_link }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <span class="rk-social__ic rk-social__ic--wa">{% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}</span>
+        <span>WhatsApp</span>
+      </a>
       {%- if settings.instagram_url != blank -%}
-        <a href="{{ settings.instagram_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'instagram' %} Instagram</a>
+        <a class="rk-social" href="{{ settings.instagram_url }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <span class="rk-social__ic">{% render 'icon', name: 'instagram', class: 'icon-lg icon' %}</span>
+          <span>Instagram</span>
+        </a>
       {%- endif -%}
       {%- if settings.facebook_url != blank -%}
-        <a href="{{ settings.facebook_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'facebook' %} Facebook</a>
+        <a class="rk-social" href="{{ settings.facebook_url }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <span class="rk-social__ic">{% render 'icon', name: 'facebook', class: 'icon-lg icon' %}</span>
+          <span>Facebook</span>
+        </a>
       {%- endif -%}
       {%- if settings.tiktok_url != blank -%}
-        <a href="{{ settings.tiktok_url }}" target="_blank" rel="noopener noreferrer">{% render 'icon', name: 'tiktok' %} TikTok</a>
+        <a class="rk-social" href="{{ settings.tiktok_url }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <span class="rk-social__ic">{% render 'icon', name: 'tiktok', class: 'icon-lg icon' %}</span>
+          <span>TikTok</span>
+        </a>
       {%- endif -%}
     </nav>
   </div>
