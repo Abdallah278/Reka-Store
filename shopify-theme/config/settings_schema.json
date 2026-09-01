@@ -54,7 +54,7 @@
   {
     "name": "WhatsApp ordering",
     "settings": [
-      { "type": "text", "id": "whatsapp_number", "label": "Store WhatsApp number (digits only, e.g. 2010xxxxxxxx)", "default": "201094881552" },
+      { "type": "text", "id": "whatsapp_number", "label": "Store WhatsApp number (digits only, e.g. 2010xxxxxxxx)", "default": "201205980358" },
       { "type": "range", "id": "delivery_fee", "label": "Flat delivery fee (EGP, 0 = confirmed in chat) — used only when no shipping zones are set", "min": 0, "max": 500, "step": 5, "default": 0 }
     ]
   },

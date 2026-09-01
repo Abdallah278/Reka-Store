@@ -22,7 +22,7 @@ uid = "5a9afcd6-adcf-4143-b9aa-91012093e7b6eb8ced5f"
     key = "phone"
     type = "single_line_text_field"
     name = "WhatsApp number (digits only)"
-    description = "e.g. 201094881552"
+    description = "e.g. 201205980358"
 
     [[extensions.settings.fields]]
     key = "label"

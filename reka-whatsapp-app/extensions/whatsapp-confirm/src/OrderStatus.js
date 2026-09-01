@@ -10,7 +10,7 @@ export default extension("customer-account.order-status.block.render", (root, ap
     const order = (api.order && api.order.current) || {};
     const orderName = order.name || order.confirmationNumber || "";
 
-    const phone = String(s.phone || "201094881552").replace(/\D/g, "");
+    const phone = String(s.phone || "201205980358").replace(/\D/g, "");
     const template = s.message || "Hello Reka Store, I want to complete payment for order {order}.";
     const msg = template.replace("{order}", orderName);
     const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);

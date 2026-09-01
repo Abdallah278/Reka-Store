@@ -11,7 +11,7 @@ export default extension("purchase.thank-you.block.render", (root, api) => {
     const conf = (api.orderConfirmation && api.orderConfirmation.current) || {};
     const orderName = (conf.order && conf.order.name) || conf.number || "";
 
-    const phone = String(s.phone || "201094881552").replace(/\D/g, "");
+    const phone = String(s.phone || "201205980358").replace(/\D/g, "");
     const template = s.message || "Hello Reka Store, I want to complete payment for order {order}.";
     const msg = template.replace("{order}", orderName);
     const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);

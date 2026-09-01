@@ -18,7 +18,7 @@
 
      ```
      لإتمام الدفع، كلّمنا على واتساب برقم طلبك وهنبعتلك تعليمات التحويل:
-     https://wa.me/201094881552
+     https://wa.me/201205980358
      الأوردر بيتشحن بعد تأكيد التحويل.
      ```
 3. متضيفش Cash on Delivery.
@@ -40,7 +40,7 @@
 ```liquid
 <div style="text-align:center;margin:24px 0;">
   {% capture wa_msg %}Hello Reka Store, I want to complete payment for order {{ order.name }}.{% endcapture %}
-  <a href="https://wa.me/201094881552?text={{ wa_msg | url_encode }}"
+  <a href="https://wa.me/201205980358?text={{ wa_msg | url_encode }}"
      style="display:inline-block;background:#25D366;color:#fff;padding:14px 28px;border-radius:999px;font-weight:bold;font-size:16px;text-decoration:none;">
     ✅ Continue on WhatsApp — تأكيد الدفع
   </a>
@@ -59,7 +59,7 @@
 ```liquid
 <p style="text-align:center;margin:24px 0;">
   {% capture wa_msg %}Hello Reka Store, I want to complete payment for order {{ order.name }}.{% endcapture %}
-  <a href="https://wa.me/201094881552?text={{ wa_msg | url_encode }}"
+  <a href="https://wa.me/201205980358?text={{ wa_msg | url_encode }}"
      style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:999px;font-weight:bold;text-decoration:none;">
     Continue on WhatsApp — تأكيد الدفع
   </a>
