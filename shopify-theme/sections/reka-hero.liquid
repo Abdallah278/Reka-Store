@@ -83,7 +83,7 @@
           {%- if section.settings.hero_image -%}
             <img src="{{ section.settings.hero_image | image_url: width: 1100 }}" alt="{{ settings.store_name | default: 'Reka Store' }} — featured beauty portrait" width="{{ section.settings.hero_image.width }}" height="{{ section.settings.hero_image.height }}" loading="eager" fetchpriority="high">
           {%- else -%}
-            {% render 'art', key: 'portrait', title: 'Illustrated portrait of a woman applying burgundy lipstick, lit warm on a golden canvas' %}
+            <img src="{{ 'hero-portrait.jpg' | asset_url }}" alt="{{ settings.store_name | default: 'Reka Store' }} — beauty portrait with burgundy lips" width="1200" height="1500" loading="eager" fetchpriority="high" style="height:100%; width:100%; object-fit:cover;">
           {%- endif -%}
         </div>
       </div>
