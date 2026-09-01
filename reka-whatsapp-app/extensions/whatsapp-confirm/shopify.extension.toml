@@ -37,7 +37,13 @@ uid = "5a9afcd6-adcf-4143-b9aa-91012093e7b6eb8ced5f"
     description = "Default: Hello Reka Store, I want to complete payment for order {order}."
 
     [[extensions.settings.fields]]
+    key = "title"
+    type = "single_line_text_field"
+    name = "Banner title"
+    description = "Default: ⏳ طلبك بانتظار تأكيد الدفع"
+
+    [[extensions.settings.fields]]
     key = "note"
     type = "multi_line_text_field"
-    name = "Note text (shown above the button)"
-    description = "Default: طلبك بانتظار تأكيد الدفع. بعد تحويل المبلغ، اضغط الزر بالأسفل وأرسل لنا رسالة لتأكيد التحويل."
+    name = "Note text (inside the banner, above the button)"
+    description = "Default: بعد تحويل المبلغ، اضغط الزر بالأسفل وأرسل لنا رسالة لتأكيد التحويل. لن يتم شحن الطلب قبل تأكيد الدفع."

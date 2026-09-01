@@ -1,8 +1,9 @@
-// زرار "Continue on WhatsApp" في صفحة الشكر — نوت فوق الزرار، زرار بعرض كامل
-// بنص كبير Bold، والرسالة فيها رقم الأوردر فقط.
-import { extension, Button, BlockStack, Text } from "@shopify/ui-extensions/checkout";
+// Banner تحذيري أصفر (رسمي من شوبيفاي) في صفحة الشكر: "طلبك بانتظار تأكيد الدفع"
+// وجواه زرار واتساب بعرض كامل — الرسالة فيها رقم الأوردر فقط.
+import { extension, Banner, Button, BlockStack, Text } from "@shopify/ui-extensions/checkout";
 
-const DEFAULT_NOTE = "طلبك بانتظار تأكيد الدفع. بعد تحويل المبلغ، اضغط الزر بالأسفل وأرسل لنا رسالة لتأكيد التحويل.";
+const DEFAULT_TITLE = "⏳ طلبك بانتظار تأكيد الدفع";
+const DEFAULT_NOTE = "بعد تحويل المبلغ، اضغط الزر بالأسفل وأرسل لنا رسالة لتأكيد التحويل. لن يتم شحن الطلب قبل تأكيد الدفع.";
 
 export default extension("purchase.thank-you.block.render", (root, api) => {
   function render() {
@@ -17,11 +18,12 @@ export default extension("purchase.thank-you.block.render", (root, api) => {
 
     for (const child of root.children) root.removeChild(child);
     root.appendChild(
-      // BlockStack بدون inlineAlignment => العناصر بتتمدد بعرض الحاوية بالكامل
-      root.createComponent(BlockStack, { spacing: "base", padding: "base" }, [
-        root.createComponent(Text, { size: "base", emphasis: "bold" }, s.note || DEFAULT_NOTE),
-        root.createComponent(Button, { to: url, external: true }, [
-          root.createComponent(Text, { size: "medium", emphasis: "bold" }, s.label || "Continue on WhatsApp — تأكيد الدفع"),
+      root.createComponent(Banner, { status: "warning", title: s.title || DEFAULT_TITLE }, [
+        root.createComponent(BlockStack, { spacing: "base" }, [
+          root.createComponent(Text, { size: "base" }, s.note || DEFAULT_NOTE),
+          root.createComponent(Button, { to: url, external: true }, [
+            root.createComponent(Text, { size: "medium", emphasis: "bold" }, s.label || "Continue on WhatsApp — تأكيد الدفع"),
+          ]),
         ]),
       ])
     );
