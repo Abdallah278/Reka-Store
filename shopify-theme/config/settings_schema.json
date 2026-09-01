@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "Reka Store",
-    "theme_version": "1.0.0",
+    "theme_version": "1.1.0",
     "theme_author": "Reka Store",
     "theme_documentation_url": "https://github.com/Abdallah278/Reka-Store",
     "theme_support_url": "https://github.com/Abdallah278/Reka-Store"
@@ -12,10 +12,43 @@
     "settings": [
       { "type": "text", "id": "store_name", "label": "Store display name", "default": "Reka Store" },
       { "type": "image_picker", "id": "logo_image", "label": "Logo (round, replaces the R mark)" },
+      { "type": "image_picker", "id": "favicon", "label": "Favicon (square, at least 96×96)" },
+      { "type": "text", "id": "currency_label", "label": "Currency label shown next to prices", "default": "EGP" },
+      { "type": "header", "content": "Social links" },
       { "type": "text", "id": "instagram_url", "label": "Instagram profile URL" },
       { "type": "text", "id": "facebook_url", "label": "Facebook page URL" },
       { "type": "text", "id": "tiktok_url", "label": "TikTok profile URL" },
       { "type": "text", "id": "whatsapp_page_url", "label": "WhatsApp business/channel page URL (optional — falls back to the number)" }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "paragraph", "content": "These drive the whole palette. Sections reference them, so one change updates the entire site." },
+      { "type": "color", "id": "color_canvas", "label": "Canvas (page background)", "default": "#f4e382" },
+      { "type": "color", "id": "color_cream", "label": "Cream (soft background)", "default": "#fbf4d6" },
+      { "type": "color", "id": "color_ink", "label": "Ink (dark text / dark panels)", "default": "#310e10" },
+      { "type": "color", "id": "color_burgundy", "label": "Burgundy (accent)", "default": "#74070e" },
+      { "type": "color", "id": "color_olive", "label": "Olive (secondary text)", "default": "#45462a" },
+      { "type": "color", "id": "color_clay", "label": "Clay (warm accent)", "default": "#947268" },
+      { "type": "color", "id": "color_clay_soft", "label": "Clay soft (muted accent)", "default": "#d9c5b6" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "paragraph", "content": "By default the theme loads its brand fonts (Cormorant Garamond + Manrope). Turn on custom fonts to pick any font from the Shopify library instead." },
+      { "type": "checkbox", "id": "use_custom_fonts", "label": "Use custom fonts from the Shopify font library", "default": false },
+      { "type": "font_picker", "id": "font_heading", "label": "Headings font", "default": "georgia_n4" },
+      { "type": "font_picker", "id": "font_body", "label": "Body font", "default": "assistant_n4" },
+      { "type": "range", "id": "base_font_size", "label": "Base text size", "min": 14, "max": 19, "step": 1, "unit": "px", "default": 16 }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      { "type": "range", "id": "section_spacing", "label": "Vertical space between sections", "min": 50, "max": 200, "step": 10, "unit": "%", "default": 100 },
+      { "type": "range", "id": "page_width", "label": "Page max width", "min": 1100, "max": 1600, "step": 20, "unit": "px", "default": 1320 }
     ]
   },
   {
@@ -26,9 +59,18 @@
     ]
   },
   {
+    "name": "Payment (manual transfer)",
+    "settings": [
+      { "type": "paragraph", "content": "Shown to customers so they know where to transfer. The order itself is completed with the manual payment method you enable in Shopify Admin → Settings → Payments." },
+      { "type": "text", "id": "vodafone_cash", "label": "Vodafone Cash number" },
+      { "type": "text", "id": "instapay", "label": "InstaPay address / number" },
+      { "type": "textarea", "id": "payment_note", "label": "Extra payment note (optional)" }
+    ]
+  },
+  {
     "name": "Shipping zones",
     "settings": [
-      { "type": "paragraph", "content": "One zone per line, format: Governorate | fee in EGP | delivery time. Example: Cairo | 70 | 1–2 days. Leave empty to keep everything \"confirmed on WhatsApp\". Fee or time can be left blank inside a line (e.g. Aswan | | 3–5 days)." },
+      { "type": "paragraph", "content": "One zone per line, format: Governorate | fee in EGP | delivery time. Example: Cairo | 70 | 1–2 days. Leave empty to keep everything \"confirmed on WhatsApp\". Fee or time can be left blank inside a line (e.g. Aswan | | 3–5 days). Note: fees charged at checkout come from Shopify Admin → Settings → Shipping — keep both in sync." },
       { "type": "textarea", "id": "shipping_zones", "label": "Zones (Governorate | fee | delivery time)" },
       { "type": "text", "id": "free_shipping_threshold", "label": "Free delivery above (EGP) — empty = disabled" },
       { "type": "textarea", "id": "shipping_extra_note", "label": "Extra note shown on the Shipping page (optional)" }

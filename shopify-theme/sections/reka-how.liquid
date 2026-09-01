@@ -2,30 +2,85 @@
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
 <section class="container rk-section" aria-labelledby="how-title">
   <div class="rk-section-head">
-    <p class="eyebrow text-burgundy">How it works</p>
-    <h2 id="how-title" class="font-display">Ordering is a conversation</h2>
-    <p>There is no online payment here — by design. Every order is confirmed personally on WhatsApp.</p>
+    <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'How it works' }}</p>
+    <h2 id="how-title" class="font-display">{{ section.settings.title | default: 'Ordering is a conversation' }}</h2>
+    <p>{{ section.settings.intro | default: 'There is no online payment here — by design. Every order is confirmed personally on WhatsApp.' }}</p>
   </div>
   <ol class="rk-steps">
-    <li class="rk-step">
-      <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'shield-check', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">01</span></div>
-      <h3 class="font-display">Build your order</h3>
-      <p>Add pieces to your cart and share your delivery details. Nothing is charged on this site.</p>
-    </li>
-    <li class="rk-step">
-      <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">02</span></div>
-      <h3 class="font-display">Confirm on WhatsApp</h3>
-      <p>Your order opens as a ready message — press send and we confirm availability in chat.</p>
-    </li>
-    <li class="rk-step">
-      <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'truck', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">03</span></div>
-      <h3 class="font-display">Transfer, then delivery</h3>
-      <p>We send payment-transfer instructions manually. Once received, your order ships.</p>
-    </li>
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        <li class="rk-step" {{ block.shopify_attributes }}>
+          <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: block.settings.icon, class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">{{ forloop.index | prepend: '0' }}</span></div>
+          <h3 class="font-display">{{ block.settings.title }}</h3>
+          <p>{{ block.settings.text }}</p>
+        </li>
+      {%- endfor -%}
+    {%- else -%}
+      <li class="rk-step">
+        <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'shield-check', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">01</span></div>
+        <h3 class="font-display">Build your order</h3>
+        <p>Add pieces to your cart and share your delivery details. Nothing is charged on this site.</p>
+      </li>
+      <li class="rk-step">
+        <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">02</span></div>
+        <h3 class="font-display">Confirm on WhatsApp</h3>
+        <p>Your order opens as a ready message — press send and we confirm availability in chat.</p>
+      </li>
+      <li class="rk-step">
+        <div class="rk-step__top"><span class="rk-step__icon">{% render 'icon', name: 'truck', class: 'icon-lg icon' %}</span><span class="rk-step__n font-display">03</span></div>
+        <h3 class="font-display">Transfer, then delivery</h3>
+        <p>We send payment-transfer instructions manually. Once received, your order ships.</p>
+      </li>
+    {%- endif -%}
   </ol>
-  <p class="rk-how__note">Questions first? <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: settings.store_name | append: ', I have a question before ordering.' | url_encode }}" target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>.</p>
+  {%- assign question_prefill = section.settings.question_prefill | default: 'Hi {store}, I have a question before ordering.' | replace: '{store}', settings.store_name -%}
+  <p class="rk-how__note">{{ section.settings.note_prefix | default: 'Questions first?' }} <a href="https://wa.me/{{ wa }}?text={{ question_prefill | url_encode }}" target="_blank" rel="noopener noreferrer">{{ section.settings.note_link_label | default: 'Message us on WhatsApp' }}</a>.</p>
 </section>
 
 {% schema %}
-{ "name": "Reka how it works", "settings": [], "presets": [{ "name": "Reka how it works" }] }
+{
+  "name": "Reka how it works",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "How it works" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Ordering is a conversation" },
+    { "type": "textarea", "id": "intro", "label": "Intro text", "default": "There is no online payment here — by design. Every order is confirmed personally on WhatsApp." },
+    { "type": "text", "id": "note_prefix", "label": "Bottom note text", "default": "Questions first?" },
+    { "type": "text", "id": "note_link_label", "label": "Bottom note link label", "default": "Message us on WhatsApp" },
+    { "type": "text", "id": "question_prefill", "label": "Pre-filled WhatsApp question ({store} = store name)", "default": "Hi {store}, I have a question before ordering." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "shield-check",
+          "options": [
+            { "value": "shield-check", "label": "Shield" },
+            { "value": "message-circle", "label": "Chat bubble" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "sparkles", "label": "Sparkles" },
+            { "value": "shopping-bag", "label": "Shopping bag" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Step title", "default": "Build your order" },
+        { "type": "textarea", "id": "text", "label": "Step text", "default": "Add pieces to your cart and share your delivery details." }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Reka how it works",
+      "blocks": [
+        { "type": "step", "settings": { "icon": "shield-check", "title": "Build your order", "text": "Add pieces to your cart and share your delivery details. Nothing is charged on this site." } },
+        { "type": "step", "settings": { "icon": "message-circle", "title": "Confirm on WhatsApp", "text": "Your order opens as a ready message — press send and we confirm availability in chat." } },
+        { "type": "step", "settings": { "icon": "truck", "title": "Transfer, then delivery", "text": "We send payment-transfer instructions manually. Once received, your order ships." } }
+      ]
+    }
+  ]
+}
 {% endschema %}

@@ -16,24 +16,33 @@
 
   <div class="container rk-hero__grid">
     <div class="rk-hero__copy">
-      <p class="eyebrow rk-hero__eyebrow">{% render 'icon', name: 'sparkles' %} five departments · one point of view</p>
+      <p class="eyebrow rk-hero__eyebrow">{% render 'icon', name: 'sparkles' %} {{ section.settings.eyebrow | default: 'five departments · one point of view' }}</p>
       <h1 class="rk-hero__title">{{ hero_title }}</h1>
       <p class="rk-hero__sub">{{ hero_subtitle }}</p>
       <div class="rk-hero__ctas">
-        <a href="#departments" class="btn-ink">Choose your ritual {% render 'icon', name: 'arrow-right' %}</a>
-        <a href="{{ routes.collections_url }}/offers" class="btn-outline">Browse offers</a>
+        <a href="{{ section.settings.cta1_link | default: '#departments' }}" class="btn-ink">{{ section.settings.cta1_label | default: 'Choose your ritual' }} {% render 'icon', name: 'arrow-right' %}</a>
+        {%- assign cta2_link = section.settings.cta2_link -%}
+        {%- if cta2_link == blank -%}{%- assign cta2_link = routes.collections_url | append: '/offers' -%}{%- endif -%}
+        <a href="{{ cta2_link }}" class="btn-outline">{{ section.settings.cta2_label | default: 'Browse offers' }}</a>
       </div>
       <nav aria-label="Departments" class="rk-hero__chips">
-        <a href="{{ routes.collections_url }}/korean-skincare">Korean Skincare</a>
-        <a href="{{ routes.collections_url }}/french-skincare">French Skincare</a>
-        <a href="{{ routes.collections_url }}/makeup">Makeup</a>
-        <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
-        <a href="{{ routes.collections_url }}/offers">Offers</a>
+        {%- assign chips_menu = linklists[section.settings.chips_menu] -%}
+        {%- if chips_menu != blank and chips_menu.links.size > 0 -%}
+          {%- for link in chips_menu.links -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ routes.collections_url }}/korean-skincare">Korean Skincare</a>
+          <a href="{{ routes.collections_url }}/french-skincare">French Skincare</a>
+          <a href="{{ routes.collections_url }}/makeup">Makeup</a>
+          <a href="{{ routes.collections_url }}/perfumes">Perfumes</a>
+          <a href="{{ routes.collections_url }}/offers">Offers</a>
+        {%- endif -%}
       </nav>
       <dl class="rk-hero__facts">
-        <div><dt>Korean → Perfume</dt><dd>Five departments</dd></div>
-        <div><dt>Prices in EGP</dt><dd>No surprises</dd></div>
-        <div><dt>Order on WhatsApp</dt><dd>Confirmed in chat</dd></div>
+        <div><dt>{{ section.settings.fact1_title | default: 'Korean → Perfume' }}</dt><dd>{{ section.settings.fact1_text | default: 'Five departments' }}</dd></div>
+        <div><dt>{{ section.settings.fact2_title | default: 'Prices in EGP' }}</dt><dd>{{ section.settings.fact2_text | default: 'No surprises' }}</dd></div>
+        <div><dt>{{ section.settings.fact3_title | default: 'Order on WhatsApp' }}</dt><dd>{{ section.settings.fact3_text | default: 'Confirmed in chat' }}</dd></div>
       </dl>
     </div>
 
@@ -41,15 +50,21 @@
       <div class="rk-hero__main">
         <div class="brand-tone">
           {%- if section.settings.hero_image -%}
-            <img src="{{ section.settings.hero_image | image_url: width: 1100 }}" alt="{{ settings.store_name | default: 'Reka Store' }} — featured beauty portrait" loading="eager" fetchpriority="high">
+            <img src="{{ section.settings.hero_image | image_url: width: 1100 }}" alt="{{ settings.store_name | default: 'Reka Store' }} — featured beauty portrait" width="{{ section.settings.hero_image.width }}" height="{{ section.settings.hero_image.height }}" loading="eager" fetchpriority="high">
           {%- else -%}
             {% render 'art', key: 'portrait', title: 'Illustrated portrait of a woman applying burgundy lipstick, lit warm on a golden canvas' %}
           {%- endif -%}
         </div>
       </div>
       <figure class="rk-hero__card">
-        <div class="rk-hero__card-art">{% render 'art', key: 'perfume-bottle', title: "Illustration of a woman's perfume bottle in amber glass" %}</div>
-        <figcaption>Perfume edit</figcaption>
+        <div class="rk-hero__card-art">
+          {%- if section.settings.card_image -%}
+            <img src="{{ section.settings.card_image | image_url: width: 400 }}" alt="" loading="lazy" width="{{ section.settings.card_image.width }}" height="{{ section.settings.card_image.height }}" style="height:100%; width:100%; object-fit:cover;">
+          {%- else -%}
+            {% render 'art', key: 'perfume-bottle', title: "Illustration of a woman's perfume bottle in amber glass" %}
+          {%- endif -%}
+        </div>
+        <figcaption>{{ section.settings.card_caption | default: 'Perfume edit' }}</figcaption>
       </figure>
       <div class="rk-hero__bubble">{% render 'art', key: 'hands', title: 'Illustration of a hand applying a skincare serum' %}</div>
       {%- if feature -%}
@@ -69,8 +84,8 @@
         </a>
       {%- else -%}
         <div class="panel rk-hero__feature" style="display:block;">
-          <p class="eyebrow text-burgundy" style="letter-spacing:.2em;">New edit</p>
-          <p class="font-display" style="font-size:1.25rem;">Arriving soon</p>
+          <p class="eyebrow text-burgundy" style="letter-spacing:.2em;">{{ section.settings.soon_eyebrow | default: 'New edit' }}</p>
+          <p class="font-display" style="font-size:1.25rem;">{{ section.settings.soon_text | default: 'Arriving soon' }}</p>
         </div>
       {%- endif -%}
     </div>
@@ -81,10 +96,30 @@
 {
   "name": "Reka hero",
   "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow line", "default": "five departments · one point of view" },
     { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Beauty, your way" },
     { "type": "textarea", "id": "hero_subtitle", "label": "Hero subtitle", "default": "A considered edit of colour, skin and ritual — chosen for the way you actually live." },
     { "type": "image_picker", "id": "hero_image", "label": "Hero image (replaces the brand portrait)" },
-    { "type": "collection", "id": "featured_collection", "label": "Collection for the floating featured card" }
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "cta1_label", "label": "Primary button label", "default": "Choose your ritual" },
+    { "type": "url", "id": "cta1_link", "label": "Primary button link (empty = #departments)" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary button label", "default": "Browse offers" },
+    { "type": "url", "id": "cta2_link", "label": "Secondary button link (empty = offers collection)" },
+    { "type": "header", "content": "Department chips" },
+    { "type": "link_list", "id": "chips_menu", "label": "Chips menu (empty = built-in five departments)" },
+    { "type": "header", "content": "Facts row" },
+    { "type": "text", "id": "fact1_title", "label": "Fact 1 — title", "default": "Korean → Perfume" },
+    { "type": "text", "id": "fact1_text", "label": "Fact 1 — text", "default": "Five departments" },
+    { "type": "text", "id": "fact2_title", "label": "Fact 2 — title", "default": "Prices in EGP" },
+    { "type": "text", "id": "fact2_text", "label": "Fact 2 — text", "default": "No surprises" },
+    { "type": "text", "id": "fact3_title", "label": "Fact 3 — title", "default": "Order on WhatsApp" },
+    { "type": "text", "id": "fact3_text", "label": "Fact 3 — text", "default": "Confirmed in chat" },
+    { "type": "header", "content": "Floating cards" },
+    { "type": "image_picker", "id": "card_image", "label": "Small card image (replaces the perfume art)" },
+    { "type": "text", "id": "card_caption", "label": "Small card caption", "default": "Perfume edit" },
+    { "type": "collection", "id": "featured_collection", "label": "Collection for the floating featured card" },
+    { "type": "text", "id": "soon_eyebrow", "label": "Fallback card eyebrow (no products)", "default": "New edit" },
+    { "type": "text", "id": "soon_text", "label": "Fallback card text (no products)", "default": "Arriving soon" }
   ],
   "presets": [{ "name": "Reka hero" }]
 }

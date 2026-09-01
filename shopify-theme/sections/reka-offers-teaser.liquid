@@ -7,10 +7,10 @@
     <div class="rk-inkpanel__grid" style="grid-template-columns:1fr;">
       <div style="display:grid; gap:2.5rem; align-items:center;" class="rk-offers-grid">
         <div>
-          <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Honest offers</p>
-          <h2 id="offers-teaser-title" class="font-display">Real pieces, really reduced.</h2>
-          <p style="margin-top:1rem; max-width:28rem; font-size:.875rem; line-height:1.75; color: color-mix(in srgb, var(--canvas) 75%, transparent);">Every strikethrough is a genuine previous price. When an offer has an end date, it's a real one.</p>
-          <a href="{{ routes.collections_url }}/offers" class="rk-summary__cta" style="width:auto; margin-top:1.75rem;">Enter the offers room {% render 'icon', name: 'arrow-right' %}</a>
+          <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: 'Honest offers' }}</p>
+          <h2 id="offers-teaser-title" class="font-display">{{ section.settings.title | default: 'Real pieces, really reduced.' }}</h2>
+          <p style="margin-top:1rem; max-width:28rem; font-size:.875rem; line-height:1.75; color: color-mix(in srgb, var(--canvas) 75%, transparent);">{{ section.settings.text | default: "Every strikethrough is a genuine previous price. When an offer has an end date, it's a real one." }}</p>
+          <a href="{{ routes.collections_url }}/offers" class="rk-summary__cta" style="width:auto; margin-top:1.75rem;">{{ section.settings.cta_label | default: 'Enter the offers room' }} {% render 'icon', name: 'arrow-right' %}</a>
         </div>
         <ul style="display:grid; gap:.75rem; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));" aria-label="Current offers">
           {%- for product in offers_col.products limit: 3 -%}
@@ -21,7 +21,7 @@
               <a href="{{ product.url }}" style="display:block; overflow:hidden; border-radius:1.25rem; background: color-mix(in srgb, var(--canvas) 5%, transparent); outline:1px solid color-mix(in srgb, var(--canvas) 15%, transparent);">
                 <div style="position:relative; aspect-ratio:1; overflow:hidden;">
                   {%- if product.featured_image -%}
-                    <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" style="height:100%; width:100%; object-fit:cover;">
+                    <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" style="height:100%; width:100%; object-fit:cover;">
                   {%- else -%}
                     {% render 'product-art', product: product %}
                   {%- endif -%}
@@ -44,5 +44,14 @@
 {%- endif -%}
 
 {% schema %}
-{ "name": "Reka offers teaser", "settings": [], "presets": [{ "name": "Reka offers teaser" }] }
+{
+  "name": "Reka offers teaser",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Honest offers" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Real pieces, really reduced." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Every strikethrough is a genuine previous price. When an offer has an end date, it's a real one." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Enter the offers room" }
+  ],
+  "presets": [{ "name": "Reka offers teaser" }]
+}
 {% endschema %}

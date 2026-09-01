@@ -1,30 +1,53 @@
 {%- comment -%} Manifesto marquee — port of Home.tsx Manifesto (compact) {%- endcomment -%}
+{%- assign marquee_raw = section.settings.marquee_items | default: 'Korean skincare
+French skincare
+Makeup
+Perfumes
+Honest offers
+Real prices' -%}
+{%- assign marquee_items = marquee_raw | newline_to_br | split: '<br />' -%}
 <section class="rk-manifesto">
   <div class="rk-marquee-band" aria-hidden="true">
     <div class="marquee">
       {%- for pass in (1..2) -%}
-        <span>Korean skincare <i></i></span>
-        <span>French skincare <i></i></span>
-        <span>Makeup <i></i></span>
-        <span>Perfumes <i></i></span>
-        <span>Honest offers <i></i></span>
-        <span>Real prices <i></i></span>
+        {%- for item in marquee_items -%}
+          {%- assign t = item | strip -%}
+          {%- if t != blank -%}<span>{{ t }} <i></i></span>{%- endif -%}
+        {%- endfor -%}
       {%- endfor -%}
     </div>
   </div>
   <div class="container rk-manifesto__grid">
     <div>
-      <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Manifesto</p>
-      <h2 class="font-display">Beauty that fits the <em>morning you already have.</em></h2>
-      <p class="rk-manifesto__text">{{ settings.store_name | default: 'Reka Store' }} is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.</p>
+      <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: 'Manifesto' }}</p>
+      <h2 class="font-display">{{ section.settings.title_start | default: 'Beauty that fits the' }} <em>{{ section.settings.title_em | default: 'morning you already have.' }}</em></h2>
+      {%- assign default_text = settings.store_name | default: 'Reka Store' | append: ' is a small, deliberate edit across five departments — skincare from Seoul and Paris, colour, fragrance and honest offers. No noise, no pressure: build your order, then simply send it.' -%}
+      <p class="rk-manifesto__text">{{ section.settings.text | default: default_text }}</p>
     </div>
     <div class="rk-manifesto__art">
-      <div class="rk-manifesto__art-frame">{% render 'art', key: 'hands', title: 'Illustration of a hand holding a serum bottle in warm light' %}</div>
+      <div class="rk-manifesto__art-frame">
+        {%- if section.settings.image -%}
+          <img src="{{ section.settings.image | image_url: width: 800 }}" alt="" loading="lazy" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" style="height:100%; width:100%; object-fit:cover;">
+        {%- else -%}
+          {% render 'art', key: 'hands', title: 'Illustration of a hand holding a serum bottle in warm light' %}
+        {%- endif -%}
+      </div>
       <div class="rk-manifesto__dot" aria-hidden="true"></div>
     </div>
   </div>
 </section>
 
 {% schema %}
-{ "name": "Reka manifesto", "settings": [], "presets": [{ "name": "Reka manifesto" }] }
+{
+  "name": "Reka manifesto",
+  "settings": [
+    { "type": "textarea", "id": "marquee_items", "label": "Scrolling band words (one per line)", "default": "Korean skincare\nFrench skincare\nMakeup\nPerfumes\nHonest offers\nReal prices" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Manifesto" },
+    { "type": "text", "id": "title_start", "label": "Heading — first part", "default": "Beauty that fits the" },
+    { "type": "text", "id": "title_em", "label": "Heading — italic part", "default": "morning you already have." },
+    { "type": "textarea", "id": "text", "label": "Paragraph (empty = built-in text)" },
+    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" }
+  ],
+  "presets": [{ "name": "Reka manifesto" }]
+}
 {% endschema %}

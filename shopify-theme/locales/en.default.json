@@ -3,5 +3,36 @@
     "meta": { "tags": "Tagged \"{{ tags }}\"", "page": "Page {{ page }}" },
     "404": { "title": "Page not found" },
     "search": { "title": "Search" }
+  },
+  "products": {
+    "sold_out": "Sold out",
+    "sold_out_note": "Sold out — back soon",
+    "add_to_order": "Add to order",
+    "only_left": "Only {{ count }} left",
+    "available": "Available"
+  },
+  "js": {
+    "added_to_order": "added to your order",
+    "could_not_add": "Could not add to your order",
+    "could_not_update": "Could not update the order",
+    "fix_fields": "Please fix the highlighted fields.",
+    "preparing_summary": "Preparing summary…",
+    "saving_order": "Saving your order…",
+    "review_label": "Review delivery details",
+    "confirm_label": "Confirm — send via WhatsApp",
+    "send_label": "Send order via WhatsApp",
+    "message_copied": "Order message copied",
+    "copy_failed": "Could not copy — long-press the message to copy it manually.",
+    "order_failed": "Could not create your order. Please try again.",
+    "fee_confirmed_whatsapp": "Delivery fee confirmed on WhatsApp",
+    "other_gov_hint": "Delivery fee & timing for your governorate are confirmed on WhatsApp.",
+    "err_name": "Please enter your full name.",
+    "err_phone": "Enter a valid mobile number (digits, e.g. 010xxxxxxxx).",
+    "err_whatsapp": "Enter a valid WhatsApp number, or leave empty.",
+    "err_governorate": "Please choose your governorate.",
+    "err_city": "Please enter your area or city.",
+    "err_building": "Building / floor / apartment helps the courier find you.",
+    "err_address": "Please enter the street address in detail.",
+    "err_consent": "We need your OK to contact you on WhatsApp about this order."
   }
 }

@@ -3,10 +3,10 @@
   {%- case template.name -%}
   {%- when '404' -%}
     <div style="text-align:center;">
-      <p class="eyebrow text-burgundy">Not found</p>
-      <h1 class="font-display" style="margin-top:.75rem; font-size:clamp(2.4rem,6vw,4rem);">This page isn't here anymore.</h1>
-      <p style="margin:1rem auto 0; max-width:24rem; font-size:.875rem; line-height:1.75; color:var(--olive);">It may have been retired from the edit. The departments are full of good company, though.</p>
-      <a href="{{ routes.root_url }}" class="btn-ink" style="margin-top:1.75rem;">Back to the homepage</a>
+      <p class="eyebrow text-burgundy">{{ section.settings.nf_eyebrow | default: 'Not found' }}</p>
+      <h1 class="font-display" style="margin-top:.75rem; font-size:clamp(2.4rem,6vw,4rem);">{{ section.settings.nf_title | default: "This page isn't here anymore." }}</h1>
+      <p style="margin:1rem auto 0; max-width:24rem; font-size:.875rem; line-height:1.75; color:var(--olive);">{{ section.settings.nf_text | default: 'It may have been retired from the edit. The departments are full of good company, though.' }}</p>
+      <a href="{{ routes.root_url }}" class="btn-ink" style="margin-top:1.75rem;">{{ section.settings.nf_button | default: 'Back to the homepage' }}</a>
     </div>
   {%- when 'search' -%}
     <p class="eyebrow text-burgundy">Search</p>
@@ -33,5 +33,14 @@
 </div>
 
 {% schema %}
-{ "name": "Utility page", "settings": [] }
+{
+  "name": "Utility page",
+  "settings": [
+    { "type": "header", "content": "404 page" },
+    { "type": "text", "id": "nf_eyebrow", "label": "Eyebrow", "default": "Not found" },
+    { "type": "text", "id": "nf_title", "label": "Heading", "default": "This page isn't here anymore." },
+    { "type": "textarea", "id": "nf_text", "label": "Text", "default": "It may have been retired from the edit. The departments are full of good company, though." },
+    { "type": "text", "id": "nf_button", "label": "Button label", "default": "Back to the homepage" }
+  ]
+}
 {% endschema %}

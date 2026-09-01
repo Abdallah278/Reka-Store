@@ -1,25 +1,44 @@
 {%- comment -%} Closing CTA — port of Home.tsx Closing {%- endcomment -%}
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+{%- assign wa_prefill = section.settings.wa_prefill | default: 'Hi {store}, I would like some help choosing.' | replace: '{store}', settings.store_name -%}
 <section class="container" style="padding-bottom:3.5rem;">
   <div class="rk-inkpanel">
     <div class="rk-inkpanel__blob" aria-hidden="true" style="right:-2.5rem; top:-2.5rem; height:16rem; width:16rem; background: color-mix(in srgb, var(--burgundy) 60%, transparent);"></div>
     <div class="rk-inkpanel__blob" aria-hidden="true" style="bottom:-4rem; left:33%; height:14rem; width:14rem; background: color-mix(in srgb, var(--clay) 40%, transparent);"></div>
     <div class="rk-inkpanel__grid">
       <div>
-        <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">Say hello</p>
-        <h2 class="font-display">Tell us what you're looking for. We'll point you to the right room.</h2>
+        <p class="eyebrow" style="color: color-mix(in srgb, var(--canvas) 60%, transparent);">{{ section.settings.eyebrow | default: 'Say hello' }}</p>
+        <h2 class="font-display">{{ section.settings.title | default: "Tell us what you're looking for. We'll point you to the right room." }}</h2>
         <div class="rk-inkpanel__ctas">
-          <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: settings.store_name | append: ', I would like some help choosing.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
-            {% render 'icon', name: 'message-circle' %} Chat on WhatsApp
+          <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
+            {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Chat on WhatsApp' }}
           </a>
-          <a href="#departments" class="btn-outline btn-outline--light">Back to departments</a>
+          <a href="{{ section.settings.secondary_link | default: '#departments' }}" class="btn-outline btn-outline--light">{{ section.settings.secondary_label | default: 'Back to departments' }}</a>
         </div>
       </div>
-      <div class="rk-inkpanel__art">{% render 'art', key: 'perfume-bottle', title: 'Amber perfume bottle illustration' %}</div>
+      <div class="rk-inkpanel__art">
+        {%- if section.settings.image -%}
+          <img src="{{ section.settings.image | image_url: width: 600 }}" alt="" loading="lazy" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" style="height:100%; width:100%; object-fit:contain;">
+        {%- else -%}
+          {% render 'art', key: 'perfume-bottle', title: 'Amber perfume bottle illustration' %}
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </section>
 
 {% schema %}
-{ "name": "Reka closing", "settings": [], "presets": [{ "name": "Reka closing" }] }
+{
+  "name": "Reka closing",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Say hello" },
+    { "type": "textarea", "id": "title", "label": "Heading", "default": "Tell us what you're looking for. We'll point you to the right room." },
+    { "type": "text", "id": "wa_label", "label": "WhatsApp button label", "default": "Chat on WhatsApp" },
+    { "type": "text", "id": "wa_prefill", "label": "Pre-filled WhatsApp message ({store} = store name)", "default": "Hi {store}, I would like some help choosing." },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button label", "default": "Back to departments" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary button link (empty = #departments)" },
+    { "type": "image_picker", "id": "image", "label": "Image (replaces the illustration)" }
+  ],
+  "presets": [{ "name": "Reka closing" }]
+}
 {% endschema %}

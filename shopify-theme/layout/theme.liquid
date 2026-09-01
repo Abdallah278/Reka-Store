@@ -6,15 +6,46 @@
   <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ settings.store_name | default: 'Reka Store' }}{% endunless %}</title>
   {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
   <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  {%- if settings.favicon -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 96 }}">
+  {%- endif -%}
+  {%- if settings.use_custom_fonts -%}
+    <style>
+      {{ settings.font_heading | font_face: font_display: 'swap' }}
+      {{ settings.font_body | font_face: font_display: 'swap' }}
+    </style>
+  {%- else -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  {%- endif -%}
   {{ 'reka.css' | asset_url | stylesheet_tag }}
   {{ content_for_header }}
   <style>
     :root {
       --rk-wa-number: "{{ settings.whatsapp_number | strip }}";
+      --canvas: {{ settings.color_canvas | default: '#f4e382' }};
+      --cream: {{ settings.color_cream | default: '#fbf4d6' }};
+      --ink: {{ settings.color_ink | default: '#310e10' }};
+      --burgundy: {{ settings.color_burgundy | default: '#74070e' }};
+      --olive: {{ settings.color_olive | default: '#45462a' }};
+      --clay: {{ settings.color_clay | default: '#947268' }};
+      --clay-soft: {{ settings.color_clay_soft | default: '#d9c5b6' }};
+      {%- if settings.use_custom_fonts %}
+      --font-display: "{{ settings.font_heading.family }}", {{ settings.font_heading.fallback_families }};
+      --font-sans: "{{ settings.font_body.family }}", {{ settings.font_body.fallback_families }};
+      {%- endif %}
     }
+    html { font-size: {{ settings.base_font_size | default: 16 }}px; }
+    {%- assign spacing = settings.section_spacing | default: 100 -%}
+    {%- if spacing != 100 %}
+    .rk-section { padding-block: {{ 2.5 | times: spacing | divided_by: 100.0 }}rem; }
+    @media (min-width: 1024px) { .rk-section { padding-block: {{ 3.25 | times: spacing | divided_by: 100.0 }}rem; } }
+    {%- endif %}
+    {%- assign pw = settings.page_width | default: 1320 -%}
+    {%- if pw != 1320 %}
+    @media (min-width: 1024px) { .container { max-width: {{ pw }}px; } }
+    {%- endif %}
   </style>
 </head>
 <body class="rk-body">
@@ -29,7 +60,31 @@
       whatsapp: {{ settings.whatsapp_number | json }},
       deliveryFee: {{ settings.delivery_fee | default: 0 | json }},
       storeName: {{ settings.store_name | default: 'Reka Store' | json }},
-      moneyFormat: "EGP"
+      moneyFormat: {{ settings.currency_label | default: 'EGP' | json }},
+      strings: {
+        added: {{ 'js.added_to_order' | t | json }},
+        add_fail: {{ 'js.could_not_add' | t | json }},
+        update_fail: {{ 'js.could_not_update' | t | json }},
+        fix_fields: {{ 'js.fix_fields' | t | json }},
+        preparing: {{ 'js.preparing_summary' | t | json }},
+        saving: {{ 'js.saving_order' | t | json }},
+        review_label: {{ 'js.review_label' | t | json }},
+        confirm_label: {{ 'js.confirm_label' | t | json }},
+        send_label: {{ 'js.send_label' | t | json }},
+        copied: {{ 'js.message_copied' | t | json }},
+        copy_fail: {{ 'js.copy_failed' | t | json }},
+        order_fail: {{ 'js.order_failed' | t | json }},
+        fee_confirmed: {{ 'js.fee_confirmed_whatsapp' | t | json }},
+        other_gov_hint: {{ 'js.other_gov_hint' | t | json }},
+        err_name: {{ 'js.err_name' | t | json }},
+        err_phone: {{ 'js.err_phone' | t | json }},
+        err_whatsapp: {{ 'js.err_whatsapp' | t | json }},
+        err_governorate: {{ 'js.err_governorate' | t | json }},
+        err_city: {{ 'js.err_city' | t | json }},
+        err_building: {{ 'js.err_building' | t | json }},
+        err_address: {{ 'js.err_address' | t | json }},
+        err_consent: {{ 'js.err_consent' | t | json }}
+      }
     };
   </script>
   <script src="{{ 'reka.js' | asset_url }}" defer></script>

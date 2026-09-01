@@ -5,10 +5,12 @@
   <div class="container">
     <div class="rk-split">
       <div class="rk-section-head">
-        <p class="eyebrow text-burgundy">This week</p>
-        <h2 id="featured-title" class="font-display">The featured edit</h2>
+        <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'This week' }}</p>
+        <h2 id="featured-title" class="font-display">{{ section.settings.title | default: 'The featured edit' }}</h2>
       </div>
-      <a href="{{ routes.collections_url }}/makeup" class="btn-outline">Browse departments</a>
+      {%- assign btn_link = section.settings.button_link -%}
+      {%- if btn_link == blank -%}{%- assign btn_link = routes.collections_url | append: '/makeup' -%}{%- endif -%}
+      <a href="{{ btn_link }}" class="btn-outline">{{ section.settings.button_label | default: 'Browse departments' }}</a>
     </div>
     <ul class="rk-grid-products">
       {%- for product in fc.products limit: section.settings.limit -%}
@@ -23,6 +25,10 @@
 {
   "name": "Reka featured edit",
   "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "This week" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "The featured edit" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Browse departments" },
+    { "type": "url", "id": "button_link", "label": "Button link (empty = makeup collection)" },
     { "type": "collection", "id": "collection", "label": "Collection to feature" },
     { "type": "range", "id": "limit", "label": "Products shown", "min": 2, "max": 8, "step": 1, "default": 4 }
   ],

@@ -25,11 +25,11 @@
       {%- endif -%}
     </div>
     {%- if sold_out -%}
-      <span class="rk-badge rk-badge--soldout">Sold out</span>
+      <span class="rk-badge rk-badge--soldout">{{ 'products.sold_out' | t }}</span>
     {%- elsif stock_left -%}
-      <span class="rk-badge rk-badge--low">Only {{ stock_left }} left</span>
+      <span class="rk-badge rk-badge--low">{{ 'products.only_left' | t: count: stock_left }}</span>
     {%- else -%}
-      <span class="rk-badge">Available</span>
+      <span class="rk-badge">{{ 'products.available' | t }}</span>
     {%- endif -%}
     {%- if off > 0 and sold_out == false -%}
       <span class="rk-badge rk-badge--off">−{{ off }}%</span>
@@ -49,10 +49,10 @@
     {% render 'price', product: product %}
   </div>
   {%- if sold_out -%}
-    <p class="rk-card__soldnote" role="status">Sold out — back soon</p>
+    <p class="rk-card__soldnote" role="status">{{ 'products.sold_out_note' | t }}</p>
   {%- else -%}
     <button type="button" class="btn-wa" data-add-to-cart="{{ v.id }}" data-product-title="{{ product.title | escape }}">
-      {% render 'icon', name: 'shopping-bag' %} Add to order
+      {% render 'icon', name: 'shopping-bag' %} {{ 'products.add_to_order' | t }}
     </button>
   {%- endif -%}
 </article>

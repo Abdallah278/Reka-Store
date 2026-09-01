@@ -7,10 +7,10 @@
 {%- assign zones_raw = settings.shipping_zones | default: '' | strip -%}
 {%- assign free_above = settings.free_shipping_threshold | default: '' | strip -%}
 <div class="container" style="padding-top:7rem; padding-bottom:4rem; max-width:56rem;">
-  <p class="eyebrow text-burgundy">Delivery</p>
-  <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:500;">Shipping & delivery</h1>
+  <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'Delivery' }}</p>
+  <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:500;">{{ section.settings.title | default: 'Shipping & delivery' }}</h1>
   <p style="margin-top:1rem; max-width:36rem; font-size:.9375rem; line-height:1.9; color:var(--olive);">
-    Orders are placed as WhatsApp requests — we confirm availability, delivery cost and timing with you in chat before anything ships. Payment instructions are sent manually; nothing is charged on this site.
+    {{ section.settings.intro | default: 'Orders are placed as WhatsApp requests — we confirm availability, delivery cost and timing with you in chat before anything ships. Payment instructions are sent manually; nothing is charged on this site.' }}
   </p>
 
   {%- if free_above != '' -%}
@@ -48,6 +48,15 @@
     </div>
   {%- endif -%}
 
+  {%- if settings.vodafone_cash != blank or settings.instapay != blank or settings.payment_note != blank -%}
+    <div style="margin-top:1.5rem; border-radius:1rem; background: color-mix(in srgb, var(--cream) 70%, transparent); padding:1rem 1.25rem; font-size:.875rem; line-height:1.9; color:var(--olive); outline:1px solid color-mix(in srgb, var(--ink) 8%, transparent); max-width:36rem;">
+      <strong style="color:var(--ink);">{{ section.settings.payment_title | default: 'Payment by transfer' }}</strong><br>
+      {%- if settings.vodafone_cash != blank -%}Vodafone Cash: <strong>{{ settings.vodafone_cash }}</strong><br>{%- endif -%}
+      {%- if settings.instapay != blank -%}InstaPay: <strong>{{ settings.instapay }}</strong><br>{%- endif -%}
+      {%- if settings.payment_note != blank -%}{{ settings.payment_note }}{%- endif -%}
+    </div>
+  {%- endif -%}
+
   {%- if settings.shipping_extra_note != blank -%}
     <p style="margin-top:1.5rem; max-width:36rem; font-size:.875rem; line-height:1.9; color:var(--olive); white-space:pre-line;">{{ settings.shipping_extra_note }}</p>
   {%- endif -%}
@@ -57,11 +66,22 @@
   {%- endif -%}
 
   <div style="margin-top:2.5rem; display:flex; flex-wrap:wrap; gap:.75rem;">
-    <a href="https://wa.me/{{ wa }}?text={{ 'Hi, I have a question about delivery.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">{% render 'icon', name: 'message-circle' %} Ask about delivery</a>
-    <a href="{{ routes.root_url }}" class="btn-outline">Back to the store</a>
+    <a href="https://wa.me/{{ wa }}?text={{ section.settings.wa_prefill | default: 'Hi, I have a question about delivery.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa">{% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Ask about delivery' }}</a>
+    <a href="{{ routes.root_url }}" class="btn-outline">{{ section.settings.back_label | default: 'Back to the store' }}</a>
   </div>
 </div>
 
 {% schema %}
-{ "name": "Shipping page", "settings": [] }
+{
+  "name": "Shipping page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Delivery" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Shipping & delivery" },
+    { "type": "textarea", "id": "intro", "label": "Intro text", "default": "Orders are placed as WhatsApp requests — we confirm availability, delivery cost and timing with you in chat before anything ships. Payment instructions are sent manually; nothing is charged on this site." },
+    { "type": "text", "id": "wa_label", "label": "WhatsApp button label", "default": "Ask about delivery" },
+    { "type": "text", "id": "wa_prefill", "label": "Pre-filled WhatsApp message", "default": "Hi, I have a question about delivery." },
+    { "type": "text", "id": "back_label", "label": "Back button label", "default": "Back to the store" },
+    { "type": "text", "id": "payment_title", "label": "Payment box title (numbers come from Theme settings → Payment)", "default": "Payment by transfer" }
+  ]
+}
 {% endschema %}

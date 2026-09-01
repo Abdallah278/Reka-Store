@@ -13,9 +13,9 @@
 {%- if cart.item_count == 0 -%}
 <div class="rk-cart-empty" data-cart-empty>
   <span class="rk-cart-empty__icon">{% render 'icon', name: 'shopping-bag', class: 'icon-lg icon' %}</span>
-  <h1 class="font-display">Your order is empty</h1>
-  <p>Wander through the departments and add the pieces you'd like — then we'll confirm everything on WhatsApp.</p>
-  <a href="{{ routes.root_url }}" class="btn-ink">Explore departments</a>
+  <h1 class="font-display">{{ section.settings.empty_title | default: 'Your order is empty' }}</h1>
+  <p>{{ section.settings.empty_text | default: "Wander through the departments and add the pieces you'd like — then we'll confirm everything on WhatsApp." }}</p>
+  <a href="{{ routes.root_url }}" class="btn-ink">{{ section.settings.empty_button | default: 'Explore departments' }}</a>
 </div>
 {%- else -%}
 <div class="container rk-cart" data-cart-root data-delivery-fee="{{ fee }}" data-wa="{{ wa }}" data-free-above="{{ free_above | escape }}">
@@ -28,8 +28,8 @@
       <li><span class="rk-step-chip">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
       <li><span class="rk-step-chip">3. Send on WhatsApp</span></li>
     </ol>
-    <h1 class="font-display">Your order</h1>
-    <p class="rk-cart__lede">Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat.</p>
+    <h1 class="font-display">{{ section.settings.step1_title | default: 'Your order' }}</h1>
+    <p class="rk-cart__lede">{{ section.settings.step1_lede | default: "Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat." }}</p>
 
     <div class="rk-cart__grid">
       <ul class="rk-lines" aria-label="Order items">
@@ -37,7 +37,7 @@
         <li class="rk-line" data-line="{{ forloop.index }}">
           <a href="{{ item.url }}" class="rk-line__img" aria-label="Open {{ item.product.title | escape }}">
             {%- if item.image -%}
-              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title | escape }}">
+              <img src="{{ item.image | image_url: width: 240 }}" alt="{{ item.product.title | escape }}" width="{{ item.image.width }}" height="{{ item.image.height }}">
             {%- else -%}
               {% render 'product-art', product: item.product %}
             {%- endif -%}
@@ -73,7 +73,7 @@
           <div class="rk-summary__total"><dt>Total</dt><dd>{% if has_zones %}{{ cart.total_price | money_without_currency | remove: '.00' }} EGP + delivery{% else %}{{ cart.total_price | divided_by: 100 | plus: fee }} EGP{% endif %}</dd></div>
         </dl>
         <button type="button" class="rk-summary__cta" data-goto-step2>Delivery details {% render 'icon', name: 'arrow-right' %}</button>
-        <p class="rk-summary__note">No payment on this site — final confirmation and payment instructions happen on WhatsApp.</p>
+        <p class="rk-summary__note">{{ section.settings.summary_note | default: 'No payment on this site — final confirmation and payment instructions happen on WhatsApp.' }}</p>
       </aside>
     </div>
   </div>
@@ -85,8 +85,8 @@
       <li><span class="rk-step-chip rk-step-chip--current" aria-current="step">2. Delivery details</span><span class="rk-step-arrow" aria-hidden="true">→</span></li>
       <li><span class="rk-step-chip">3. Send on WhatsApp</span></li>
     </ol>
-    <h1 class="font-display">Delivery details</h1>
-    <p class="rk-cart__lede">This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat.</p>
+    <h1 class="font-display">{{ section.settings.step2_title | default: 'Delivery details' }}</h1>
+    <p class="rk-cart__lede">{{ section.settings.step2_lede | default: 'This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat.' }}</p>
 
     <div class="rk-cart__grid" style="grid-template-columns:1fr;">
       <form class="rk-form" data-checkout-form novalidate style="max-width:44rem;">
@@ -163,7 +163,15 @@
         <button type="submit" class="btn-wa btn-lg btn-block" data-submit-order>
           {% render 'icon', name: 'message-circle' %} <span data-submit-label>Review delivery details</span>
         </button>
-        <p class="rk-secure-note">{% render 'icon', name: 'lock', class: 'icon' %} No card numbers, no passwords — we only collect delivery details.</p>
+        <p class="rk-secure-note">{% render 'icon', name: 'lock', class: 'icon' %} {{ section.settings.secure_note | default: 'No card numbers, no passwords — we only collect delivery details.' }}</p>
+        {%- if settings.vodafone_cash != blank or settings.instapay != blank or settings.payment_note != blank -%}
+          <div class="rk-paynote" style="margin-top:.75rem; border-radius:1rem; background: color-mix(in srgb, var(--cream) 70%, transparent); padding:.875rem 1rem; font-size:.8125rem; line-height:1.8; color:var(--olive); outline:1px solid color-mix(in srgb, var(--ink) 8%, transparent);">
+            <strong style="color:var(--ink);">{{ section.settings.payment_title | default: 'Transfer options' }}</strong><br>
+            {%- if settings.vodafone_cash != blank -%}Vodafone Cash: <strong>{{ settings.vodafone_cash }}</strong><br>{%- endif -%}
+            {%- if settings.instapay != blank -%}InstaPay: <strong>{{ settings.instapay }}</strong><br>{%- endif -%}
+            {%- if settings.payment_note != blank -%}{{ settings.payment_note }}{%- endif -%}
+          </div>
+        {%- endif -%}
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <button type="button" class="rk-line__remove" data-back-step1>← Edit order</button>
           {%- if pages.shipping.url != blank -%}
@@ -212,5 +220,22 @@
 {%- endif -%}
 
 {% schema %}
-{ "name": "Cart & WhatsApp checkout", "settings": [] }
+{
+  "name": "Cart & WhatsApp checkout",
+  "settings": [
+    { "type": "header", "content": "Empty cart" },
+    { "type": "text", "id": "empty_title", "label": "Heading", "default": "Your order is empty" },
+    { "type": "textarea", "id": "empty_text", "label": "Text", "default": "Wander through the departments and add the pieces you'd like — then we'll confirm everything on WhatsApp." },
+    { "type": "text", "id": "empty_button", "label": "Button label", "default": "Explore departments" },
+    { "type": "header", "content": "Step 1 — the order" },
+    { "type": "text", "id": "step1_title", "label": "Heading", "default": "Your order" },
+    { "type": "textarea", "id": "step1_lede", "label": "Intro text", "default": "Nothing is paid here. You'll share delivery details next, then send the order on WhatsApp — we confirm availability and send transfer instructions in chat." },
+    { "type": "textarea", "id": "summary_note", "label": "Summary note", "default": "No payment on this site — final confirmation and payment instructions happen on WhatsApp." },
+    { "type": "header", "content": "Step 2 — delivery details" },
+    { "type": "text", "id": "step2_title", "label": "Heading", "default": "Delivery details" },
+    { "type": "textarea", "id": "step2_lede", "label": "Intro text", "default": "This is an order request — no payment happens here. Your order opens as a ready WhatsApp message; we confirm availability and send transfer instructions in chat." },
+    { "type": "text", "id": "secure_note", "label": "Security note under the button", "default": "No card numbers, no passwords — we only collect delivery details." },
+    { "type": "text", "id": "payment_title", "label": "Transfer options box title (numbers come from Theme settings → Payment)", "default": "Transfer options" }
+  ]
+}
 {% endschema %}

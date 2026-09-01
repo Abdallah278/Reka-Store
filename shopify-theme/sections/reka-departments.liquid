@@ -2,45 +2,120 @@
 <section id="departments" class="container rk-section" aria-labelledby="departments-title" style="scroll-margin-top:6rem;">
   <div class="rk-split">
     <div class="rk-section-head">
-      <p class="eyebrow text-burgundy">Choose your ritual</p>
-      <h2 id="departments-title" class="font-display">Five departments, five moods</h2>
+      <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'Choose your ritual' }}</p>
+      <h2 id="departments-title" class="font-display">{{ section.settings.title | default: 'Five departments, five moods' }}</h2>
     </div>
-    <p>Each department is its own room — its own light, colour and pace. Step into the one closest to today.</p>
+    <p>{{ section.settings.intro | default: 'Each department is its own room — its own light, colour and pace. Step into the one closest to today.' }}</p>
   </div>
   <div class="rk-depts">
-    {%- assign handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
-    {%- assign names = 'Korean Skincare,French Skincare,Makeup,Perfumes,Offers' | split: ',' -%}
-    {%- assign taglines = 'Glass skin: layer by layer,Quiet luxury for everyday skin,Colour with a point of view,Worn close: remembered longer,Real prices: honestly reduced' | split: ',' -%}
-    {%- assign arts = 'serum-bottle,cream-jar,lipstick-bullet,perfume-bottle,offer-mark' | split: ',' -%}
-    {%- assign grads = 'linear-gradient(160deg. #74070E 0%. #310E10 78%)|linear-gradient(160deg. #F4E3B2 0%. #fbf4d6 70%)|linear-gradient(160deg. #45462A 0%. #310E10 80%)|linear-gradient(160deg. #947268 0%. #310E10 85%)|linear-gradient(165deg. #310E10 0%. #74070E 130%)' | split: '|' -%}
-    {%- for h in handles -%}
-      {%- assign i = forloop.index0 -%}
-      {%- assign col = collections[h] -%}
-      {%- assign n = forloop.index | prepend: '0' -%}
-      {%- assign grad = grads[i] | replace: '.', ',' -%}
-      <a href="{{ routes.collections_url }}/{{ h }}" class="rk-dept {% if i < 2 %}rk-dept--wide{% else %}rk-dept--narrow{% endif %}" aria-label="Enter {{ names[i] }}">
-        <div class="rk-dept__art" style="background: {{ grad }};">
-          <div class="rk-dept__art-inner">{% render 'art', key: arts[i], title: names[i] %}</div>
-        </div>
-        <div class="rk-dept__meta">
-          <div>
-            <p class="eyebrow">{{ n }}</p>
-            <p class="rk-dept__name font-display">{{ names[i] }}</p>
-            <p class="rk-dept__count">
-              {%- if col != blank and col.products_count > 0 -%}
-                {{ col.products_count }} piece{% if col.products_count != 1 %}s{% endif %}
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- assign i = forloop.index0 -%}
+        {%- assign col = collections[block.settings.collection] -%}
+        {%- assign n = forloop.index | prepend: '0' -%}
+        {%- assign url = block.settings.link -%}
+        {%- if url == blank and col != blank -%}{%- assign url = col.url -%}{%- endif -%}
+        {%- assign dept_name = block.settings.name -%}
+        {%- if dept_name == blank and col != blank -%}{%- assign dept_name = col.title -%}{%- endif -%}
+        <a href="{{ url | default: routes.collections_url }}" class="rk-dept {% if i < 2 %}rk-dept--wide{% else %}rk-dept--narrow{% endif %}" aria-label="Enter {{ dept_name | escape }}" {{ block.shopify_attributes }}>
+          <div class="rk-dept__art" style="background: linear-gradient(160deg, {{ block.settings.grad_start }} 0%, {{ block.settings.grad_end }} 80%);">
+            <div class="rk-dept__art-inner">
+              {%- if block.settings.image -%}
+                <img src="{{ block.settings.image | image_url: width: 700 }}" alt="" loading="lazy" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" style="height:100%; width:100%; object-fit:cover;">
               {%- else -%}
-                {{ taglines[i] | replace: ':', ',' }}
+                {% render 'art', key: block.settings.art, title: dept_name %}
               {%- endif -%}
-            </p>
+            </div>
           </div>
-          <span class="rk-dept__arrow">{% render 'icon', name: 'arrow-up-right' %}</span>
-        </div>
-      </a>
-    {%- endfor -%}
+          <div class="rk-dept__meta">
+            <div>
+              <p class="eyebrow">{{ n }}</p>
+              <p class="rk-dept__name font-display">{{ dept_name }}</p>
+              <p class="rk-dept__count">
+                {%- if col != blank and col.products_count > 0 -%}
+                  {{ col.products_count }} piece{% if col.products_count != 1 %}s{% endif %}
+                {%- else -%}
+                  {{ block.settings.tagline }}
+                {%- endif -%}
+              </p>
+            </div>
+            <span class="rk-dept__arrow">{% render 'icon', name: 'arrow-up-right' %}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- else -%}
+      {%- assign handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
+      {%- assign names = 'Korean Skincare,French Skincare,Makeup,Perfumes,Offers' | split: ',' -%}
+      {%- assign taglines = 'Glass skin: layer by layer,Quiet luxury for everyday skin,Colour with a point of view,Worn close: remembered longer,Real prices: honestly reduced' | split: ',' -%}
+      {%- assign arts = 'serum-bottle,cream-jar,lipstick-bullet,perfume-bottle,offer-mark' | split: ',' -%}
+      {%- assign grads = 'linear-gradient(160deg. #74070E 0%. #310E10 78%)|linear-gradient(160deg. #F4E3B2 0%. #fbf4d6 70%)|linear-gradient(160deg. #45462A 0%. #310E10 80%)|linear-gradient(160deg. #947268 0%. #310E10 85%)|linear-gradient(165deg. #310E10 0%. #74070E 130%)' | split: '|' -%}
+      {%- for h in handles -%}
+        {%- assign i = forloop.index0 -%}
+        {%- assign col = collections[h] -%}
+        {%- assign n = forloop.index | prepend: '0' -%}
+        {%- assign grad = grads[i] | replace: '.', ',' -%}
+        <a href="{{ routes.collections_url }}/{{ h }}" class="rk-dept {% if i < 2 %}rk-dept--wide{% else %}rk-dept--narrow{% endif %}" aria-label="Enter {{ names[i] }}">
+          <div class="rk-dept__art" style="background: {{ grad }};">
+            <div class="rk-dept__art-inner">{% render 'art', key: arts[i], title: names[i] %}</div>
+          </div>
+          <div class="rk-dept__meta">
+            <div>
+              <p class="eyebrow">{{ n }}</p>
+              <p class="rk-dept__name font-display">{{ names[i] }}</p>
+              <p class="rk-dept__count">
+                {%- if col != blank and col.products_count > 0 -%}
+                  {{ col.products_count }} piece{% if col.products_count != 1 %}s{% endif %}
+                {%- else -%}
+                  {{ taglines[i] | replace: ':', ',' }}
+                {%- endif -%}
+              </p>
+            </div>
+            <span class="rk-dept__arrow">{% render 'icon', name: 'arrow-up-right' %}</span>
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
-{ "name": "Reka departments", "settings": [], "presets": [{ "name": "Reka departments" }] }
+{
+  "name": "Reka departments",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Choose your ritual" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Five departments, five moods" },
+    { "type": "textarea", "id": "intro", "label": "Intro text", "default": "Each department is its own room — its own light, colour and pace. Step into the one closest to today." },
+    { "type": "paragraph", "content": "Add \"Department\" blocks to control the cards. With no blocks, the built-in five departments are shown." }
+  ],
+  "blocks": [
+    {
+      "type": "department",
+      "name": "Department",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "name", "label": "Display name (empty = collection title)" },
+        { "type": "text", "id": "tagline", "label": "Tagline (shown when the collection is empty)" },
+        { "type": "url", "id": "link", "label": "Link (empty = the collection)" },
+        { "type": "image_picker", "id": "image", "label": "Card image (replaces the illustration)" },
+        {
+          "type": "select",
+          "id": "art",
+          "label": "Illustration (used when no image)",
+          "default": "serum-bottle",
+          "options": [
+            { "value": "serum-bottle", "label": "Serum bottle" },
+            { "value": "cream-jar", "label": "Cream jar" },
+            { "value": "lipstick-bullet", "label": "Lipstick" },
+            { "value": "perfume-bottle", "label": "Perfume bottle" },
+            { "value": "offer-mark", "label": "Offer mark" }
+          ]
+        },
+        { "type": "color", "id": "grad_start", "label": "Card gradient — start", "default": "#74070E" },
+        { "type": "color", "id": "grad_end", "label": "Card gradient — end", "default": "#310E10" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Reka departments" }]
+}
 {% endschema %}

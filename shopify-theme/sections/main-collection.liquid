@@ -88,6 +88,26 @@
     {%- assign e2e = 'Tools' -%}{%- assign e2t = 'Fewer, better brushes' -%}{%- assign e2x = 'A dense rounded brush does three jobs. Keep the good one.' -%}{%- assign e2a = 'brush' -%}
 {%- endcase -%}
 {%- if h == 'makeup' -%}{%- assign dept_name = 'Makeup' -%}{%- assign dept_short = 'makeup' -%}{%- endif -%}
+
+{%- comment -%}
+  Admin overrides — everything below can be changed per collection from
+  Shopify Admin without touching code:
+  • Collection title      → department name
+  • Collection description→ hero intro text
+  • Collection image      → hero artwork (replaces the illustration)
+  • Metafields (namespace "reka"): eyebrow, tagline, color (hex) — need
+    metafield definitions once (Settings → Custom data → Collections).
+{%- endcomment -%}
+{%- if collection.title != blank -%}{%- assign dept_name = collection.title -%}{%- endif -%}
+{%- assign desc_override = collection.description | strip_html | strip -%}
+{%- if desc_override != blank -%}{%- assign intro = desc_override -%}{%- endif -%}
+{%- if collection.metafields.reka.eyebrow.value != blank -%}{%- assign eyebrow = collection.metafields.reka.eyebrow.value -%}{%- endif -%}
+{%- if collection.metafields.reka.tagline.value != blank -%}{%- assign tagline = collection.metafields.reka.tagline.value -%}{%- endif -%}
+{%- if collection.metafields.reka.color.value != blank -%}
+  {%- assign dept_color = collection.metafields.reka.color.value -%}
+  {%- assign grad = 'linear-gradient(160deg, ' | append: dept_color | append: ' 0%, #310E10 80%)' -%}
+{%- endif -%}
+
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
 {%- assign store_name = settings.store_name | default: 'Reka Store' -%}
 {%- assign count = collection.products_count -%}
@@ -134,7 +154,13 @@
       </div>
       <div class="rk-dhero__artcol">
         <div class="rk-dhero__artframe {% if h == 'french-skincare' %}anim-sheen{% endif %}" style="--ring: color-mix(in srgb, {{ fg }} 18%, transparent);">
-          <div class="{{ motif_anim }}" style="height:100%; width:100%;">{% render 'art', key: hero_art, title: dept_name %}</div>
+          <div class="{{ motif_anim }}" style="height:100%; width:100%;">
+            {%- if collection.image -%}
+              <img src="{{ collection.image | image_url: width: 900 }}" alt="{{ dept_name | escape }}" loading="lazy" width="{{ collection.image.width }}" height="{{ collection.image.height }}" style="height:100%; width:100%; object-fit:cover; border-radius:inherit;">
+            {%- else -%}
+              {% render 'art', key: hero_art, title: dept_name %}
+            {%- endif -%}
+          </div>
         </div>
         <div class="rk-dhero__motif" style="background: {% if dark %}var(--canvas){% else %}var(--ink){% endif %};">
           <div class="rk-dhero__motif-inner">{% render 'art', key: motif_art, title: dept_name %}</div>
@@ -166,8 +192,8 @@
   <div class="container">
     <div class="rk-split">
       <div class="rk-section-head {% if is_offers %}rk-section-head--dark{% endif %}">
-        <p class="eyebrow {% unless is_offers %}text-burgundy{% endunless %}">{% if is_offers %}Active offers{% else %}The collection{% endif %}</p>
-        <h2 id="collection-title" class="font-display">{% if is_offers %}On offer right now{% else %}The {{ dept_short }} edit{% endif %}</h2>
+        <p class="eyebrow {% unless is_offers %}text-burgundy{% endunless %}">{% if is_offers %}{{ section.settings.offers_eyebrow | default: 'Active offers' }}{% else %}{{ section.settings.grid_eyebrow | default: 'The collection' }}{% endif %}</p>
+        <h2 id="collection-title" class="font-display">{% if is_offers %}{{ section.settings.offers_title | default: 'On offer right now' }}{% else %}The {{ dept_short }} edit{% endif %}</h2>
       </div>
       {%- comment -%} Category filter chips — categories = Shopify product types present {%- endcomment -%}
       <div role="group" aria-label="Filter by category" class="rk-catchips no-scrollbar" data-cat-filter {% if is_offers %}data-dark{% endif %} hidden>
@@ -261,10 +287,10 @@
     <div class="rk-dcta__row" style="color: {{ fg }};">
       <div>
         <p class="eyebrow" style="color: {% if dark %}color-mix(in srgb, var(--canvas) 70%, transparent){% else %}color-mix(in srgb, var(--ink) 60%, transparent){% endif %};">{{ dept_name }}</p>
-        <h2 class="font-display">Not sure where to start? Just ask.</h2>
+        <h2 class="font-display">{{ section.settings.cta_title | default: 'Not sure where to start? Just ask.' }}</h2>
       </div>
       <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: store_name | append: ', I would love a ' | append: dept_name | append: ' recommendation.' | url_encode }}" target="_blank" rel="noopener noreferrer" class="rk-pillbtn {% if dark %}rk-pillbtn--canvas{% else %}rk-pillbtn--ink{% endif %}">
-        {% render 'icon', name: 'message-circle' %} Ask on WhatsApp
+        {% render 'icon', name: 'message-circle' %} {{ section.settings.cta_label | default: 'Ask on WhatsApp' }}
       </a>
     </div>
   </div>
@@ -273,5 +299,14 @@
 </div>
 
 {% schema %}
-{ "name": "Department page", "settings": [] }
+{
+  "name": "Department page",
+  "settings": [
+    { "type": "text", "id": "grid_eyebrow", "label": "Grid eyebrow (normal departments)", "default": "The collection" },
+    { "type": "text", "id": "offers_eyebrow", "label": "Grid eyebrow (offers)", "default": "Active offers" },
+    { "type": "text", "id": "offers_title", "label": "Grid heading (offers)", "default": "On offer right now" },
+    { "type": "text", "id": "cta_title", "label": "Bottom CTA heading", "default": "Not sure where to start? Just ask." },
+    { "type": "text", "id": "cta_label", "label": "Bottom CTA button label", "default": "Ask on WhatsApp" }
+  ]
+}
 {% endschema %}

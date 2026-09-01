@@ -1,5 +1,6 @@
 {%- comment -%} Fixed pill navigation — port of chrome.tsx Nav {%- endcomment -%}
 {%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+{%- assign wa_prefill = section.settings.wa_prefill | default: 'Hi {store}, I have a question.' | replace: '{store}', settings.store_name -%}
 <header class="rk-header">
   <div class="rk-header__bar" data-header-bar>
     <a href="{{ routes.root_url }}" class="rk-logo" aria-label="{{ settings.store_name | default: 'Reka Store' }} home">
@@ -12,17 +13,24 @@
     </a>
 
     <nav class="rk-nav" aria-label="Departments">
-      <a href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>Home</a>
-      {%- assign dept_handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
-      {%- assign dept_names = 'Korean,French,Makeup,Perfumes,Offers' | split: ',' -%}
-      {%- for h in dept_handles -%}
-        {%- assign i = forloop.index0 -%}
-        <a href="{{ routes.collections_url }}/{{ h }}" {% if collection.handle == h %}aria-current="page"{% endif %}>{{ dept_names[i] }}</a>
-      {%- endfor -%}
+      <a href="{{ routes.root_url }}" {% if request.page_type == 'index' %}aria-current="page"{% endif %}>{{ section.settings.home_label | default: 'Home' }}</a>
+      {%- assign menu = linklists[section.settings.menu] -%}
+      {%- if menu != blank and menu.links.size > 0 -%}
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign dept_handles = 'korean-skincare,french-skincare,makeup,perfumes,offers' | split: ',' -%}
+        {%- assign dept_names = 'Korean,French,Makeup,Perfumes,Offers' | split: ',' -%}
+        {%- for h in dept_handles -%}
+          {%- assign i = forloop.index0 -%}
+          <a href="{{ routes.collections_url }}/{{ h }}" {% if collection.handle == h %}aria-current="page"{% endif %}>{{ dept_names[i] }}</a>
+        {%- endfor -%}
+      {%- endif -%}
     </nav>
 
     <div class="rk-header__actions">
-      <a href="https://wa.me/{{ wa }}?text={{ 'Hi ' | append: settings.store_name | append: ', I have a question.' | url_encode }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="rk-iconbtn rk-iconbtn--hide-sm">
+      <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="rk-iconbtn rk-iconbtn--hide-sm">
         {% render 'icon', name: 'message-circle', class: 'icon-lg icon' %}
       </a>
       <a href="{{ routes.cart_url }}" aria-label="Open cart" class="rk-cartbtn">
@@ -39,19 +47,34 @@
 
   <div id="mobile-menu" class="rk-mobile-menu" hidden>
     <nav aria-label="Mobile">
-      <a href="{{ routes.root_url }}">Home</a>
-      {%- for h in dept_handles -%}
-        {%- assign i = forloop.index0 -%}
-        <a href="{{ routes.collections_url }}/{{ h }}">{{ dept_names[i] }}</a>
-      {%- endfor -%}
-      <a href="{{ routes.cart_url }}">Cart {% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</a>
+      <a href="{{ routes.root_url }}">{{ section.settings.home_label | default: 'Home' }}</a>
+      {%- if menu != blank and menu.links.size > 0 -%}
+        {%- for link in menu.links -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for h in dept_handles -%}
+          {%- assign i = forloop.index0 -%}
+          <a href="{{ routes.collections_url }}/{{ h }}">{{ dept_names[i] }}</a>
+        {%- endfor -%}
+      {%- endif -%}
+      <a href="{{ routes.cart_url }}">{{ section.settings.cart_label | default: 'Cart' }} {% if cart.item_count > 0 %}({{ cart.item_count }}){% endif %}</a>
       <a href="https://wa.me/{{ wa }}" target="_blank" rel="noopener noreferrer" class="btn-wa">
-        {% render 'icon', name: 'message-circle' %} Ask on WhatsApp
+        {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_mobile_label | default: 'Ask on WhatsApp' }}
       </a>
     </nav>
   </div>
 </header>
 
 {% schema %}
-{ "name": "Reka header", "settings": [] }
+{
+  "name": "Reka header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Navigation menu (empty = built-in five departments)" },
+    { "type": "text", "id": "home_label", "label": "Home link label", "default": "Home" },
+    { "type": "text", "id": "cart_label", "label": "Cart link label (mobile menu)", "default": "Cart" },
+    { "type": "text", "id": "wa_mobile_label", "label": "WhatsApp button label (mobile menu)", "default": "Ask on WhatsApp" },
+    { "type": "text", "id": "wa_prefill", "label": "Pre-filled WhatsApp question ({store} = store name)", "default": "Hi {store}, I have a question." }
+  ]
+}
 {% endschema %}

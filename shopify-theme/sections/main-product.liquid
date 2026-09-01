@@ -31,7 +31,7 @@
         <div class="brand-tone" data-gallery-main>
           {%- if product.images.size > 0 -%}
             {%- for image in product.images -%}
-              <img src="{{ image | image_url: width: 1000 }}" alt="{{ image.alt | default: product.title | escape }}" {% unless forloop.first %}hidden{% endunless %} data-gallery-img="{{ forloop.index0 }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+              <img src="{{ image | image_url: width: 1000 }}" alt="{{ image.alt | default: product.title | escape }}" width="{{ image.width }}" height="{{ image.height }}" {% unless forloop.first %}hidden{% endunless %} data-gallery-img="{{ forloop.index0 }}" {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
             {%- endfor -%}
           {%- else -%}
             {% render 'product-art', product: product %}
@@ -48,7 +48,7 @@
         <div class="rk-thumbs" role="tablist" aria-label="Product images">
           {%- for image in product.images -%}
             <button type="button" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Show image {{ forloop.index }} of {{ product.images.size }}" data-gallery-thumb="{{ forloop.index0 }}">
-              <img src="{{ image | image_url: width: 160 }}" alt="" loading="lazy">
+              <img src="{{ image | image_url: width: 160 }}" alt="" loading="lazy" width="{{ image.width }}" height="{{ image.height }}">
             </button>
           {%- endfor -%}
         </div>
@@ -86,19 +86,19 @@
           </div>
         {%- else -%}
           <button type="button" class="btn-ink btn-block" data-add-to-cart="{{ v.id }}" data-product-title="{{ product.title | escape }}">
-            {% render 'icon', name: 'shopping-bag' %} Add to order — {{ price_txt }}
+            {% render 'icon', name: 'shopping-bag' %} {{ section.settings.add_label | default: 'Add to order' }} — {{ price_txt }}
           </button>
         {%- endif -%}
         <a href="https://wa.me/{{ wa }}?text={{ ask | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa btn-block">
-          {% render 'icon', name: 'message-circle' %} Ask about this on WhatsApp
+          {% render 'icon', name: 'message-circle' %} {{ section.settings.ask_label | default: 'Ask about this on WhatsApp' }}
         </a>
-        <p class="rk-pdetails__nopay">No online payment — your order is confirmed on WhatsApp and payment instructions are sent manually.</p>
+        <p class="rk-pdetails__nopay">{{ section.settings.nopay_note | default: 'No online payment — your order is confirmed on WhatsApp and payment instructions are sent manually.' }}</p>
       </div>
 
       {%- assign notes = product.metafields.reka.notes.value | default: product.metafields.custom.notes.value -%}
       {%- if notes != blank -%}
         <div class="rk-pdetails__notes">
-          <h2>Notes & details</h2>
+          <h2>{{ section.settings.notes_title | default: 'Notes & details' }}</h2>
           <p>{{ notes }}</p>
         </div>
       {%- endif -%}
@@ -118,8 +118,8 @@
   {%- if related contains '<li' -%}
   <section class="container rk-related" aria-labelledby="related-title">
     <div class="rk-section-head">
-      <p class="eyebrow text-burgundy">Same department</p>
-      <h2 id="related-title" class="font-display">You might also like</h2>
+      <p class="eyebrow text-burgundy">{{ section.settings.related_eyebrow | default: 'Same department' }}</p>
+      <h2 id="related-title" class="font-display">{{ section.settings.related_title | default: 'You might also like' }}</h2>
     </div>
     <ul class="rk-grid-products">{{ related }}</ul>
   </section>
@@ -127,5 +127,15 @@
 </div>
 
 {% schema %}
-{ "name": "Product page", "settings": [] }
+{
+  "name": "Product page",
+  "settings": [
+    { "type": "text", "id": "add_label", "label": "Add-to-order button label", "default": "Add to order" },
+    { "type": "text", "id": "ask_label", "label": "WhatsApp button label", "default": "Ask about this on WhatsApp" },
+    { "type": "textarea", "id": "nopay_note", "label": "No-payment note under the buttons", "default": "No online payment — your order is confirmed on WhatsApp and payment instructions are sent manually." },
+    { "type": "text", "id": "notes_title", "label": "Notes block heading", "default": "Notes & details" },
+    { "type": "text", "id": "related_eyebrow", "label": "Related products — eyebrow", "default": "Same department" },
+    { "type": "text", "id": "related_title", "label": "Related products — heading", "default": "You might also like" }
+  ]
+}
 {% endschema %}

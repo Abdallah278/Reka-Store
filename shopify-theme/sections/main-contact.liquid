@@ -1,0 +1,69 @@
+{%- comment -%} Contact page — Shopify contact form + WhatsApp shortcut {%- endcomment -%}
+{%- assign wa = settings.whatsapp_number | default: '201000000000' -%}
+<div class="container" style="padding-top:7rem; padding-bottom:4rem; max-width:44rem;">
+  <p class="eyebrow text-burgundy">{{ section.settings.eyebrow | default: 'Contact' }}</p>
+  <h1 class="font-display" style="margin-top:.5rem; font-size:clamp(2.2rem,5vw,3.4rem); font-weight:500;">{{ section.settings.title | default: page.title }}</h1>
+  {%- if section.settings.intro != blank or page.content != blank -%}
+    <div style="margin-top:1rem; max-width:36rem; font-size:.9375rem; line-height:1.9; color:var(--olive);">
+      {%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+      {{ page.content }}
+    </div>
+  {%- endif -%}
+
+  {%- assign wa_prefill = section.settings.wa_prefill | default: 'Hi {store}, I have a question.' | replace: '{store}', settings.store_name -%}
+  <a href="https://wa.me/{{ wa }}?text={{ wa_prefill | url_encode }}" target="_blank" rel="noopener noreferrer" class="btn-wa" style="margin-top:1.5rem;">
+    {% render 'icon', name: 'message-circle' %} {{ section.settings.wa_label | default: 'Message us on WhatsApp' }}
+  </a>
+
+  {%- if section.settings.show_form -%}
+  {%- form 'contact', class: 'rk-form', style: 'margin-top:2.5rem;' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="rk-field__hint" role="status" style="border-radius:1rem; background: color-mix(in srgb, var(--olive) 12%, transparent); padding:1rem 1.25rem; color:var(--ink); font-weight:600;">
+        {{ section.settings.success_text | default: 'Thanks — your message was sent. We reply during working hours.' }}
+      </p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <p class="rk-field__err" role="alert" style="margin-bottom:1rem;">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+    <div class="rk-form__row">
+      <div class="rk-field">
+        <label for="ct-name">{{ section.settings.label_name | default: 'Name' }}</label>
+        <input id="ct-name" type="text" name="contact[name]" autocomplete="name" maxlength="120" value="{{ form.name }}">
+      </div>
+      <div class="rk-field">
+        <label for="ct-email">{{ section.settings.label_email | default: 'Email' }}</label>
+        <input id="ct-email" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}">
+      </div>
+    </div>
+    <div class="rk-field">
+      <label for="ct-phone">{{ section.settings.label_phone | default: 'Phone (optional)' }}</label>
+      <input id="ct-phone" type="tel" name="contact[phone]" autocomplete="tel" maxlength="32" value="{{ form.phone }}">
+    </div>
+    <div class="rk-field">
+      <label for="ct-body">{{ section.settings.label_message | default: 'Message' }}</label>
+      <textarea id="ct-body" name="contact[body]" rows="5" required>{{ form.body }}</textarea>
+    </div>
+    <button type="submit" class="btn-ink btn-block">{{ section.settings.submit_label | default: 'Send message' }}</button>
+  {%- endform -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Contact" },
+    { "type": "text", "id": "title", "label": "Heading (empty = page title)" },
+    { "type": "textarea", "id": "intro", "label": "Intro text" },
+    { "type": "text", "id": "wa_label", "label": "WhatsApp button label", "default": "Message us on WhatsApp" },
+    { "type": "text", "id": "wa_prefill", "label": "Pre-filled WhatsApp message ({store} = store name)", "default": "Hi {store}, I have a question." },
+    { "type": "checkbox", "id": "show_form", "label": "Show the email contact form", "default": true },
+    { "type": "text", "id": "label_name", "label": "Name field label", "default": "Name" },
+    { "type": "text", "id": "label_email", "label": "Email field label", "default": "Email" },
+    { "type": "text", "id": "label_phone", "label": "Phone field label", "default": "Phone (optional)" },
+    { "type": "text", "id": "label_message", "label": "Message field label", "default": "Message" },
+    { "type": "text", "id": "submit_label", "label": "Send button label", "default": "Send message" },
+    { "type": "text", "id": "success_text", "label": "Success message", "default": "Thanks — your message was sent. We reply during working hours." }
+  ]
+}
+{% endschema %}

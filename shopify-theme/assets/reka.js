@@ -4,7 +4,9 @@
   "use strict";
 
   var fmt = new Intl.NumberFormat("en-EG");
-  function formatPrice(v) { return fmt.format(v) + " EGP"; }
+  var S = (window.REKA && window.REKA.strings) || {};
+  function t(key, fallback) { return S[key] || fallback; }
+  function formatPrice(v) { return fmt.format(v) + " " + ((window.REKA && window.REKA.moneyFormat) || "EGP"); }
   function normalizePhone(p) { return String(p || "").replace(/\D/g, ""); }
 
   /* ---- toast ------------------------------------------------------- */
@@ -63,9 +65,9 @@
       .then(function () { return fetch("/cart.js").then(function (r) { return r.json(); }); })
       .then(function (cart) {
         setCartCount(cart.item_count);
-        toast((btn.getAttribute("data-product-title") || "Added") + " — added to your order");
+        toast((btn.getAttribute("data-product-title") || "Added") + " — " + t("added", "added to your order"));
       })
-      .catch(function (err) { toast(err.message || "Could not add to your order", true); })
+      .catch(function (err) { toast(err.message || t("add_fail", "Could not add to your order"), true); })
       .finally(function () { btn.disabled = false; });
   });
 
@@ -122,11 +124,11 @@
         var z = selectedZone();
         if (z) {
           var bits = [];
-          if (z.fee !== null) bits.push("Delivery " + formatPrice(z.fee)); else bits.push("Delivery fee confirmed on WhatsApp");
+          if (z.fee !== null) bits.push("Delivery " + formatPrice(z.fee)); else bits.push(t("fee_confirmed", "Delivery fee confirmed on WhatsApp"));
           if (z.time) bits.push("est. " + z.time);
           govHint.textContent = bits.join(" · ");
         } else if (govSelect.value === "__other__") {
-          govHint.textContent = "Delivery fee & timing for your governorate are confirmed on WhatsApp.";
+          govHint.textContent = t("other_gov_hint", "Delivery fee & timing for your governorate are confirmed on WhatsApp.");
         } else { govHint.textContent = ""; }
       });
     }
@@ -139,7 +141,7 @@
       })
         .then(function (r) { return r.json(); })
         .then(function () { window.location.reload(); })
-        .catch(function () { toast("Could not update the order", true); });
+        .catch(function () { toast(t("update_fail", "Could not update the order"), true); });
     }
 
     root.addEventListener("click", function (e) {
@@ -180,7 +182,7 @@
         if (phase === 2) {
           phase = 1;
           var lbl = form.querySelector("[data-submit-label]");
-          if (lbl) lbl.textContent = "Review delivery details";
+          if (lbl) lbl.textContent = t("review_label", "Review delivery details");
         }
       });
       form.addEventListener("submit", function (e) {
@@ -190,19 +192,19 @@
         var ok = true;
         var name = v("name"), phone = v("phone"), whats = v("whatsapp"), city = v("city"), address = v("address"), building = v("building"), landmark = v("landmark");
         var gov = govName();
-        setErr("name", name.length < 2 ? (ok = false, "Please enter your full name.") : "");
-        setErr("phone", !phoneRe.test(phone) ? (ok = false, "Enter a valid mobile number (digits, e.g. 010xxxxxxxx).") : "");
-        setErr("whatsapp", whats && !phoneRe.test(whats) ? (ok = false, "Enter a valid WhatsApp number, or leave empty.") : "");
-        if (govSelect) setErr("governorate", govSelect.value === "" ? (ok = false, "Please choose your governorate.") : "");
-        setErr("city", city.length < 2 ? (ok = false, "Please enter your area or city.") : "");
-        setErr("building", building.length < 1 ? (ok = false, "Building / floor / apartment helps the courier find you.") : "");
-        setErr("address", address.length < 8 ? (ok = false, "Please enter the street address in detail.") : "");
-        setErr("consent", !form.elements.consent.checked ? (ok = false, "We need your OK to contact you on WhatsApp about this order.") : "");
-        if (!ok) { toast("Please fix the highlighted fields.", true); phase = 1; return; }
+        setErr("name", name.length < 2 ? (ok = false, t("err_name", "Please enter your full name.")) : "");
+        setErr("phone", !phoneRe.test(phone) ? (ok = false, t("err_phone", "Enter a valid mobile number (digits, e.g. 010xxxxxxxx).")) : "");
+        setErr("whatsapp", whats && !phoneRe.test(whats) ? (ok = false, t("err_whatsapp", "Enter a valid WhatsApp number, or leave empty.")) : "");
+        if (govSelect) setErr("governorate", govSelect.value === "" ? (ok = false, t("err_governorate", "Please choose your governorate.")) : "");
+        setErr("city", city.length < 2 ? (ok = false, t("err_city", "Please enter your area or city.")) : "");
+        setErr("building", building.length < 1 ? (ok = false, t("err_building", "Building / floor / apartment helps the courier find you.")) : "");
+        setErr("address", address.length < 8 ? (ok = false, t("err_address", "Please enter the street address in detail.")) : "");
+        setErr("consent", !form.elements.consent.checked ? (ok = false, t("err_consent", "We need your OK to contact you on WhatsApp about this order.")) : "");
+        if (!ok) { toast(t("fix_fields", "Please fix the highlighted fields."), true); phase = 1; return; }
 
         var btn = form.querySelector("[data-submit-order]");
         var label = form.querySelector("[data-submit-label]");
-        btn.disabled = true; label.textContent = phase === 1 ? "Preparing summary…" : "Saving your order…";
+        btn.disabled = true; label.textContent = phase === 1 ? t("preparing", "Preparing summary…") : t("saving", "Saving your order…");
 
         fetch("/cart.js")
           .then(function (r) { return r.json(); })
@@ -242,7 +244,7 @@
                 : "We confirm availability on WhatsApp before anything ships.";
               box.hidden = false;
               box.scrollIntoView({ behavior: "smooth", block: "center" });
-              label.textContent = "Confirm — send via WhatsApp";
+              label.textContent = t("confirm_label", "Confirm — send via WhatsApp");
               btn.disabled = false;
               phase = 2;
               return;
@@ -278,22 +280,52 @@
             var copyBtn = root.querySelector("[data-copy-message]");
             if (copyBtn) copyBtn.onclick = function () {
               navigator.clipboard.writeText(message).then(
-                function () { toast("Order message copied"); },
-                function () { toast("Could not copy — long-press the message to copy it manually.", true); }
+                function () { toast(t("copied", "Order message copied")); },
+                function () { toast(t("copy_fail", "Could not copy — long-press the message to copy it manually."), true); }
               );
             };
             try { sessionStorage.setItem("reka-last-order", JSON.stringify({ reference: ref, whatsappUrl: url, total: total })); } catch (e2) {}
+
+            // Save everything on the cart (note = the full WhatsApp message;
+            // attributes show on the Shopify order under "Additional details"),
+            // then open WhatsApp in a new tab and send THIS tab to Shopify
+            // checkout with the address prefilled. The customer places the
+            // order with cash-on-delivery / manual payment, so it lands in the
+            // Shopify admin as a pending order to confirm after the transfer.
+            var attrs = { "Order reference": ref };
+            if (whats && normalizePhone(whats) !== normalizePhone(phone)) attrs["WhatsApp"] = whats;
+            if (gov) attrs["Governorate"] = gov;
+            if (landmark) attrs["Landmark"] = landmark;
+            if (v("notes")) attrs["Delivery notes"] = v("notes");
+            attrs["Delivery"] = deliveryText + (etaText ? " (est. " + etaText + ")" : "");
+
+            var nameParts = name.split(/\s+/);
+            var prefill = {
+              "checkout[shipping_address][first_name]": nameParts[0] || name,
+              "checkout[shipping_address][last_name]": nameParts.slice(1).join(" ") || ".",
+              "checkout[shipping_address][address1]": address,
+              "checkout[shipping_address][address2]": building,
+              "checkout[shipping_address][city]": city,
+              "checkout[shipping_address][province]": gov,
+              "checkout[shipping_address][country]": "Egypt",
+              "checkout[shipping_address][phone]": phone,
+            };
+            var qs = Object.keys(prefill)
+              .filter(function (k) { return prefill[k]; })
+              .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(prefill[k]); })
+              .join("&");
+
             return fetch("/cart/update.js", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ note: "Order request " + ref + " — " + name + " — " + phone + " — " + city }),
+              body: JSON.stringify({ note: message, attributes: attrs }),
             }).then(function () {
               window.open(url, "_blank", "noopener");
-              showStep(3);
+              window.location.href = "/checkout?" + qs;
             });
           })
-          .catch(function () { toast("Could not create your order. Please try again.", true); })
-          .finally(function () { btn.disabled = false; label.textContent = "Send order via WhatsApp"; });
+          .catch(function () { toast(t("order_fail", "Could not create your order. Please try again."), true); })
+          .finally(function () { btn.disabled = false; label.textContent = t("send_label", "Send order via WhatsApp"); });
       });
     }
   }
