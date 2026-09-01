@@ -51,6 +51,30 @@
         <div><dt>{{ section.settings.fact2_title | default: 'Prices in EGP' }}</dt><dd>{{ section.settings.fact2_text | default: 'No surprises' }}</dd></div>
         <div><dt>{{ section.settings.fact3_title | default: 'Order on WhatsApp' }}</dt><dd>{{ section.settings.fact3_text | default: 'Confirmed in chat' }}</dd></div>
       </dl>
+      {%- if section.settings.show_social -%}
+        {%- assign wa_link = settings.whatsapp_page_url | default: '' -%}
+        {%- if wa_link == blank -%}{%- assign wa_link = 'https://wa.me/' | append: settings.whatsapp_number -%}{%- endif -%}
+        <nav class="rk-hero__social" aria-label="Social media">
+          <a class="rk-social rk-social--sm" href="{{ wa_link }}" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+            <span class="rk-social__ic rk-social__ic--wa">{% render 'icon', name: 'message-circle', class: 'icon' %}</span>
+          </a>
+          {%- if settings.instagram_url != blank -%}
+            <a class="rk-social rk-social--sm" href="{{ settings.instagram_url }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <span class="rk-social__ic">{% render 'icon', name: 'instagram', class: 'icon' %}</span>
+            </a>
+          {%- endif -%}
+          {%- if settings.facebook_url != blank -%}
+            <a class="rk-social rk-social--sm" href="{{ settings.facebook_url }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <span class="rk-social__ic">{% render 'icon', name: 'facebook', class: 'icon' %}</span>
+            </a>
+          {%- endif -%}
+          {%- if settings.tiktok_url != blank -%}
+            <a class="rk-social rk-social--sm" href="{{ settings.tiktok_url }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              <span class="rk-social__ic">{% render 'icon', name: 'tiktok', class: 'icon' %}</span>
+            </a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
     </div>
 
     <div class="rk-hero__scene">
@@ -130,6 +154,7 @@
     { "type": "text", "id": "fact2_text", "label": "Fact 2 — text", "default": "No surprises" },
     { "type": "text", "id": "fact3_title", "label": "Fact 3 — title", "default": "Order on WhatsApp" },
     { "type": "text", "id": "fact3_text", "label": "Fact 3 — text", "default": "Confirmed in chat" },
+    { "type": "checkbox", "id": "show_social", "label": "Show social icons under the facts", "default": true },
     { "type": "header", "content": "Floating cards" },
     { "type": "image_picker", "id": "card_image", "label": "Small card image (replaces the perfume art)" },
     { "type": "text", "id": "card_caption", "label": "Small card caption", "default": "Perfume edit" },

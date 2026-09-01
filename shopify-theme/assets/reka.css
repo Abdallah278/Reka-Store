@@ -574,6 +574,9 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-social:hover .rk-social__ic { background: var(--burgundy); transform: translateY(-4px) scale(1.05); }
 .rk-social:hover .rk-social__ic--wa { background: var(--ink); }
 .rk-social:hover { color: var(--burgundy); }
+.rk-hero__social { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .625rem; }
+.rk-social--sm { min-width: 0; }
+.rk-social--sm .rk-social__ic { height: 2.75rem; width: 2.75rem; }
 .rk-footer__legal { border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); padding-block: 1.25rem; font-size: .75rem; color: var(--olive); }
 
 /* ---- Toast ---------------------------------------------------------- */
