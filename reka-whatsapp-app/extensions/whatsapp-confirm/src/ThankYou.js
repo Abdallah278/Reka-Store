@@ -2,7 +2,7 @@
 // بنص كبير Bold، والرسالة فيها رقم الأوردر فقط.
 import { extension, Button, BlockStack, Text } from "@shopify/ui-extensions/checkout";
 
-const DEFAULT_NOTE = "لإكمال الدفع، اضغط الزر وتواصل معنا على واتساب لتأكيد التحويل.";
+const DEFAULT_NOTE = "طلبك بانتظار تأكيد الدفع. بعد تحويل المبلغ، اضغط الزر بالأسفل وأرسل لنا رسالة لتأكيد التحويل.";
 
 export default extension("purchase.thank-you.block.render", (root, api) => {
   function render() {
@@ -19,7 +19,7 @@ export default extension("purchase.thank-you.block.render", (root, api) => {
     root.appendChild(
       // BlockStack بدون inlineAlignment => العناصر بتتمدد بعرض الحاوية بالكامل
       root.createComponent(BlockStack, { spacing: "base", padding: "base" }, [
-        root.createComponent(Text, { size: "base" }, s.note || DEFAULT_NOTE),
+        root.createComponent(Text, { size: "base", emphasis: "bold" }, s.note || DEFAULT_NOTE),
         root.createComponent(Button, { to: url, external: true }, [
           root.createComponent(Text, { size: "medium", emphasis: "bold" }, s.label || "Continue on WhatsApp — تأكيد الدفع"),
         ]),

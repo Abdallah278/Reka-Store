@@ -1,7 +1,7 @@
 // نفس البلوك في صفحة حالة الطلب — نوت فوق زرار بعرض كامل بنص Bold.
 import { extension, Button, BlockStack, Text } from "@shopify/ui-extensions/customer-account";
 
-const DEFAULT_NOTE = "لإكمال الدفع، اضغط الزر وتواصل معنا على واتساب لتأكيد التحويل.";
+const DEFAULT_NOTE = "طلبك بانتظار تأكيد الدفع. بعد تحويل المبلغ، اضغط الزر بالأسفل وأرسل لنا رسالة لتأكيد التحويل.";
 
 export default extension("customer-account.order-status.block.render", (root, api) => {
   function render() {
@@ -17,7 +17,7 @@ export default extension("customer-account.order-status.block.render", (root, ap
     for (const child of root.children) root.removeChild(child);
     root.appendChild(
       root.createComponent(BlockStack, { spacing: "base", padding: "base" }, [
-        root.createComponent(Text, { size: "base" }, s.note || DEFAULT_NOTE),
+        root.createComponent(Text, { size: "base", emphasis: "bold" }, s.note || DEFAULT_NOTE),
         root.createComponent(Button, { to: url, external: true }, [
           root.createComponent(Text, { size: "medium", emphasis: "bold" }, s.label || "Continue on WhatsApp — تأكيد الدفع"),
         ]),
