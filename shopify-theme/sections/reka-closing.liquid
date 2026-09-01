@@ -19,9 +19,9 @@
       </div>
       <div class="rk-inkpanel__art">
         {%- if section.settings.image -%}
-          <img src="{{ section.settings.image | image_url: width: 600 }}" alt="" loading="lazy" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" style="height:100%; width:100%; object-fit:contain;">
+          <img src="{{ section.settings.image | image_url: width: 600 }}" alt="" loading="lazy" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" style="height:100%; width:100%; object-fit:cover; border-radius:1.5rem;">
         {%- else -%}
-          {% render 'art', key: 'perfume-bottle', title: 'Amber perfume bottle illustration' %}
+          <img src="{{ 'closing.jpg' | asset_url }}" alt="" loading="lazy" width="800" height="1000" style="height:100%; width:100%; object-fit:cover; border-radius:1.5rem;">
         {%- endif -%}
       </div>
     </div>

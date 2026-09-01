@@ -27,7 +27,7 @@
         {%- if section.settings.image -%}
           <img src="{{ section.settings.image | image_url: width: 800 }}" alt="" loading="lazy" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" style="height:100%; width:100%; object-fit:cover;">
         {%- else -%}
-          {% render 'art', key: 'hands', title: 'Illustration of a hand holding a serum bottle in warm light' %}
+          <img src="{{ 'manifesto.jpg' | asset_url }}" alt="" loading="lazy" width="800" height="1000" style="height:100%; width:100%; object-fit:cover;">
         {%- endif -%}
       </div>
       <div class="rk-manifesto__dot" aria-hidden="true"></div>
