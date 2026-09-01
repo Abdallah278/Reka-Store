@@ -1,13 +1,19 @@
-# Reka WhatsApp confirm — free custom app for this store only.
-# `shopify app deploy` will link it to your store/org and fill client_id on first run.
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
 name = "reka-whatsapp-confirm"
-embedded = false
+embedded = true
+client_id = "bd6cc0fc0a82fbfd21020dda62d85f20"
+application_url = "https://shopify.dev/apps/default-app-home"
 
 [access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = ""
 
 [webhooks]
-api_version = "2025-07"
+api_version = "2026-10"
 
 [build]
-include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[auth]
+redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]

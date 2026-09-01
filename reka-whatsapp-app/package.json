@@ -1,5 +1,10 @@
 {
   "name": "reka-whatsapp-app",
   "private": true,
-  "workspaces": ["extensions/*"]
+  "workspaces": [
+    "extensions/*"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
 }

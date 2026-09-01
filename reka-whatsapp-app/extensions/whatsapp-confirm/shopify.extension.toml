@@ -4,6 +4,7 @@ api_version = "2025-07"
 type = "ui_extension"
 name = "WhatsApp order confirm"
 handle = "whatsapp-order-confirm"
+uid = "5a9afcd6-adcf-4143-b9aa-91012093e7b6eb8ced5f"
 
   # زرار في صفحة الشكر (بعد Complete order مباشرة)
   [[extensions.targeting]]
