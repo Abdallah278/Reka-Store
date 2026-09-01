@@ -419,26 +419,33 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-breadcrumb [aria-current] { font-weight: 600; color: var(--ink); }
 .rk-product__grid { display: grid; gap: 2.5rem; padding-bottom: 4rem; }
 @media (min-width: 1024px) { .rk-product__grid { grid-template-columns: 1.05fr .95fr; gap: 3.5rem; } }
-.rk-gallery__main { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 2rem; background: var(--clay); outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
-.rk-gallery__badge { position: absolute; left: 1rem; top: 1rem; border-radius: 9999px; background: var(--burgundy); padding: .5rem 1rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--canvas); }
-.rk-gallery__off { position: absolute; right: 1rem; top: 1rem; border-radius: 9999px; background: var(--ink); padding: .5rem 1rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--canvas); }
+.rk-gallery__main { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border-radius: 999px 999px 2.2rem 2.2rem; background: var(--clay); box-shadow: 0 0 0 6px var(--canvas), 0 0 0 7px color-mix(in srgb, var(--burgundy) 35%, transparent), 0 44px 80px -44px rgba(29,7,8,.55); }
+.rk-gallery__main .brand-tone img { transition: transform .6s; }
+.rk-gallery__main:hover .brand-tone img { transform: scale(1.03); }
+.rk-gallery__badge { position: absolute; left: 50%; top: 1.25rem; transform: translateX(-50%); border-radius: 9999px; background: var(--burgundy); padding: .5rem 1rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--canvas); }
+.rk-gallery__off { position: absolute; right: 1.75rem; top: 4.5rem; border-radius: 9999px; background: var(--ink); padding: .5rem 1rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--canvas); }
 .rk-gallery__nav { position: absolute; top: 50%; transform: translateY(-50%); display: grid; height: 2.75rem; width: 2.75rem; place-items: center; border-radius: 9999px; background: color-mix(in srgb, var(--cream) 90%, transparent); color: var(--ink); box-shadow: 0 4px 12px rgba(49,14,16,.2); }
 .rk-gallery__nav:hover { background: var(--canvas); }
 .rk-gallery__nav--prev { left: .75rem; }
 .rk-gallery__nav--next { right: .75rem; }
 .rk-thumbs { margin-top: .75rem; display: flex; gap: .5rem; overflow-x: auto; scrollbar-width: none; }
 .rk-thumbs::-webkit-scrollbar { display: none; }
-.rk-thumbs button { height: 5rem; width: 5rem; flex-shrink: 0; overflow: hidden; border-radius: .75rem; outline: 2px solid transparent; outline-offset: 2px; transition: outline-color .2s; padding: 0; }
+.rk-thumbs { justify-content: center; padding-top: .5rem; }
+.rk-thumbs button { height: 5.25rem; width: 5.25rem; flex-shrink: 0; overflow: hidden; border-radius: 1.1rem; outline: 2px solid transparent; outline-offset: 2px; transition: outline-color .2s, transform .2s; padding: 0; }
+.rk-thumbs button:hover { transform: translateY(-2px); }
 .rk-thumbs button img { height: 100%; width: 100%; object-fit: cover; }
 .rk-thumbs button[aria-selected="true"] { outline-color: var(--burgundy); }
 .rk-thumbs button:hover { outline-color: var(--clay); }
 .rk-gallery__note { margin-top: .5rem; font-size: .75rem; color: var(--olive); }
-.rk-pdetails .eyebrow { }
-.rk-pdetails h1 { margin-top: .75rem; font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 600; line-height: 1; letter-spacing: -.01em; }
-.rk-pdetails__brand { margin-top: .5rem; font-size: .875rem; font-weight: 600; text-transform: uppercase; letter-spacing: .2em; color: var(--olive); }
-.rk-pdetails__desc { margin-top: 1.25rem; font-size: 1rem; line-height: 2; color: var(--olive); }
+@media (min-width: 1024px) { .rk-pdetails { position: sticky; top: 6.5rem; align-self: start; } }
+.rk-pdetails .eyebrow { display: inline-flex; align-items: center; border-radius: 9999px; background: color-mix(in srgb, var(--burgundy) 10%, transparent); padding: .4375rem 1rem; color: var(--burgundy); }
+.rk-pdetails h1 { margin-top: 1rem; font-family: var(--font-display); font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 600; line-height: .98; letter-spacing: -.01em; }
+.rk-pdetails__brand { margin-top: .625rem; font-size: .875rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--clay); }
+.rk-pdetails__desc { margin-top: 1.25rem; max-width: 34rem; font-size: 1.0625rem; line-height: 2; color: var(--olive); border-inline-start: 3px solid color-mix(in srgb, var(--burgundy) 35%, transparent); padding-inline-start: 1.1rem; }
 .rk-pdetails__variant { margin-top: 1rem; display: inline-flex; border-radius: 1rem; background: var(--cream); padding: .625rem 1rem; font-size: .875rem; font-weight: 600; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
 .rk-pdetails__pricerow { margin-top: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; border-block: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); padding-block: 1.25rem; }
+.rk-pdetails__pricerow .rk-price__now { font-size: 1.875rem; }
+.rk-pdetails__pricerow .rk-price--offer s { font-size: .9375rem; }
 .rk-status-chip { border-radius: 9999px; padding: .4375rem .875rem; font-size: .8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: .16em; background: color-mix(in srgb, var(--olive) 15%, transparent); color: var(--olive); }
 .rk-status-chip--soldout, .rk-status-chip--low { background: var(--burgundy); color: var(--canvas); }
 .rk-status-chip--low { background: color-mix(in srgb, var(--burgundy) 90%, transparent); }
@@ -451,7 +458,7 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-pdetails__notes { margin-top: 1.75rem; border-radius: 1.25rem; background: var(--cream); padding: 1.25rem; outline: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
 .rk-pdetails__notes h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .28em; color: var(--olive); }
 .rk-pdetails__notes p { margin-top: .5rem; font-size: .875rem; line-height: 1.75; color: var(--ink); white-space: pre-line; }
-.rk-related { padding-bottom: 3.5rem; }
+.rk-related { padding-bottom: 3.5rem; border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); padding-top: 2.75rem; }
 
 /* ---- Cart / checkout ------------------------------------------------ */
 .rk-cart { padding: 5rem 0 3.5rem; }
