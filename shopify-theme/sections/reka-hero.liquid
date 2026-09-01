@@ -74,6 +74,14 @@
         <figcaption>{{ section.settings.card_caption | default: 'Perfume edit' }}</figcaption>
       </figure>
       <div class="rk-hero__bubble">{% render 'art', key: 'hands', title: 'Illustration of a hand applying a skincare serum' %}</div>
+      {%- assign stamp_text = section.settings.stamp_text | default: 'Reka Store • Beauty your way •' -%}
+      <div class="rk-hero__stamp" aria-hidden="true">
+        <svg viewBox="0 0 120 120">
+          <defs><path id="rk-stamp-circle" d="M 60,60 m -42,0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0"/></defs>
+          <text><textPath href="#rk-stamp-circle">{{ stamp_text | upcase }}</textPath></text>
+          <circle class="rk-hero__stamp-heart" cx="60" cy="60" r="5"/>
+        </svg>
+      </div>
       {%- if feature -%}
         <a href="{{ feature.url }}" class="panel rk-hero__feature" aria-label="Open {{ feature.title | escape }}">
           <span class="rk-hero__feature-img">
@@ -107,6 +115,7 @@
     { "type": "text", "id": "hero_title", "label": "Hero title", "default": "Beauty, your way" },
     { "type": "textarea", "id": "hero_subtitle", "label": "Hero subtitle", "default": "A considered edit of colour, skin and ritual — chosen for the way you actually live." },
     { "type": "image_picker", "id": "hero_image", "label": "Hero image (replaces the brand portrait)" },
+    { "type": "text", "id": "stamp_text", "label": "Rotating stamp text", "default": "Reka Store • Beauty your way •" },
     { "type": "header", "content": "Buttons" },
     { "type": "text", "id": "cta1_label", "label": "Primary button label", "default": "Choose your ritual" },
     { "type": "url", "id": "cta1_link", "label": "Primary button link (empty = #departments)" },
