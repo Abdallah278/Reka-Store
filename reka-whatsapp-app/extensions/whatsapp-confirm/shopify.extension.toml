@@ -35,3 +35,9 @@ uid = "5a9afcd6-adcf-4143-b9aa-91012093e7b6eb8ced5f"
     type = "single_line_text_field"
     name = "Message template ({order} = order number)"
     description = "Default: Hello Reka Store, I want to complete payment for order {order}."
+
+    [[extensions.settings.fields]]
+    key = "note"
+    type = "multi_line_text_field"
+    name = "Note text (shown above the button)"
+    description = "Default: لإكمال الدفع، اضغط الزر وتواصل معنا على واتساب لتأكيد التحويل."
