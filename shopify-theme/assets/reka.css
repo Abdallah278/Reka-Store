@@ -94,9 +94,10 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-header__bar {
   margin-inline: auto; max-width: 1320px; display: flex; align-items: center; justify-content: space-between; gap: .5rem;
   border-radius: 9999px; padding: .5rem .75rem;
-  background: color-mix(in srgb, var(--cream) 60%, transparent);
-  outline: 1px solid color-mix(in srgb, var(--ink) 5%, transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  outline: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  box-shadow: 0 12px 30px -22px rgba(49,14,16,.45);
+  backdrop-filter: blur(10px);
   transition: background-color .3s, box-shadow .3s;
 }
 @media (min-width: 640px) { .rk-header__bar { padding-inline: 1rem; } }
@@ -109,12 +110,12 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-logo { display: flex; align-items: center; gap: .625rem; }
 .rk-logo__mark { display: grid; place-items: center; height: 2.5rem; width: 2.5rem; border-radius: 9999px; background: var(--ink); color: var(--canvas); font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; }
 .rk-logo__mark img { height: 2.5rem; width: 2.5rem; border-radius: 9999px; object-fit: cover; }
-.rk-logo__name { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; letter-spacing: -.01em; }
-@media (min-width: 640px) { .rk-logo__name { font-size: 1.5rem; } }
-.rk-nav { display: none; align-items: center; gap: .25rem; font-size: .875rem; font-weight: 600; }
+.rk-logo__name { font-family: var(--font-display); font-size: 1.375rem; font-weight: 700; letter-spacing: -.01em; color: var(--ink); }
+@media (min-width: 640px) { .rk-logo__name { font-size: 1.625rem; } }
+.rk-nav { display: none; align-items: center; gap: .25rem; font-size: .9375rem; font-weight: 700; }
 @media (min-width: 1024px) { .rk-nav { display: flex; } }
-.rk-nav a { border-radius: 9999px; padding: .5rem .875rem; transition: color .2s; }
-.rk-nav a:hover { color: var(--burgundy); }
+.rk-nav a { border-radius: 9999px; padding: .5rem .875rem; color: var(--ink); transition: color .2s, background-color .2s; }
+.rk-nav a:hover { color: var(--burgundy); background: color-mix(in srgb, var(--burgundy) 10%, transparent); }
 .rk-nav a[aria-current="page"] { background: var(--ink); color: var(--canvas); }
 .rk-header__actions { display: flex; align-items: center; gap: .375rem; }
 .rk-iconbtn { display: grid; place-items: center; height: 2.75rem; width: 2.75rem; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); color: var(--ink); transition: background-color .2s, color .2s; }
