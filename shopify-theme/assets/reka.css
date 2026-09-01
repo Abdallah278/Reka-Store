@@ -374,7 +374,9 @@ button:disabled { opacity: .6; cursor: default; }
 .rk-dept-hero__motif svg { display: block; height: 100%; width: 100%; }
 .rk-collection { padding-block: 3rem; }
 @media (min-width: 1024px) { .rk-collection { padding-block: 4rem; } }
-.rk-collection--dark { background: var(--ink); }
+.rk-collection--dark { background: var(--ink); margin: 2.5rem .75rem 0; border-radius: 2.5rem; box-shadow: 0 24px 48px -32px rgba(49,14,16,.45); }
+@media (min-width: 640px) { .rk-collection--dark { margin-inline: 1.25rem; } }
+@media (max-width: 479px) { .rk-collection--dark { margin-top: 1.75rem; border-radius: 1.75rem; } }
 .rk-ritual { padding-block: 3rem; }
 .rk-empty { margin-top: 2rem; border-radius: 1.75rem; border: 1px dashed color-mix(in srgb, var(--olive) 40%, transparent); background: color-mix(in srgb, var(--canvas) 50%, transparent); padding: 2.5rem 1.5rem; text-align: center; }
 .rk-empty--dark { border-color: color-mix(in srgb, var(--canvas) 30%, transparent); background: transparent; color: var(--canvas); }
